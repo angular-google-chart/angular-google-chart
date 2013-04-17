@@ -1,0 +1,125 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css"
+          rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>
+        Google Chart Tools AngularJS Directive
+    </title>
+    <style type="text/css">
+        [ng-cloak] {
+            display: none;
+        }
+
+        body {
+            padding: 20px;
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+
+        table td.number {
+            text-align: right;
+        }
+
+        .navbar-fixed-top {
+            z-index: 1111;
+        }
+
+
+    </style>
+</head>
+<body ng-cloak="" ng-controller="SampleCtrl">
+<div>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a href="" class="brand">ng-google-chart</a>
+
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li>
+                            <a href="https://github.com/bouil/angular-google-chart"><i class="icon icon-github"></i> Github</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </div>
+    </div>
+    <div class="container-fuild">
+        <div class="row-fluid">
+            <div class="span12" style="text-align: center;">
+                <h1>AngularJs Google Chart Tools directive</h1>
+                <hr/>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span4">
+                <h2>Usage</h2>
+                <pre ng-non-bindable>&lt;div google-chart chart="chart" style="{{chart.cssStyle}}"/&gt;</pre>
+                <h2>Setup</h2>
+                <pre>$scope.chart = {{chart|json}}</pre>
+            </div>
+            <div class="span8">
+                <h2>Live edit</h2>
+
+                <form class="form-horizontal">
+                    <div class="row-fluid">
+
+                        <div class="control-group span6">
+                            <label class="control-label" for="chartType">February server sale units</label>
+
+                            <div class="controls">
+                                <input type="number" min="0" max="100" ng-model="chart.data.rows[1].c[3].v"/>
+                            </div>
+                        </div>
+                        <div class="control-group span6">
+                            <label class="control-label" for="chartType">Number of grid lines</label>
+
+                            <div class="controls">
+                                <input type="number" min="0" max="100" ng-model="chart.options.vAxis.gridlines.count"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="chartType">Chart type</label>
+
+                        <div class="controls">
+                            <select id="chartType" ng-model="chart.type">
+                                <option value="AreaChart">AreaChart</option>
+                                <option value="PieChart">PieChart</option>
+                                <option value="ColumnChart">ColumnChart</option>
+                                <option value="LineChart">LineChart</option>
+                                <option value="Table">Table</option>
+                                <option value="BarChart">BarChart</option>
+                            </select>
+
+                        </div>
+                    </div>
+                </form>
+
+                <h2>Output</h2>
+
+                <div google-chart chart="chart" style="{{chart.cssStyle}}"/>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+<script src="//www.google.com/jsapi"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+<script src="ng-google-chart.js"></script>
+<script src="sample.js"></script>
+</body>
+</html>
