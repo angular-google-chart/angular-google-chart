@@ -5,7 +5,7 @@ for AngularJS
 
 ### Goal
 
-Wrapper directive for [Google Chart Tools]()https://google-developers.appspot.com/chart/
+Wrapper directive for [Google Chart Tools](https://google-developers.appspot.com/chart/)
 
 ### Usage
 
