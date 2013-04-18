@@ -7,9 +7,9 @@ for AngularJS
 
 Wrapper directive for [Google Chart Tools](https://google-developers.appspot.com/chart/)
 
-### Usage
+### Usage and Demo
 
-See sample files index.html and sample.js.
+See sample files index.html and sample.js. [Live Demo](http://bouil.github.io/angular-google-chart/)
 
 ### Chart Data doc
 
