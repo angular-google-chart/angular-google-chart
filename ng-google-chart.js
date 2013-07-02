@@ -34,15 +34,22 @@
                                 containerId: $elm[0]
                             };
 
-                            var chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
-                            google.visualization.events.addListener(chartWrapper, 'ready', function () {
-                                $scope.chart.displayed = true;
-                            });
-                            google.visualization.events.addListener(chartWrapper, 'error', function (err) {
-                                console.log("Chart not displayed due to error: " + err.message);
-                            });
+                            if($scope.chartWrapper==null) {
+                            	$scope.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
+                                google.visualization.events.addListener(chartWrapper, 'ready', function () {
+                                    $scope.chart.displayed = true;
+                                });
+                                google.visualization.events.addListener(chartWrapper, 'error', function (err) {
+                                    console.log("Chart not displayed due to error: " + err.message);
+                                });
+                            }
+                            else {
+                            	$scope.chartWrapper.setDataTable(dataTable);
+                            	$scope.chartWrapper.setOptions($scope.chart.options);
+                            }
+                            	
                             $timeout(function () {
-                                chartWrapper.draw();
+                            	$scope.chartWrapper.draw();
                             });
                         }, 0, true);
                     }
