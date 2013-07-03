@@ -36,14 +36,15 @@
 
                             if($scope.chartWrapper==null) {
                             	$scope.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
-                                google.visualization.events.addListener(chartWrapper, 'ready', function () {
+                                google.visualization.events.addListener($scope.chartWrapper, 'ready', function () {
                                     $scope.chart.displayed = true;
                                 });
-                                google.visualization.events.addListener(chartWrapper, 'error', function (err) {
+                                google.visualization.events.addListener($scope.chartWrapper, 'error', function (err) {
                                     console.log("Chart not displayed due to error: " + err.message);
                                 });
                             }
                             else {
+                            	$scope.chartWrapper.setChartType($scope.chart.type);
                             	$scope.chartWrapper.setDataTable(dataTable);
                             	$scope.chartWrapper.setOptions($scope.chart.options);
                             }
