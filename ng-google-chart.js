@@ -30,6 +30,7 @@
                             var chartWrapperArgs = {
                                 chartType: $scope.chart.type,
                                 dataTable: dataTable,
+                                view: $scope.chart.view,
                                 options: $scope.chart.options,
                                 containerId: $elm[0]
                             };
@@ -46,6 +47,7 @@
                             else {
                             	$scope.chartWrapper.setChartType($scope.chart.type);
                             	$scope.chartWrapper.setDataTable(dataTable);
+                                $scope.chartWrapper.setView($scope.chart.view);
                             	$scope.chartWrapper.setOptions($scope.chart.options);
                             }
                             	
