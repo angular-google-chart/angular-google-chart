@@ -49,9 +49,18 @@ angular.module('google-chart-sample', ['googlechart.directives']).controller("Sa
         "hAxis": {
             "title": "Date"
         }
-    };
+    };  
 
     $scope.chart = chart1;
+
+    $scope.hideServer = false;
+    $scope.selectionChange = function () {
+        if($scope.hideServer) {
+            $scope.chart.view = {columns: [0,1,2]};
+        } else {
+            $scope.chart.view = {};
+        }
+    }
 
 });
 
