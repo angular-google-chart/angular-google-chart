@@ -8,7 +8,7 @@
 (function () {
     'use strict';
 
-    angular.module('googlechart.directives', []).directive('googleChart', function ($timeout) {
+    angular.module('googlechart.directives', []).directive('googleChart', function ($timeout, $window) {
         return {
             restrict: 'A',
             scope: {
@@ -19,6 +19,11 @@
                 $scope.$watch('chart', function () {
                     draw();
                 }, true); // true is for deep object equality checking
+
+                // Redraw the chart if the window is resized 
+                angular.element($window).bind('resize', function () {
+                    draw();
+                });
 
                 function draw() {
                     if (!draw.triggered && ($scope.chart != undefined)) {
