@@ -8,7 +8,7 @@
 (function () {
     'use strict';
 
-    angular.module('googlechart.directives', []).directive('googleChart', function ($timeout) {
+    angular.module('googlechart.directives', []).directive('googleChart', ['$timeout', function ($timeout) {
         return {
             restrict: 'A',
             scope: {
@@ -60,5 +60,5 @@
 
             }
         };
-    });
+    }]);
 })();
