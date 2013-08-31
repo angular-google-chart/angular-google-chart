@@ -14,3 +14,9 @@ See sample files index.html and sample.js. [Live Demo](http://bouil.github.io/an
 ### Chart Data doc
 
 See [ChartWrapper](https://google-developers.appspot.com/chart/interactive/docs/reference#chartwrapperobject) and [DataTable](https://google-developers.appspot.com/chart/interactive/docs/reference#DataTable) documentation.
+
+### Release notes
+
+#### 0.0.2
+
+The module is now named `googlechart` (instead of `googlechart.directives`)
