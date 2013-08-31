@@ -1,11 +1,6 @@
 'use strict';
 
-google.setOnLoadCallback(function () {
-    angular.bootstrap(document.body, ['google-chart-sample']);
-});
-google.load('visualization', '1', {packages: ['corechart']});
-
-angular.module('google-chart-sample', ['googlechart.directives']).controller("SampleCtrl", function ($scope) {
+angular.module('google-chart-sample', ['googlechart']).controller("SampleCtrl", function ($scope) {
 
     var chart1 = {};
     chart1.type = "AreaChart";
