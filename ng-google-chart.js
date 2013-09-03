@@ -63,7 +63,7 @@
             };
         }])
 
-        .directive('googleChart', ['$timeout', '$window', 'googleChartApiProxy', function ($timeout, $window, apiProxy) {
+        directive('googleChart', ['$timeout', '$window', '$rootScope', 'googleChartApiProxy', function ($timeout, $window, $rootScope, apiProxy) {
             return {
                 restrict: 'A',
                 scope: {
@@ -75,9 +75,12 @@
                         draw();
                     }, true); // true is for deep object equality checking
 
-                    // Redraw the chart if the window is resized 
-                    angular.element($window).bind('resize', function () {
-                        draw();
+                     // Redraw the chart if the window is resized 
+                    $rootScope.$on('resizeMsg', function (e) {
+                        console.log('resize call - redraw chart');
+                        $timeout(function () {
+                            $scope.chartWrapper.draw();
+                        });
                     });
 
                     function draw() {
@@ -121,6 +124,12 @@
                     draw = apiProxy(draw, this);
                 }
             };
-        }]);
+        }])
+
+        .run(function ($rootScope, $window) {
+            angular.element($window).bind('resize', function () {
+                $rootScope.$emit('resizeMsg');
+            });
+        });
 
 })(document, window);
