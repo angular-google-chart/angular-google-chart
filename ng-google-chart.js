@@ -63,7 +63,7 @@
             };
         }])
 
-        directive('googleChart', ['$timeout', '$window', '$rootScope', 'googleChartApiProxy', function ($timeout, $window, $rootScope, apiProxy) {
+        .directive('googleChart', ['$timeout', '$window', '$rootScope', 'googleChartApiProxy', function ($timeout, $window, $rootScope, apiProxy) {
             return {
                 restrict: 'A',
                 scope: {
