@@ -77,7 +77,6 @@
 
                      // Redraw the chart if the window is resized 
                     $rootScope.$on('resizeMsg', function (e) {
-                        console.log('resize call - redraw chart');
                         $timeout(function () {
                             $scope.chartWrapper.draw();
                         });
