@@ -112,6 +112,23 @@
                                     $scope.chartWrapper.setView($scope.chart.view);
                                 	$scope.chartWrapper.setOptions($scope.chart.options);
                                 }
+
+				if(typeof($scope.chart.numberFormat) != 'undefined')
+                                {
+                                    if($scope.formatter==null) {
+                                        $scope.formatter = new Array();
+                                        for (var i = 0; i < $scope.chart.numberFormat.cols.length; i++) {
+                                            $scope.formatter.push(new google.visualization.NumberFormat(
+                                                $scope.chart.numberFormat.cols[i].format)
+                                            );
+                                        }
+                                    }
+                                    else {
+                                        for (var i = 0; i < $scope.formatter.length; i++) {
+                                            $scope.formatter[i].format(dataTable,$scope.chart.numberFormat.cols[i].columnNum);
+                                        }
+                                    }
+                                }
                                 	
                                 $timeout(function () {
                                 	$scope.chartWrapper.draw();
