@@ -67,7 +67,8 @@
             return {
                 restrict: 'A',
                 scope: {
-                    chart: '=chart'
+                    chart: '=chart',
+                    onReady: '&'
                 },
                 link: function ($scope, $elm, $attr) {
                     // Watches, to refresh the chart when its data, title or dimensions change
@@ -82,17 +83,74 @@
                         });
                     });
 
+                    function applyFormat(formatType, formatClass, dataTable) {
+                        
+                        if(typeof($scope.chart.formatters[formatType]) != 'undefined') {
+                            if($scope.formatters[formatType]==null) {
+                                $scope.formatters[formatType] = new Array();
+
+                                if (formatType === 'color') {
+                                    for (var cIdx = 0; cIdx < $scope.chart.formatters[formatType].length; cIdx++) {
+                                        var colorFormat = new formatClass();
+
+                                        for (var i=0; i<$scope.chart.formatters[formatType][cIdx].formats.length; i++) {
+                                            var data = $scope.chart.formatters[formatType][cIdx].formats[i];
+
+                                            if (typeof(data.fromBgColor) != 'undefined' && typeof(data.toBgColor) != 'undefined') 
+                                                colorFormat.addGradientRange(data.from, data.to, data.color, data.fromBgColor, data.toBgColor);
+                                            else
+                                                colorFormat.addRange(data.from, data.to, data.color, data.bgcolor);
+                                        }
+
+                                        $scope.formatters[formatType].push(colorFormat)
+                                    }
+                                } else {
+
+                                    for (var i = 0; i < $scope.chart.formatters[formatType].length; i++) {
+                                        $scope.formatters[formatType].push(new formatClass(
+                                            $scope.chart.formatters[formatType][i])
+                                        );
+                                    }
+                                }
+                            }
+
+
+                            //apply formats to dataTable
+                            for (var i = 0; i < $scope.formatters[formatType].length; i++) {
+                                if ($scope.chart.formatters[formatType][i].columnNum < dataTable.getNumberOfColumns())
+                                    $scope.formatters[formatType][i].format(dataTable,$scope.chart.formatters[formatType][i].columnNum);
+                            }
+
+
+                            //Many formatters require HTML tags to display special formatting
+                            if (formatType === 'arrow' || formatType === 'bar' || formatType === 'color')
+                                $scope.chart.options.allowHtml = true;
+                        }
+                    }
+
                     function draw() {
                         if (!draw.triggered && ($scope.chart != undefined)) {
                             draw.triggered = true;
                             $timeout(function () {
                                 draw.triggered = false;
-                                
+
+                                if (typeof($scope.formatters)==='undefined')
+                                    $scope.formatters = {};
+
                                 var dataTable;
                                 if ($scope.chart.data instanceof google.visualization.DataTable)
                                     dataTable = $scope.chart.data;
                                 else
                                     dataTable = new google.visualization.DataTable($scope.chart.data, 0.5);
+
+                                if (typeof($scope.chart.formatters) != 'undefined') {
+                                    applyFormat("number", google.visualization.NumberFormat, dataTable);
+                                    applyFormat("arrow", google.visualization.ArrowFormat, dataTable);
+                                    applyFormat("date", google.visualization.DateFormat, dataTable);
+                                    applyFormat("bar", google.visualization.BarFormat, dataTable);
+                                    applyFormat("color", google.visualization.ColorFormat, dataTable);
+                                }
+
 
                                 var chartWrapperArgs = {
                                     chartType: $scope.chart.type,
@@ -106,6 +164,7 @@
                                 	$scope.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
                                     google.visualization.events.addListener($scope.chartWrapper, 'ready', function () {
                                         $scope.chart.displayed = true;
+                                        $scope.onReady();
                                     });
                                     google.visualization.events.addListener($scope.chartWrapper, 'error', function (err) {
                                         console.log("Chart not displayed due to error: " + err.message);
@@ -117,23 +176,7 @@
                                     $scope.chartWrapper.setView($scope.chart.view);
                                 	$scope.chartWrapper.setOptions($scope.chart.options);
                                 }
-
-				if(typeof($scope.chart.numberFormat) != 'undefined')
-                                {
-                                    if($scope.formatter==null) {
-                                        $scope.formatter = new Array();
-                                        for (var i = 0; i < $scope.chart.numberFormat.cols.length; i++) {
-                                            $scope.formatter.push(new google.visualization.NumberFormat(
-                                                $scope.chart.numberFormat.cols[i].format)
-                                            );
-                                        }
-                                    }
-                                    else {
-                                        for (var i = 0; i < $scope.formatter.length; i++) {
-                                            $scope.formatter[i].format(dataTable,$scope.chart.numberFormat.cols[i].columnNum);
-                                        }
-                                    }
-                                }
+				                
                                 	
                                 $timeout(function () {
                                 	$scope.chartWrapper.draw();

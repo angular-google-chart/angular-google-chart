@@ -31,6 +31,15 @@
             z-index: 1111;
         }
 
+        .inputs-list li {
+            display:inline-block;
+            margin-right: 20px;
+        }
+
+        .inputs-list > li  input[type="checkbox"] {
+            margin:0;
+        }
+
 
     </style>
 </head>
@@ -92,7 +101,7 @@
                             <label class="control-label" for="chartType">Chart type</label>
 
                             <div class="controls">
-                                <select id="chartType" ng-model="chart.type">
+                                <select id="chartType" ng-model="chart.type" ng-change="chartSelectionChange()">
                                     <option value="AreaChart">AreaChart</option>
                                     <option value="PieChart">PieChart</option>
                                     <option value="ColumnChart">ColumnChart</option>
@@ -103,7 +112,7 @@
 
                             </div>
                         </div>
-                        <div class="control-group span6">
+                        <div class="control-group span2">
                             <label class="control-label" for="chartType">Hide Server</label>
 
                             <div class="controls">
@@ -111,11 +120,22 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="row-fluid" ng-show="chart.type=='Table'">
+                            <label class="control-label" for="chartType">Format</label>
+                            <div class="input controls">
+                              <ul class="inputs-list">
+                                <li ng-repeat="format in formatCollection">
+                                <button class="btn primary" ng-click="toggleFormat(format)">{{format.name}}</button>
+                                </li>
+                              </ul>
+                            </div>
+                    </div>
                 </form>
 
                 <h2>Output</h2>
 
-                <div google-chart chart="chart" style="{{chart.cssStyle}}"/>
+                <div google-chart chart="chart" style="{{chart.cssStyle}}" on-ready="chartReady()" />
 
 
             </div>
@@ -137,7 +157,6 @@
 
   ga('create', 'UA-3451018-11', 'github.io');
   ga('send', 'pageview');
-
 </script>
 </body>
 </html>
