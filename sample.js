@@ -127,14 +127,42 @@ angular.module('google-chart-sample', ['googlechart']).controller("SampleCtrl", 
 
 
     $scope.chartSelectionChange = function () {
+
+        if (($scope.chart.type==='Table' && $scope.chart.data.cols.length===6 && $scope.chart.options.tooltip.isHtml===true) || 
+           ($scope.chart.type!='Table' && $scope.chart.data.cols.length===6 && $scope.chart.options.tooltip.isHtml===false)) {
+            $scope.chart.data.cols.pop();
+            delete $scope.chart.data.rows[0].c[5];
+            delete $scope.chart.data.rows[1].c[5];
+            delete $scope.chart.data.rows[2].c[5];
+        }
+
+
         if ($scope.chart.type==='Table') {
+
+            $scope.chart.options.tooltip.isHtml=false;
+
             $scope.chart.data.cols.push( {id: "data-id", label: "Date", type: "date"} );
             $scope.chart.data.rows[0].c[5] = {v:"Date(2013,01,05)"};
             $scope.chart.data.rows[1].c[5] = {v:"Date(2013,02,05)"};
             $scope.chart.data.rows[2].c[5] = {v:"Date(2013,03,05)"};
         }
-        else if ($scope.chart.data.cols.length===6)
+
+    }
+
+
+    $scope.htmlTooltip = function() {
+
+        if ($scope.chart.options.tooltip.isHtml) {
+            $scope.chart.data.cols.push( {id: "", "role": "tooltip", "type": "string", "p" : { "role" : "tooltip" ,'html': true} }   );
+            $scope.chart.data.rows[0].c[5] = {v:" <b>Shipping "+$scope.chart.data.rows[0].c[4].v+"</b><br /><img src=\"http://icons.iconarchive.com/icons/antrepo/container-4-cargo-vans/512/Google-Shipping-Box-icon.png\" style=\"height:85px\" />"};
+            $scope.chart.data.rows[1].c[5] = {v:" <b>Shipping "+$scope.chart.data.rows[1].c[4].v+"</b><br /><img src=\"http://icons.iconarchive.com/icons/antrepo/container-4-cargo-vans/512/Google-Shipping-Box-icon.png\" style=\"height:85px\" />"};
+            $scope.chart.data.rows[2].c[5] = {v:" <b>Shipping "+$scope.chart.data.rows[2].c[4].v+"</b><br /><img src=\"http://icons.iconarchive.com/icons/antrepo/container-4-cargo-vans/512/Google-Shipping-Box-icon.png\" style=\"height:85px\" />"};
+        } else {
             $scope.chart.data.cols.pop();
+            delete $scope.chart.data.rows[0].c[5];
+            delete $scope.chart.data.rows[1].c[5];
+            delete $scope.chart.data.rows[2].c[5];
+        }
     }
 
 

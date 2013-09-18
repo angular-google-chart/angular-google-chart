@@ -119,6 +119,14 @@
                                 <input type="checkbox" ng-model="hideServer" ng-change="selectionChange()" />
                             </div>
                         </div>
+
+                        <div class="control-group span2" ng-show="chart.type!='Table'">
+                            <label class="control-label" for="chartType">HTML Tooltip</label>
+
+                            <div class="controls">
+                                <input type="checkbox" ng-model="chart.options.tooltip.isHtml" ng-change="htmlTooltip()" />
+                            </div>
+                        </div>                        
                     </div>
 
                     <div class="row-fluid" ng-show="chart.type=='Table'">
