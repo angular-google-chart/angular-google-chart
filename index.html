@@ -113,18 +113,18 @@
                             </div>
                         </div>
                         <div class="control-group span2">
-                            <label class="control-label" for="chartType">Hide Server</label>
+                            <label class="control-label" for="hideServer">Hide Server</label>
 
                             <div class="controls">
-                                <input type="checkbox" ng-model="hideServer" ng-change="selectionChange()" />
+                                <input id="hideServer" type="checkbox" ng-model="hideServer" ng-change="selectionChange()" />
                             </div>
                         </div>
 
                         <div class="control-group span2" ng-show="chart.type!='Table'">
-                            <label class="control-label" for="chartType">HTML Tooltip</label>
+                            <label class="control-label" for="htmlTooltip">HTML Tooltip</label>
 
                             <div class="controls">
-                                <input type="checkbox" ng-model="chart.options.tooltip.isHtml" ng-change="htmlTooltip()" />
+                                <input id="htmlTooltip" type="checkbox" ng-model="chart.options.tooltip.isHtml" ng-change="htmlTooltip()" />
                             </div>
                         </div>                        
                     </div>
