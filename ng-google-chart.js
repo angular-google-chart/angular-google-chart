@@ -191,10 +191,10 @@
             };
         }])
 
-        .run(function ($rootScope, $window) {
+        .run(['$rootScope', '$window', function ($rootScope, $window) {
             angular.element($window).bind('resize', function () {
                 $rootScope.$emit('resizeMsg');
             });
-        });
+        }]);
 
 })(document, window);
