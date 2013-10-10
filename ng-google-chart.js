@@ -69,7 +69,8 @@
                 restrict: 'A',
                 scope: {
                     chart: '=chart',
-                    onReady: '&'
+                    onReady: '&',
+                    select: '&'
                 },
                 link: function ($scope, $elm, $attr) {
                     // Watches, to refresh the chart when its data, title or dimensions change
@@ -170,6 +171,14 @@
                                     google.visualization.events.addListener($scope.chartWrapper, 'error', function (err) {
                                         console.log("Chart not displayed due to error: " + err.message);
                                     });
+                                    google.visualization.events.addListener($scope.chartWrapper, 'select', function () {
+										var selectedItem = $scope.chartWrapper.getChart().getSelection()[0];
+										if (selectedItem) {
+										  $scope.$apply(function () {
+											$scope.select({selectedItem: selectedItem});
+										  });
+										}
+									  }); 
                                 }
                                 else {
                                 	$scope.chartWrapper.setChartType($scope.chart.type);
