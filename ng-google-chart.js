@@ -165,7 +165,9 @@
                                 	$scope.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
                                     google.visualization.events.addListener($scope.chartWrapper, 'ready', function () {
                                         $scope.chart.displayed = true;
-                                        $scope.onReady();
+                                        $scope.$apply(function(scope) {
+                                            scope.onReady({chartWrapper: scope.chartWrapper});
+                                        });
                                     });
                                     google.visualization.events.addListener($scope.chartWrapper, 'error', function (err) {
                                         console.log("Chart not displayed due to error: " + err.message);
