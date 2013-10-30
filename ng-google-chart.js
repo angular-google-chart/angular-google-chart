@@ -11,7 +11,7 @@
 
 	//http://stackoverflow.com/a/15437678
 	function ieLoadBugFix(scriptElement, callback){
-        if (scriptElement.readyState=='loaded' || scriptElement.readyState=='completed') {
+        if (scriptElement.readyState=='loaded' || scriptElement.readyState=='complete') {
              callback();
          }else {
              setTimeout(function() {ieLoadBugFix(scriptElement, callback); }, 100);
