@@ -9,15 +9,17 @@
 (function (document, window) {
     'use strict';
 
-	//http://stackoverflow.com/a/15437678
-	function ieLoadBugFix(scriptElement, callback){
-        if (scriptElement.readyState=='loaded' || scriptElement.readyState=='complete') {
-             callback();
-         }else {
-             setTimeout(function() {ieLoadBugFix(scriptElement, callback); }, 100);
-         }
-	}
-	
+    //http://stackoverflow.com/a/15437678
+    function ieLoadBugFix(scriptElement, callback) {
+        if (scriptElement.readyState == 'loaded' || scriptElement.readyState == 'complete') {
+            callback();
+        } else {
+            setTimeout(function () {
+                ieLoadBugFix(scriptElement, callback);
+            }, 100);
+        }
+    }
+
     function loadScript(url, callback) {
         var script = document.createElement('script');
         script.src = url;
@@ -25,8 +27,8 @@
         script.onerror = function () {
             throw Error('Error loading "' + url + '"');
         };
-		
-		ieLoadBugFix(script, callback);
+
+        ieLoadBugFix(script, callback);
 
         document.getElementsByTagName('head')[0].appendChild(script);
     }
@@ -57,12 +59,12 @@
                             }
                         }
                     };
-                    
+
                     settings = angular.extend({}, apiConfig.optionalSettings, settings);
 
                     window.google.load('visualization', apiConfig.version, settings);
                 };
-            
+
             loadScript('//www.google.com/jsapi', onLoad);
 
             return function (fn, context) {
@@ -89,7 +91,7 @@
                         draw();
                     }, true); // true is for deep object equality checking
 
-                     // Redraw the chart if the window is resized 
+                    // Redraw the chart if the window is resized
                     $rootScope.$on('resizeMsg', function (e) {
                         $timeout(function () {
                             $scope.chartWrapper.draw();
@@ -97,19 +99,19 @@
                     });
 
                     function applyFormat(formatType, formatClass, dataTable) {
-                        
-                        if(typeof($scope.chart.formatters[formatType]) != 'undefined') {
-                            if($scope.formatters[formatType]==null) {
+
+                        if (typeof($scope.chart.formatters[formatType]) != 'undefined') {
+                            if ($scope.formatters[formatType] == null) {
                                 $scope.formatters[formatType] = new Array();
 
                                 if (formatType === 'color') {
                                     for (var cIdx = 0; cIdx < $scope.chart.formatters[formatType].length; cIdx++) {
                                         var colorFormat = new formatClass();
 
-                                        for (var i=0; i<$scope.chart.formatters[formatType][cIdx].formats.length; i++) {
+                                        for (var i = 0; i < $scope.chart.formatters[formatType][cIdx].formats.length; i++) {
                                             var data = $scope.chart.formatters[formatType][cIdx].formats[i];
 
-                                            if (typeof(data.fromBgColor) != 'undefined' && typeof(data.toBgColor) != 'undefined') 
+                                            if (typeof(data.fromBgColor) != 'undefined' && typeof(data.toBgColor) != 'undefined')
                                                 colorFormat.addGradientRange(data.from, data.to, data.color, data.fromBgColor, data.toBgColor);
                                             else
                                                 colorFormat.addRange(data.from, data.to, data.color, data.bgcolor);
@@ -131,7 +133,7 @@
                             //apply formats to dataTable
                             for (var i = 0; i < $scope.formatters[formatType].length; i++) {
                                 if ($scope.chart.formatters[formatType][i].columnNum < dataTable.getNumberOfColumns())
-                                    $scope.formatters[formatType][i].format(dataTable,$scope.chart.formatters[formatType][i].columnNum);
+                                    $scope.formatters[formatType][i].format(dataTable, $scope.chart.formatters[formatType][i].columnNum);
                             }
 
 
@@ -147,7 +149,7 @@
                             $timeout(function () {
                                 draw.triggered = false;
 
-                                if (typeof($scope.formatters)==='undefined')
+                                if (typeof($scope.formatters) === 'undefined')
                                     $scope.formatters = {};
 
                                 var dataTable;
@@ -173,11 +175,11 @@
                                     containerId: $elm[0]
                                 };
 
-                                if($scope.chartWrapper==null) {
-                                	$scope.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
+                                if ($scope.chartWrapper == null) {
+                                    $scope.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
                                     google.visualization.events.addListener($scope.chartWrapper, 'ready', function () {
                                         $scope.chart.displayed = true;
-                                        $scope.$apply(function(scope) {
+                                        $scope.$apply(function (scope) {
                                             scope.onReady({chartWrapper: scope.chartWrapper});
                                         });
                                     });
@@ -185,24 +187,24 @@
                                         console.log("Chart not displayed due to error: " + err.message);
                                     });
                                     google.visualization.events.addListener($scope.chartWrapper, 'select', function () {
-										var selectedItem = $scope.chartWrapper.getChart().getSelection()[0];
-										if (selectedItem) {
-										  $scope.$apply(function () {
-											$scope.select({selectedItem: selectedItem});
-										  });
-										}
-									  }); 
+                                        var selectedItem = $scope.chartWrapper.getChart().getSelection()[0];
+                                        if (selectedItem) {
+                                            $scope.$apply(function () {
+                                                $scope.select({selectedItem: selectedItem});
+                                            });
+                                        }
+                                    });
                                 }
                                 else {
-                                	$scope.chartWrapper.setChartType($scope.chart.type);
-                                	$scope.chartWrapper.setDataTable(dataTable);
+                                    $scope.chartWrapper.setChartType($scope.chart.type);
+                                    $scope.chartWrapper.setDataTable(dataTable);
                                     $scope.chartWrapper.setView($scope.chart.view);
-                                	$scope.chartWrapper.setOptions($scope.chart.options);
+                                    $scope.chartWrapper.setOptions($scope.chart.options);
                                 }
-				                
-                                	
+
+
                                 $timeout(function () {
-                                	$scope.chartWrapper.draw();
+                                    $scope.chartWrapper.draw();
                                 });
                             }, 0, true);
                         }
