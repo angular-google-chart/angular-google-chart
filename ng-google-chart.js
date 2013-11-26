@@ -69,7 +69,10 @@
                     // Redraw the chart if the window is resized
                     $rootScope.$on('resizeMsg', function (e) {
                         $timeout(function () {
-                            $scope.chartWrapper.draw();
+                            // Not always defined yet in IE so check
+                            if($scope.chartWrapper) {
+                                $scope.chartWrapper.draw();
+                            }
                         });
                     });
 
