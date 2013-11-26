@@ -9,31 +9,6 @@
 (function (document, window) {
     'use strict';
 
-    //http://stackoverflow.com/a/15437678
-    function ieLoadBugFix(scriptElement, callback) {
-        if (scriptElement.readyState == 'loaded' || scriptElement.readyState == 'complete') {
-            callback();
-        } else {
-            setTimeout(function () {
-                ieLoadBugFix(scriptElement, callback);
-            }, 100);
-        }
-    }
-
-    function loadScript(url, callback) {
-        var script = document.createElement('script');
-        script.src = url;
-        script.onload = callback;
-        script.onerror = function () {
-            throw Error('Error loading "' + url + '"');
-        };
-
-        ieLoadBugFix(script, callback);
-
-        document.getElementsByTagName('head')[0].appendChild(script);
-    }
-
-
     angular.module('googlechart', [])
 
         .constant('googleChartApiConfig', {
@@ -65,7 +40,7 @@
                     window.google.load('visualization', apiConfig.version, settings);
                 };
 
-            loadScript('//www.google.com/jsapi', onLoad);
+            jQuery.getScript('//www.google.com/jsapi', onLoad);
 
             return function (fn, context) {
                 var args = Array.prototype.slice.call(arguments, 2);
