@@ -18,7 +18,24 @@
             }
         })
 
-        .factory('googleChartApiProxy', ['$rootScope', '$q', 'googleChartApiConfig', function ($rootScope, $q, apiConfig) {
+        .provider('googleJsapiUrl', function () {
+            var protocol = '';
+            var url = '//www.google.com/jsapi';
+
+            this.setProtocol = function(newProtocol) {
+                protocol = newProtocol;
+            };
+
+            this.setUrl = function(newUrl) {
+                url = newUrl;
+            };
+
+            this.$get = function() {
+                return (protocol ? protocol : '') + url;
+            };
+        })
+
+        .factory('googleChartApiProxy', ['$rootScope', '$q', 'googleChartApiConfig', 'googleJsapiUrl', function ($rootScope, $q, apiConfig, googleJsapiUrl) {
             var apiReady = $q.defer(),
                 onLoad = function () {
                     // override callback function
@@ -40,7 +57,7 @@
                     window.google.load('visualization', apiConfig.version, settings);
                 };
 
-            jQuery.getScript('//www.google.com/jsapi', onLoad);
+            jQuery.getScript(googleJsapiUrl, onLoad);
 
             return function (fn, context) {
                 var args = Array.prototype.slice.call(arguments, 2);
