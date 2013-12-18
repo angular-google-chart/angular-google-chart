@@ -150,6 +150,8 @@
                                 var dataTable;
                                 if ($scope.chart.data instanceof google.visualization.DataTable)
                                     dataTable = $scope.chart.data;
+                                else if (jQuery.isArray($scope.chart.data))
+                                    dataTable = google.visualization.arrayToDataTable($scope.chart.data);
                                 else
                                     dataTable = new google.visualization.DataTable($scope.chart.data, 0.5);
 
