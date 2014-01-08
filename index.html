@@ -79,21 +79,25 @@
             <div class="span8">
                 <h2>Live edit</h2>
 
-                <form class="form-horizontal">
+                <form class="form-inline">
                     <div class="row-fluid">
 
                         <div class="control-group span6">
-                            <label class="control-label" for="chartType">February server sale units</label>
+                            <label class="control-label"
+                                   for="chart-data-rows-1-3-v">February server sale units</label>
 
                             <div class="controls">
-                                <input type="number" min="0" max="100" ng-model="chart.data.rows[1].c[3].v"/>
+                                <input type="number" min="0" max="100" ng-model="chart.data.rows[1].c[3].v"
+                                       id="chart-data-rows-1-3-v"/>
                             </div>
                         </div>
                         <div class="control-group span6">
-                            <label class="control-label" for="chartType">Number of grid lines</label>
+                            <label class="control-label"
+                                   for="chart-options-vAxis-gridlines-count">Number of grid lines</label>
 
                             <div class="controls">
-                                <input type="number" min="0" max="100" ng-model="chart.options.vAxis.gridlines.count"/>
+                                <input type="number" min="0" max="100" ng-model="chart.options.vAxis.gridlines.count"
+                                       id="chart-options-vAxis-gridlines-count"/>
                             </div>
                         </div>
                     </div>
@@ -113,21 +117,23 @@
 
                             </div>
                         </div>
-                        <div class="control-group span2">
-                            <label class="control-label" for="hideServer">Hide Server</label>
-
+                        <div class="control-group span3">
                             <div class="controls">
-                                <input id="hideServer" type="checkbox" ng-model="hideServer"
-                                       ng-change="selectionChange()"/>
+                                <label class="checkbox" for="hideServer">
+
+                                    <input id="hideServer" type="checkbox" class="checkbox" ng-model="hideServer"
+                                           ng-change="selectionChange()"/> Hide Server
+                                </label>
                             </div>
-                        </div>
+                       </div>
 
-                        <div class="control-group span2" ng-show="chart.type!='Table'">
-                            <label class="control-label" for="htmlTooltip">HTML Tooltip</label>
-
+                        <div class="control-group span3">
                             <div class="controls">
-                                <input id="htmlTooltip" type="checkbox" ng-model="chart.options.tooltip.isHtml"
-                                       ng-change="htmlTooltip()"/>
+                                <label class="checkbox" for="htmlTooltip" ng-show="chart.type!='Table'">
+
+                                    <input id="htmlTooltip" type="checkbox" class="checkbox" ng-model="chart.options.tooltip.isHtml"
+                                           ng-change="htmlTooltip()"/> HTML Tooltip
+                                </label>
                             </div>
                         </div>
                     </div>
