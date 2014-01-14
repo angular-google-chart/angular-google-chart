@@ -71,7 +71,6 @@
                 
                 script.onload = onLoad;
                 
-
             return function (fn, context) {
                 var args = Array.prototype.slice.call(arguments, 2);
                 return function () {
