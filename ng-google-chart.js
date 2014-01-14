@@ -55,18 +55,22 @@
                     settings = angular.extend({}, apiConfig.optionalSettings, settings);
 
                     window.google.load('visualization', apiConfig.version, settings);
+                },
+                head = document.getElementsByTagName('head')[0],
+                script = document.createElement('script');
+                
+                script.setAttribute('type', 'text/javascript');
+                script.src = googleJsapiUrl;
+                head.appendChild(script);
+                
+                script.onreadystatechange = function () {
+                    if (this.readyState == 'complete') { 
+                        onLoad();
+                    }
                 };
                 
-                (function(doc, type) {
-                    var firstScript = doc.getElementsByTagName(type)[0],
-                        script = doc.createElement(type);
-                    script.onreadystatechange = function () {
-                        if (this.readyState == 'complete') onLoad();
-                    }
-                    script.onload = onload;
-                    script.src = googleJsapiUrl;
-                    firstScript.parentNode.insertBefore(script)
-                }(document, 'script'));
+                script.onload = onLoad;
+                
 
             return function (fn, context) {
                 var args = Array.prototype.slice.call(arguments, 2);
