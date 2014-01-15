@@ -153,7 +153,7 @@
 
                 <h2>Output</h2>
 
-                <div google-chart chart="chart" style="{{chart.cssStyle}}" on-ready="chartReady()"/>
+                <div google-chart chart="chart" style="{{chart.cssStyle}}" on-ready="chartReady()"></div><!-- explicit close of tag seems to be necessary -->
 
 
             </div>
@@ -162,9 +162,10 @@
     </div>
 </div>
 </div>
+<!-- jQuery imported here only for Bootstrap.js and for this sample.js functions. It's not needed for the directive itself. -->
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.8/angular.min.js"></script>
 <script src="ng-google-chart.js"></script>
 <script src="sample.js"></script>
 <script>
