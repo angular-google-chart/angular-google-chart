@@ -55,10 +55,22 @@
                     settings = angular.extend({}, apiConfig.optionalSettings, settings);
 
                     window.google.load('visualization', apiConfig.version, settings);
+                },
+                head = document.getElementsByTagName('head')[0],
+                script = document.createElement('script');
+                
+                script.setAttribute('type', 'text/javascript');
+                script.src = googleJsapiUrl;
+                head.appendChild(script);
+                
+                script.onreadystatechange = function () {
+                    if (this.readyState == 'complete') { 
+                        onLoad();
+                    }
                 };
-
-            jQuery.getScript(googleJsapiUrl, onLoad);
-
+                
+                script.onload = onLoad;
+                
             return function (fn, context) {
                 var args = Array.prototype.slice.call(arguments, 2);
                 return function () {
@@ -150,7 +162,7 @@
                                 var dataTable;
                                 if ($scope.chart.data instanceof google.visualization.DataTable)
                                     dataTable = $scope.chart.data;
-                                else if (jQuery.isArray($scope.chart.data))
+                                else if (Array.isArray($scope.chart.data))
                                     dataTable = google.visualization.arrayToDataTable($scope.chart.data);
                                 else
                                     dataTable = new google.visualization.DataTable($scope.chart.data, 0.5);
