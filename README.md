@@ -11,17 +11,15 @@ Wrapper directive for [Google Chart Tools](https://google-developers.appspot.com
 
 See sample files index.html and sample.js. [Live Demo](http://bouil.github.io/angular-google-chart/)
 
-### Dependency on jQuery
-
-Please be aware that jQuery needs to be loaded to use this directive.
-
-Any contribution to get rid of jQuery is welcomed.
-
 ### Chart Data doc
 
 See [ChartWrapper](https://google-developers.appspot.com/chart/interactive/docs/reference#chartwrapperobject) and [DataTable](https://google-developers.appspot.com/chart/interactive/docs/reference#DataTable) documentation.
 
 ### Release notes
+
+#### 0.0.7
+
+Removed jQuery dependency.
 
 #### 0.0.3
 
