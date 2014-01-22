@@ -11,6 +11,8 @@ Wrapper directive for [Google Chart Tools](https://google-developers.appspot.com
 
 See sample files index.html and sample.js. [Live Demo](http://bouil.github.io/angular-google-chart/)
 
+You can find another example of use on [this pluker](http://plnkr.co/edit/3RJ2HS?p=preview)
+
 ### Chart Data doc
 
 See [ChartWrapper](https://google-developers.appspot.com/chart/interactive/docs/reference#chartwrapperobject) and [DataTable](https://google-developers.appspot.com/chart/interactive/docs/reference#DataTable) documentation.
