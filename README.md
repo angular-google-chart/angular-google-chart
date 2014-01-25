@@ -19,6 +19,10 @@ See [ChartWrapper](https://google-developers.appspot.com/chart/interactive/docs/
 
 ### Release notes
 
+#### 0.0.8
+
+Exposing a factory `googleChartApiPromise` which is a Promise resolved when the `google` global object is correctly initialized.
+
 #### 0.0.7
 
 Removed jQuery dependency.
