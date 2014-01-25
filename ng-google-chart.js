@@ -34,54 +34,45 @@
                 return (protocol ? protocol : '') + url;
             };
         })
+        .factory('googleChartApiPromise', ['$rootScope', '$q', 'googleChartApiConfig', 'googleJsapiUrl', function ($rootScope, $q, apiConfig, googleJsapiUrl) {
+            var apiReady = $q.defer();
+            var onLoad = function () {
+                // override callback function
+                var settings = {
+                    callback: function () {
+                        var oldCb = apiConfig.optionalSettings.callback;
+                        $rootScope.$apply(function () {
+                            apiReady.resolve();
+                        });
 
-        .factory('googleChartApiProxy', ['$rootScope', '$q', 'googleChartApiConfig', 'googleJsapiUrl', function ($rootScope, $q, apiConfig, googleJsapiUrl) {
-            var apiReady = $q.defer(),
-                onLoad = function () {
-                    // override callback function
-                    var settings = {
-                        callback: function () {
-                            var oldCb = apiConfig.optionalSettings.callback;
-                            $rootScope.$apply(function () {
-                                apiReady.resolve();
-                            });
-
-                            if (angular.isFunction(oldCb)) {
-                                oldCb.call(this);
-                            }
+                        if (angular.isFunction(oldCb)) {
+                            oldCb.call(this);
                         }
-                    };
-
-                    settings = angular.extend({}, apiConfig.optionalSettings, settings);
-
-                    window.google.load('visualization', apiConfig.version, settings);
-                },
-                head = document.getElementsByTagName('head')[0],
-                script = document.createElement('script');
-                
-                script.setAttribute('type', 'text/javascript');
-                script.src = googleJsapiUrl;
-                head.appendChild(script);
-                
-                script.onreadystatechange = function () {
-                    if (this.readyState == 'complete') { 
-                        onLoad();
                     }
                 };
-                
-                script.onload = onLoad;
-                
-            return function (fn, context) {
-                var args = Array.prototype.slice.call(arguments, 2);
-                return function () {
-                    apiReady.promise.then(function () {
-                        fn.apply(context, args.concat(Array.prototype.slice.call(arguments)));
-                    });
-                };
-            };
-        }])
 
-        .directive('googleChart', ['$timeout', '$window', '$rootScope', 'googleChartApiProxy', function ($timeout, $window, $rootScope, apiProxy) {
+                settings = angular.extend({}, apiConfig.optionalSettings, settings);
+
+                window.google.load('visualization', apiConfig.version, settings);
+            };
+            var head = document.getElementsByTagName('head')[0];
+            var script = document.createElement('script');
+
+            script.setAttribute('type', 'text/javascript');
+            script.src = googleJsapiUrl;
+            head.appendChild(script);
+
+            script.onreadystatechange = function () {
+                if (this.readyState == 'complete') {
+                    onLoad();
+                }
+            };
+
+            script.onload = onLoad;
+
+            return apiReady.promise;
+        }])
+        .directive('googleChart', ['$timeout', '$window', '$rootScope', 'googleChartApiPromise', function ($timeout, $window, $rootScope, googleChartApiPromise) {
             return {
                 restrict: 'A',
                 scope: {
@@ -92,7 +83,7 @@
                 link: function ($scope, $elm, $attr) {
                     // Watches, to refresh the chart when its data, title or dimensions change
                     $scope.$watch('chart', function () {
-                        draw();
+                        drawAsync();
                     }, true); // true is for deep object equality checking
 
                     // Redraw the chart if the window is resized
@@ -219,7 +210,11 @@
                         }
                     }
 
-                    draw = apiProxy(draw, this);
+                    function drawAsync() {
+                        googleChartApiPromise.then(function () {
+                            draw();
+                        })
+                    }
                 }
             };
         }])
