@@ -11,7 +11,10 @@ Wrapper directive for [Google Chart Tools](https://google-developers.appspot.com
 
 See sample files index.html and sample.js. [Live Demo](http://bouil.github.io/angular-google-chart/)
 
-You can find another example of use on [this pluker](http://plnkr.co/edit/3RJ2HS?p=preview)
+#### Other samples
+
+* http://plnkr.co/edit/3RJ2HS?p=preview
+* http://plnkr.co/edit/E4iPtQ?p=preview
 
 ### Chart Data doc
 
