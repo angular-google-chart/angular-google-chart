@@ -19,7 +19,7 @@
         })
 
         .provider('googleJsapiUrl', function () {
-            var protocol = 'https';
+            var protocol = 'https:';
             var url = '//www.google.com/jsapi';
 
             this.setProtocol = function(newProtocol) {
