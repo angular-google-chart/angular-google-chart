@@ -1,4 +1,4 @@
-angular.module("multiSamples").controller("PieChartCtrl", function ($scope, googleChartApiPromise) {
+angular.module("google-chart-sample").controller("GenericChartCtrl", function ($scope, $routeParams) {
     $scope.chartObject = {};
 
     $scope.onions = [
@@ -30,7 +30,8 @@ angular.module("multiSamples").controller("PieChartCtrl", function ($scope, goog
     ]};
 
 
-    $scope.chartObject.type = "PieChart";
+    // $routeParams.chartType == BarChart or PieChart or ColumnChart...
+    $scope.chartObject.type = $routeParams.chartType;
     $scope.chartObject.options = {
         'title': 'How Much Pizza I Ate Last Night'
     }
