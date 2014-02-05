@@ -37,3 +37,7 @@ Advanced chart formatter are available. Therefore, compatibility is broken withe
 #### 0.0.2
 
 The module is now named `googlechart` (instead of `googlechart.directives`)
+
+### Out of luck ?
+
+Try another AngularJS directive that use [Highcharts](https://github.com/pablojim/highcharts-ng).
