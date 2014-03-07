@@ -166,6 +166,12 @@
                                     applyFormat("color", google.visualization.ColorFormat, dataTable);
                                 }
 
+                                var customFormatters = $scope.chart.customFormatters;
+                                if (typeof(customFormatters) != 'undefined') {
+                                    for (name in customFormatters) {
+                                        applyFormat(name, customFormatters[name], dataTable);
+                                    }
+                                }
 
                                 var chartWrapperArgs = {
                                     chartType: $scope.chart.type,
