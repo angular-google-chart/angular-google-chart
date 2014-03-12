@@ -60,15 +60,19 @@
 
             script.setAttribute('type', 'text/javascript');
             script.src = googleJsapiUrl;
+            
+            if (script.addEventListener) { // Standard browsers (including IE9+)
+                script.addEventListener('load', onLoad, false);
+            } else { // IE8 and below
+                script.onreadystatechange = function () {
+                    if (script.readyState === 'loaded' || script.readyState === 'complete') {
+                        script.onreadystatechange = null;
+                        onLoad();
+                    }
+                };
+            }
+            
             head.appendChild(script);
-
-            script.onreadystatechange = function () {
-                if (this.readyState == 'complete') {
-                    onLoad();
-                }
-            };
-
-            script.onload = onLoad;
 
             return apiReady.promise;
         }])
