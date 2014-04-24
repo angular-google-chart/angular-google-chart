@@ -185,36 +185,29 @@
                                     containerId: $elm[0]
                                 };
 
-                                if ($scope.chartWrapper == null) {
-                                    $scope.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
-                                    google.visualization.events.addListener($scope.chartWrapper, 'ready', function () {
-                                        $scope.chart.displayed = true;
-                                        $scope.$apply(function (scope) {
-                                            scope.onReady({chartWrapper: scope.chartWrapper});
+                                $scope.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
+                                google.visualization.events.addListener($scope.chartWrapper, 'ready', function () {
+                                    $scope.chart.displayed = true;
+                                    $scope.$apply(function (scope) {
+                                        scope.onReady({chartWrapper: scope.chartWrapper});
+                                    });
+                                });
+                                google.visualization.events.addListener($scope.chartWrapper, 'error', function (err) {
+                                    console.log("Chart not displayed due to error: " + err.message + ". Full error object follows.");
+                                    console.log(err);
+                                });
+                                google.visualization.events.addListener($scope.chartWrapper, 'select', function () {
+                                    var selectedItem = $scope.chartWrapper.getChart().getSelection()[0];
+                                    if (selectedItem) {
+                                        $scope.$apply(function () {
+                                            $scope.select({selectedItem: selectedItem});
                                         });
-                                    });
-                                    google.visualization.events.addListener($scope.chartWrapper, 'error', function (err) {
-                                        console.log("Chart not displayed due to error: " + err.message + ". Full error object follows.");
-                                        console.log(err);
-                                    });
-                                    google.visualization.events.addListener($scope.chartWrapper, 'select', function () {
-                                        var selectedItem = $scope.chartWrapper.getChart().getSelection()[0];
-                                        if (selectedItem) {
-                                            $scope.$apply(function () {
-                                                $scope.select({selectedItem: selectedItem});
-                                            });
-                                        }
-                                    });
-                                }
-                                else {
-                                    $scope.chartWrapper.setChartType($scope.chart.type);
-                                    $scope.chartWrapper.setDataTable(dataTable);
-                                    $scope.chartWrapper.setView($scope.chart.view);
-                                    $scope.chartWrapper.setOptions($scope.chart.options);
-                                }
+                                    }
+                                });
 
 
                                 $timeout(function () {
+                                    $elm.empty();
                                     $scope.chartWrapper.draw();
                                 });
                             }, 0, true);
