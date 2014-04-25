@@ -1,6 +1,6 @@
 /**
  * @description Google Chart Api Directive Module for AngularJS
- * @version 0.0.8
+ * @version 0.0.9
  * @author Nicolas Bouillon <nicolas@bouil.org>
  * @author GitHub contributors
  * @license MIT
