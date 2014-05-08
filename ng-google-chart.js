@@ -172,7 +172,7 @@
 
                                 var customFormatters = $scope.chart.customFormatters;
                                 if (typeof(customFormatters) != 'undefined') {
-                                    for (name in customFormatters) {
+                                    for (var name in customFormatters) {
                                         applyFormat(name, customFormatters[name], dataTable);
                                     }
                                 }
