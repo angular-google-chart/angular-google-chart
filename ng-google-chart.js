@@ -100,11 +100,15 @@
                         });
                     });
 
+                    // Keeps old formatter configuration to compare against
+                    $scope.oldChartFormatters = {};
+
                     function applyFormat(formatType, formatClass, dataTable) {
 
                         if (typeof($scope.chart.formatters[formatType]) != 'undefined') {
-                            if ($scope.formatters[formatType] == null) {
-                                $scope.formatters[formatType] = new Array();
+                            if (!angular.equals($scope.chart.formatters[formatType], $scope.oldChartFormatters[formatType])) {
+                                $scope.oldChartFormatters[formatType] = $scope.chart.formatters[formatType];
+                                $scope.formatters[formatType] = [];
 
                                 if (formatType === 'color') {
                                     for (var cIdx = 0; cIdx < $scope.chart.formatters[formatType].length; cIdx++) {
