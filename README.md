@@ -7,6 +7,14 @@ for AngularJS
 
 Wrapper directive for [Google Chart Tools](https://google-developers.appspot.com/chart/)
 
+### A note on branches
+
+Developpement branch is `gh-pages`.
+
+Release branch is `master` (idealy), and was created just because Bower needed it.
+
+Please send your pull requests to `gh-pages`.
+
 ### Usage and Demo
 
 See sample files index.html and controllers in partials directory. [Live Demo](http://bouil.github.io/angular-google-chart/)
