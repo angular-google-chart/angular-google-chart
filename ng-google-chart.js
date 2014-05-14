@@ -84,14 +84,14 @@
                     onReady: '&',
                     select: '&'
                 },
-                link: function ($scope, $elm, $attr) {
+                link: function ($scope, $elm) {
                     // Watches, to refresh the chart when its data, title or dimensions change
                     $scope.$watch('chart', function () {
                         drawAsync();
                     }, true); // true is for deep object equality checking
 
                     // Redraw the chart if the window is resized
-                    $rootScope.$on('resizeMsg', function (e) {
+                    $rootScope.$on('resizeMsg', function () {
                         $timeout(function () {
                             // Not always defined yet in IE so check
                             if($scope.chartWrapper) {
@@ -104,6 +104,7 @@
                     $scope.oldChartFormatters = {};
 
                     function applyFormat(formatType, formatClass, dataTable) {
+                        var i, cIdx;
 
                         if (typeof($scope.chart.formatters[formatType]) != 'undefined') {
                             if (!angular.equals($scope.chart.formatters[formatType], $scope.oldChartFormatters[formatType])) {
@@ -111,10 +112,10 @@
                                 $scope.formatters[formatType] = [];
 
                                 if (formatType === 'color') {
-                                    for (var cIdx = 0; cIdx < $scope.chart.formatters[formatType].length; cIdx++) {
+                                    for (cIdx = 0; cIdx < $scope.chart.formatters[formatType].length; cIdx++) {
                                         var colorFormat = new formatClass();
 
-                                        for (var i = 0; i < $scope.chart.formatters[formatType][cIdx].formats.length; i++) {
+                                        for (i = 0; i < $scope.chart.formatters[formatType][cIdx].formats.length; i++) {
                                             var data = $scope.chart.formatters[formatType][cIdx].formats[i];
 
                                             if (typeof(data.fromBgColor) != 'undefined' && typeof(data.toBgColor) != 'undefined')
@@ -127,7 +128,7 @@
                                     }
                                 } else {
 
-                                    for (var i = 0; i < $scope.chart.formatters[formatType].length; i++) {
+                                    for (i = 0; i < $scope.chart.formatters[formatType].length; i++) {
                                         $scope.formatters[formatType].push(new formatClass(
                                             $scope.chart.formatters[formatType][i])
                                         );
@@ -137,7 +138,7 @@
 
 
                             //apply formats to dataTable
-                            for (var i = 0; i < $scope.formatters[formatType].length; i++) {
+                            for (i = 0; i < $scope.formatters[formatType].length; i++) {
                                 if ($scope.chart.formatters[formatType][i].columnNum < dataTable.getNumberOfColumns())
                                     $scope.formatters[formatType][i].format(dataTable, $scope.chart.formatters[formatType][i].columnNum);
                             }
