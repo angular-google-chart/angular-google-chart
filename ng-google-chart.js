@@ -203,11 +203,9 @@
                                 });
                                 google.visualization.events.addListener($scope.chartWrapper, 'select', function () {
                                     var selectedItem = $scope.chartWrapper.getChart().getSelection()[0];
-                                    if (selectedItem) {
-                                        $scope.$apply(function () {
-                                            $scope.select({selectedItem: selectedItem});
-                                        });
-                                    }
+                                    $scope.$apply(function () {
+                                        $scope.select({selectedItem: selectedItem});
+                                    });
                                 });
 
 
