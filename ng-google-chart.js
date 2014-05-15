@@ -6,7 +6,7 @@
  * @license MIT
  * @year 2013
  */
-(function (document, window) {
+(function (document, window, angular) {
     'use strict';
 
     angular.module('googlechart', [])
@@ -234,4 +234,4 @@
             });
         }]);
 
-})(document, window);
+})(document, window, window.angular);
