@@ -80,13 +80,14 @@
             return {
                 restrict: 'A',
                 scope: {
-                    chart: '=chart',
+                    chartOrig: '=chart',
                     onReady: '&',
                     select: '&'
                 },
                 link: function ($scope, $elm) {
                     // Watches, to refresh the chart when its data, title or dimensions change
-                    $scope.$watch('chart', function () {
+                    $scope.$watch('chartOrig', function () {
+						$scope.chart = angular.copy($scope.chartOrig);
                         drawAsync();
                     }, true); // true is for deep object equality checking
 
@@ -154,8 +155,6 @@
                         if (!draw.triggered && ($scope.chart != undefined)) {
                             draw.triggered = true;
                             $timeout(function () {
-                                draw.triggered = false;
-
                                 if (typeof($scope.formatters) === 'undefined')
                                     $scope.formatters = {};
 
@@ -212,6 +211,7 @@
                                 $timeout(function () {
                                     $elm.empty();
                                     $scope.chartWrapper.draw();
+									draw.triggered = false;
                                 });
                             }, 0, true);
                         }
