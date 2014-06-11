@@ -80,14 +80,23 @@
             return {
                 restrict: 'A',
                 scope: {
-                    chartOrig: '=chart',
+                    chart: '=chart',
                     onReady: '&',
                     select: '&'
                 },
                 link: function ($scope, $elm) {
-                    // Watches, to refresh the chart when its data, title or dimensions change
-                    $scope.$watch('chartOrig', function () {
-						$scope.chart = angular.copy($scope.chartOrig);
+                    /* Watches, to refresh the chart when its data, formatters, options, or type change.
+                        All other values intentionally disregarded to avoid double calls to the draw
+                        function. Please avoid making changes to these objects directly from this directive.*/
+                    $scope.$watch(function () {
+                        return {
+                            data: $scope.chart.data,
+                            formatters: $scope.chart.formatters,
+                            options: $scope.chart.options,
+                            type: $scope.chart.type,
+                            customFormatters: $scope.chart.customFormatters
+                        };
+                    }, function () {
                         drawAsync();
                     }, true); // true is for deep object equality checking
 
@@ -160,7 +169,7 @@
 
                                 var dataTable;
                                 if ($scope.chart.data instanceof google.visualization.DataTable)
-                                    dataTable = $scope.chart.data;
+                                    dataTable = $scope.chart.data.clone();
                                 else if (angular.isArray($scope.chart.data))
                                     dataTable = google.visualization.arrayToDataTable($scope.chart.data);
                                 else
