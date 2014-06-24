@@ -118,7 +118,6 @@
                     $scope.oldChartFormatters = {};
 
                     function applyFormat(formatType, formatClass, dataTable) {
-                        var i, cIdx;
 
                         if (typeof($scope.chart.formatters[formatType]) != 'undefined') {
                             if (!angular.equals($scope.chart.formatters[formatType], $scope.oldChartFormatters[formatType])) {
@@ -126,7 +125,7 @@
                                 $scope.formatters[formatType] = [];
 
                                 if (formatType === 'color') {
-                                    for (cIdx = 0; cIdx < $scope.chart.formatters[formatType].length; cIdx++) {
+                                    for (var cIdx = 0; cIdx < $scope.chart.formatters[formatType].length; cIdx++) {
                                         var colorFormat = new formatClass();
 
                                         for (i = 0; i < $scope.chart.formatters[formatType][cIdx].formats.length; i++) {
@@ -142,7 +141,7 @@
                                     }
                                 } else {
 
-                                    for (i = 0; i < $scope.chart.formatters[formatType].length; i++) {
+                                    for (var i = 0; i < $scope.chart.formatters[formatType].length; i++) {
                                         $scope.formatters[formatType].push(new formatClass(
                                             $scope.chart.formatters[formatType][i])
                                         );
