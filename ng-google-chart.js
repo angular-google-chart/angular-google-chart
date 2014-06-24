@@ -89,13 +89,16 @@
                         All other values intentionally disregarded to avoid double calls to the draw
                         function. Please avoid making changes to these objects directly from this directive.*/
                     $scope.$watch(function () {
-                        return {
-                            data: $scope.chart.data,
-                            formatters: $scope.chart.formatters,
-                            options: $scope.chart.options,
-                            type: $scope.chart.type,
-                            customFormatters: $scope.chart.customFormatters
-                        };
+                        if ($scope.chart) {
+                            return {
+                                data: $scope.chart.data,
+                                formatters: $scope.chart.formatters,
+                                options: $scope.chart.options,
+                                type: $scope.chart.type,
+                                customFormatters: $scope.chart.customFormatters
+                            };
+                        }
+                        return $scope.chart;
                     }, function () {
                         drawAsync();
                     }, true); // true is for deep object equality checking
@@ -220,7 +223,7 @@
                                 $timeout(function () {
                                     $elm.empty();
                                     $scope.chartWrapper.draw();
-									draw.triggered = false;
+                                    draw.triggered = false;
                                 });
                             }, 0, true);
                         }
