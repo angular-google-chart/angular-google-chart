@@ -82,9 +82,10 @@
                 scope: {
                     chart: '=chart',
                     onReady: '&',
+                    onSelect: '&',
                     select: '&'
                 },
-                link: function ($scope, $elm) {
+                link: function ($scope, $elm, $attrs) {
                     /* Watches, to refresh the chart when its data, formatters, options, or type change.
                         All other values intentionally disregarded to avoid double calls to the draw
                         function. Please avoid making changes to these objects directly from this directive.*/
@@ -215,7 +216,13 @@
                                 google.visualization.events.addListener($scope.chartWrapper, 'select', function () {
                                     var selectedItem = $scope.chartWrapper.getChart().getSelection()[0];
                                     $scope.$apply(function () {
-                                        $scope.select({selectedItem: selectedItem});
+                                        if ($attrs.select) {
+                                            console.log('Angular-Google-Chart: The \'select\' attribute is deprecated and will be removed in a future release.  Please use \'onSelect\'.');
+                                            $scope.select({ selectedItem: selectedItem });
+                                        }
+                                        else {
+                                            $scope.onSelect({ selectedItem: selectedItem });
+                                        }
                                     });
                                 });
 
