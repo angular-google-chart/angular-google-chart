@@ -82,9 +82,10 @@
                 scope: {
                     chart: '=chart',
                     onReady: '&',
+                    onSelect: '&',
                     select: '&'
                 },
-                link: function ($scope, $elm) {
+                link: function ($scope, $elm, $attrs) {
                     /* Watches, to refresh the chart when its data, formatters, options, or type change.
                         All other values intentionally disregarded to avoid double calls to the draw
                         function. Please avoid making changes to these objects directly from this directive.*/
@@ -117,7 +118,6 @@
                     $scope.oldChartFormatters = {};
 
                     function applyFormat(formatType, formatClass, dataTable) {
-                        var i, cIdx;
 
                         if (typeof($scope.chart.formatters[formatType]) != 'undefined') {
                             if (!angular.equals($scope.chart.formatters[formatType], $scope.oldChartFormatters[formatType])) {
@@ -125,7 +125,7 @@
                                 $scope.formatters[formatType] = [];
 
                                 if (formatType === 'color') {
-                                    for (cIdx = 0; cIdx < $scope.chart.formatters[formatType].length; cIdx++) {
+                                    for (var cIdx = 0; cIdx < $scope.chart.formatters[formatType].length; cIdx++) {
                                         var colorFormat = new formatClass();
 
                                         for (i = 0; i < $scope.chart.formatters[formatType][cIdx].formats.length; i++) {
@@ -141,7 +141,7 @@
                                     }
                                 } else {
 
-                                    for (i = 0; i < $scope.chart.formatters[formatType].length; i++) {
+                                    for (var i = 0; i < $scope.chart.formatters[formatType].length; i++) {
                                         $scope.formatters[formatType].push(new formatClass(
                                             $scope.chart.formatters[formatType][i])
                                         );
@@ -215,7 +215,13 @@
                                 google.visualization.events.addListener($scope.chartWrapper, 'select', function () {
                                     var selectedItem = $scope.chartWrapper.getChart().getSelection()[0];
                                     $scope.$apply(function () {
-                                        $scope.select({selectedItem: selectedItem});
+                                        if ($attrs.select) {
+                                            console.log('Angular-Google-Chart: The \'select\' attribute is deprecated and will be removed in a future release.  Please use \'onSelect\'.');
+                                            $scope.select({ selectedItem: selectedItem });
+                                        }
+                                        else {
+                                            $scope.onSelect({ selectedItem: selectedItem });
+                                        }
                                     });
                                 });
 
