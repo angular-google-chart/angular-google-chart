@@ -168,7 +168,7 @@
                             draw.triggered = true;
                             $timeout(function () {
 
-                                if (typeof($scope.chartWrapper) == 'undefined') {
+                                if (typeof ($scope.chartWrapper) == 'undefined') {
                                     var chartWrapperArgs = {
                                         chartType: $scope.chart.type,
                                         dataTable: $scope.chart.data,
@@ -181,7 +181,7 @@
                                     google.visualization.events.addListener($scope.chartWrapper, 'ready', function () {
                                         $scope.chart.displayed = true;
                                         $scope.$apply(function (scope) {
-                                            scope.onReady({chartWrapper: scope.chartWrapper});
+                                            scope.onReady({ chartWrapper: scope.chartWrapper });
                                         });
                                     });
                                     google.visualization.events.addListener($scope.chartWrapper, 'error', function (err) {
@@ -200,6 +200,12 @@
                                             }
                                         });
                                     });
+                                }
+                                else {
+                                    $scope.chartWrapper.setChartType($scope.chart.type);
+                                    $scope.chartWrapper.setDataTable($scope.chart.data);
+                                    $scope.chartWrapper.setView($scope.chart.view);
+                                    $scope.chartWrapper.setOptions($scope.chart.options);
                                 }
 
                                 if (typeof($scope.formatters) === 'undefined')
