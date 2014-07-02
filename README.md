@@ -30,6 +30,20 @@ See [ChartWrapper](https://google-developers.appspot.com/chart/interactive/docs/
 
 ### Release notes
 
+#### 0.0.10
+
+* Fixed bug with Formatter implementation.
+* Fix issue where Select listener function was not called for unselect events.
+* Fixed some issues where drawing the chart triggered another call to draw the chart.
+* `select` attribute is now deprecated, to be removed in a future release.  Replaced with `on-select` to keep naming consistent with `on-ready`.
+
+#### 0.0.9
+
+* Load Google Charts API with https as default protocol.
+* Support for Custom Formatters
+* Added and Reorganized Samples
+* Improved IE Compatability for API Loading
+
 #### 0.0.8
 
 Exposing a factory `googleChartApiPromise` which is a Promise resolved when the `google` global object is correctly initialized.
