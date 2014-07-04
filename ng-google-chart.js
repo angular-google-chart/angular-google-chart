@@ -11,7 +11,7 @@
 
     angular.module('googlechart', [])
 
-        .constant('googleChartApiConfig', {
+        .value('googleChartApiConfig', {
             version: '1',
             optionalSettings: {
                 packages: ['corechart']
