@@ -105,13 +105,18 @@
                     }, true); // true is for deep object equality checking
 
                     // Redraw the chart if the window is resized
-                    $rootScope.$on('resizeMsg', function () {
+                    var resizeHandler = $rootScope.$on('resizeMsg', function () {
                         $timeout(function () {
                             // Not always defined yet in IE so check
                             if($scope.chartWrapper) {
                                 drawAsync();
                             }
                         });
+                    });
+
+                    //Cleanup resize handler.
+                    $scope.$on('$destroy', function () {
+                        resizeHandler();
                     });
 
                     // Keeps old formatter configuration to compare against
