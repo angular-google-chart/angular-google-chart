@@ -80,6 +80,7 @@
             return {
                 restrict: 'A',
                 scope: {
+                    beforeDraw: '&',
                     chart: '=chart',
                     onReady: '&',
                     onSelect: '&',
@@ -231,8 +232,8 @@
                                     }
                                 }
 
-
                                 $timeout(function () {
+                                    $scope.beforeDraw({ chartWrapper: $scope.chartWrapper });
                                     $scope.chartWrapper.draw();
                                     draw.triggered = false;
                                 });
