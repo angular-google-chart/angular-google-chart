@@ -60,7 +60,7 @@
 
             script.setAttribute('type', 'text/javascript');
             script.src = googleJsapiUrl;
-            
+
             if (script.addEventListener) { // Standard browsers (including IE9+)
                 script.addEventListener('load', onLoad, false);
             } else { // IE8 and below
@@ -71,7 +71,7 @@
                     }
                 };
             }
-            
+
             head.appendChild(script);
 
             return apiReady.promise;
@@ -87,17 +87,19 @@
                     select: '&'
                 },
                 link: function ($scope, $elm, $attrs) {
-                    /* Watches, to refresh the chart when its data, formatters, options, or type change.
-                        All other values intentionally disregarded to avoid double calls to the draw
-                        function. Please avoid making changes to these objects directly from this directive.*/
+                    /* Watches, to refresh the chart when its data, formatters, options, view,
+                        or type change. All other values intentionally disregarded to avoid double
+                        calls to the draw function. Please avoid making changes to these objects
+                        directly from this directive.*/
                     $scope.$watch(function () {
                         if ($scope.chart) {
                             return {
+                                customFormatters: $scope.chart.customFormatters,
                                 data: $scope.chart.data,
                                 formatters: $scope.chart.formatters,
                                 options: $scope.chart.options,
                                 type: $scope.chart.type,
-                                customFormatters: $scope.chart.customFormatters
+                                view: $scope.chart.view
                             };
                         }
                         return $scope.chart;
