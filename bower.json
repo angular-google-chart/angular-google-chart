@@ -1,6 +1,6 @@
 {
     "name": "angular-google-chart",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "main": "./ng-google-chart.js",
     "homepage": "http://bouil.github.io/angular-google-chart/",
     "authors": [
