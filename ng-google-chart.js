@@ -197,14 +197,16 @@
                                         console.log(err);
                                     });
                                     google.visualization.events.addListener($scope.chartWrapper, 'select', function () {
-                                        var selectedItem = $scope.chartWrapper.getChart().getSelection()[0];
+                                        var selectEventRetParams = {selectedItems:$scope.chartWrapper.getChart().getSelection()};
+                                        // This is for backwards compatibility for people using 'selectedItem' that only wanted the first selection.
+                                        selectEventRetParams['selectedItem'] = selectEventRetParams['selectedItems'][0];
                                         $scope.$apply(function () {
                                             if ($attrs.select) {
                                                 console.log('Angular-Google-Chart: The \'select\' attribute is deprecated and will be removed in a future release.  Please use \'onSelect\'.');
-                                                $scope.select({ selectedItem: selectedItem });
+                                                $scope.select(selectEventRetParams);
                                             }
                                             else {
-                                                $scope.onSelect({ selectedItem: selectedItem });
+                                                $scope.onSelect(selectEventRetParams);
                                             }
                                         });
                                     });
