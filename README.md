@@ -9,7 +9,7 @@ Wrapper directive for [Google Chart Tools](https://google-developers.appspot.com
 
 ### A note on branches
 
-Developpement branch is `gh-pages`.
+Development branch is `gh-pages`.
 
 Release branch is `master` (idealy), and was created just because Bower needed it.
 
