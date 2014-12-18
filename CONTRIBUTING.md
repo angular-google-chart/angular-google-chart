@@ -5,9 +5,9 @@ To help you make the most of your effort to contribute to this project, I've ass
 
 ## Issues
 
-- **How do I...? **A large number of our issues are requests for how-to's.  We're always happy to help, and we know the documentation for this project could use some work.  When posting a request for a how-to, please give a sample of the HTML and JavaScript that you've got so far.  The best way to do this is with a demo on http://plnkr.co/, but some HTML and/or JavaScript in the issue itself works just fine, too.
+- **How do I...?**A large number of our issues are requests for how-to's.  We're always happy to help, and we know the documentation for this project could use some work.  When posting a request for a how-to, please give a sample of the HTML and JavaScript that you've got so far.  The best way to do this is with a demo on http://plnkr.co/, but some HTML and/or JavaScript in the issue itself works just fine, too.
 
-- **Wouldn't it be nice if...? ** For feature requests, an explanation of your desired use case would be appreciated.  Many people in many projects (Open Source or not) make requests for features that they would never *actually* use.  In order for our volunteer developers to use their time to best effect, please give a full description of why you want a feature and how you plan to use it.  The more details the better, but we understand when some details must be kept confidential.
+- **Wouldn't it be nice if...?** For feature requests, an explanation of your desired use case would be appreciated.  Many people in many projects (Open Source or not) make requests for features that they would never *actually* use.  In order for our volunteer developers to use their time to best effect, please give a full description of why you want a feature and how you plan to use it.  The more details the better, but we understand when some details must be kept confidential.
 
 - **Eeew, bugs!** When submitting a bug report, please include some of the HTML and JavaScript from your project that can be used to reproduce the bug.  We find it even more helpful when bug reports include an example on http://plnkr.co/, because then we can see exactly how it behaves and how it has been found.  Please also include and errors produced on the JavaScript Console from your Browser, or a screenshot of the bug's effect if there are no errors.
 
