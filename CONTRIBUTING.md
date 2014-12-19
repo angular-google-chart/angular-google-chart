@@ -5,7 +5,7 @@ To help you make the most of your effort to contribute to this project, I've ass
 
 ## Issues
 
-- **How do I...?**A large number of our issues are requests for how-to's.  We're always happy to help, and we know the documentation for this project could use some work.  When posting a request for a how-to, please give a sample of the HTML and JavaScript that you've got so far.  The best way to do this is with a demo on http://plnkr.co/, but some HTML and/or JavaScript in the issue itself works just fine, too.
+- **How do I...?** A large number of our issues are requests for how-to's.  We're always happy to help, and we know the documentation for this project could use some work.  When posting a request for a how-to, please give a sample of the HTML and JavaScript that you've got so far.  The best way to do this is with a demo on http://plnkr.co/, but some HTML and/or JavaScript in the issue itself works just fine, too.
 
 - **Wouldn't it be nice if...?** For feature requests, an explanation of your desired use case would be appreciated.  Many people in many projects (Open Source or not) make requests for features that they would never *actually* use.  In order for our volunteer developers to use their time to best effect, please give a full description of why you want a feature and how you plan to use it.  The more details the better, but we understand when some details must be kept confidential.
 
