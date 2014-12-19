@@ -7,6 +7,10 @@ for AngularJS
 
 Wrapper directive for [Google Chart Tools](https://google-developers.appspot.com/chart/)
 
+### Contributing
+
+Interested in contributing to **Angular-Google-Chart**? Cool! Check out [CONTRIBUTING.md](./CONTRIBUTING.md) for a brief guide to raising issues and submitting Pull Requests.
+
 ### A note on branches
 
 Development branch is `gh-pages`.
