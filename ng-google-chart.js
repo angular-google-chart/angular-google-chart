@@ -22,15 +22,15 @@
             var protocol = 'https:';
             var url = '//www.google.com/jsapi';
 
-            this.setProtocol = function(newProtocol) {
+            this.setProtocol = function (newProtocol) {
                 protocol = newProtocol;
             };
 
-            this.setUrl = function(newUrl) {
+            this.setUrl = function (newUrl) {
                 url = newUrl;
             };
 
-            this.$get = function() {
+            this.$get = function () {
                 return (protocol ? protocol : '') + url;
             };
         })
@@ -111,7 +111,7 @@
                     var resizeHandler = $rootScope.$on('resizeMsg', function () {
                         $timeout(function () {
                             // Not always defined yet in IE so check
-                            if($scope.chartWrapper) {
+                            if ($scope.chartWrapper) {
                                 drawAsync();
                             }
                         });
@@ -126,8 +126,8 @@
                     $scope.oldChartFormatters = {};
 
                     function applyFormat(formatType, formatClass, dataTable) {
-
-                        if (typeof($scope.chart.formatters[formatType]) != 'undefined') {
+                        var i;
+                        if (typeof ($scope.chart.formatters[formatType]) !== 'undefined') {
                             if (!angular.equals($scope.chart.formatters[formatType], $scope.oldChartFormatters[formatType])) {
                                 $scope.oldChartFormatters[formatType] = $scope.chart.formatters[formatType];
                                 $scope.formatters[formatType] = [];
@@ -139,17 +139,17 @@
                                         for (i = 0; i < $scope.chart.formatters[formatType][cIdx].formats.length; i++) {
                                             var data = $scope.chart.formatters[formatType][cIdx].formats[i];
 
-                                            if (typeof(data.fromBgColor) != 'undefined' && typeof(data.toBgColor) != 'undefined')
+                                            if (typeof (data.fromBgColor) !== 'undefined' && typeof (data.toBgColor) !== 'undefined')
                                                 colorFormat.addGradientRange(data.from, data.to, data.color, data.fromBgColor, data.toBgColor);
                                             else
                                                 colorFormat.addRange(data.from, data.to, data.color, data.bgcolor);
                                         }
 
-                                        $scope.formatters[formatType].push(colorFormat)
+                                        $scope.formatters[formatType].push(colorFormat);
                                     }
                                 } else {
 
-                                    for (var i = 0; i < $scope.chart.formatters[formatType].length; i++) {
+                                    for (i = 0; i < $scope.chart.formatters[formatType].length; i++) {
                                         $scope.formatters[formatType].push(new formatClass(
                                             $scope.chart.formatters[formatType][i])
                                         );
@@ -172,11 +172,11 @@
                     }
 
                     function draw() {
-                        if (!draw.triggered && ($scope.chart != undefined)) {
+                        if (!draw.triggered && ($scope.chart !== undefined)) {
                             draw.triggered = true;
                             $timeout(function () {
 
-                                if (typeof ($scope.chartWrapper) == 'undefined') {
+                                if (typeof ($scope.chartWrapper) === 'undefined') {
                                     var chartWrapperArgs = {
                                         chartType: $scope.chart.type,
                                         dataTable: $scope.chart.data,
@@ -197,16 +197,16 @@
                                         console.log(err);
                                     });
                                     google.visualization.events.addListener($scope.chartWrapper, 'select', function () {
-                                        var selectEventRetParams = {selectedItems:$scope.chartWrapper.getChart().getSelection()};
+                                        var selectEventRetParams = { selectedItems: $scope.chartWrapper.getChart().getSelection() };
                                         // This is for backwards compatibility for people using 'selectedItem' that only wanted the first selection.
-                                        selectEventRetParams['selectedItem'] = selectEventRetParams['selectedItems'][0];
+                                        selectEventRetParams.selectedItem = selectEventRetParams.selectedItems[0];
                                         $scope.$apply(function () {
                                             if ($attrs.select) {
                                                 console.log('Angular-Google-Chart: The \'select\' attribute is deprecated and will be removed in a future release.  Please use \'onSelect\'.');
-                                                $scope.select({selectEventRetParams: selectEventRetParams});
+                                                $scope.select({ selectEventRetParams: selectEventRetParams });
                                             }
                                             else {
-                                                $scope.onSelect({selectEventRetParams: selectEventRetParams});
+                                                $scope.onSelect({ selectEventRetParams: selectEventRetParams });
                                             }
                                         });
                                     });
@@ -218,10 +218,10 @@
                                     $scope.chartWrapper.setOptions($scope.chart.options);
                                 }
 
-                                if (typeof($scope.formatters) === 'undefined')
+                                if (typeof ($scope.formatters) === 'undefined')
                                     $scope.formatters = {};
 
-                                if (typeof($scope.chart.formatters) != 'undefined') {
+                                if (typeof ($scope.chart.formatters) !== 'undefined') {
                                     applyFormat("number", google.visualization.NumberFormat, $scope.chartWrapper.getDataTable());
                                     applyFormat("arrow", google.visualization.ArrowFormat, $scope.chartWrapper.getDataTable());
                                     applyFormat("date", google.visualization.DateFormat, $scope.chartWrapper.getDataTable());
@@ -230,7 +230,7 @@
                                 }
 
                                 var customFormatters = $scope.chart.customFormatters;
-                                if (typeof(customFormatters) != 'undefined') {
+                                if (typeof (customFormatters) !== 'undefined') {
                                     for (var name in customFormatters) {
                                         applyFormat(name, customFormatters[name], $scope.chartWrapper.getDataTable());
                                     }
@@ -248,7 +248,7 @@
                     function drawAsync() {
                         googleChartApiPromise.then(function () {
                             draw();
-                        })
+                        });
                     }
                 }
             };
