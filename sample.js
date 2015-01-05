@@ -9,6 +9,10 @@ angular.module("google-chart-sample", ["ngRoute", "googlechart"]).config(['$rout
                 templateUrl: 'partials/annotation.html',
                 controller: 'AnnotationChartCtrl'
             }).
+            when('/gauge', {
+                templateUrl: 'partials/gauge.html',
+                controller: 'GaugeChartCtrl'
+            }).
             when('/generic/:chartType', {
                 templateUrl: 'partials/generic.html',
                 controller: 'GenericChartCtrl'
@@ -19,7 +23,7 @@ angular.module("google-chart-sample", ["ngRoute", "googlechart"]).config(['$rout
     }]).value('googleChartApiConfig', {
             version: '1',
             optionalSettings: {
-                packages: ['corechart'],
+                packages: ['corechart', 'gauge'],
                 language: 'fr'
             }
     });
