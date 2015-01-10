@@ -203,10 +203,10 @@
                                         $scope.$apply(function () {
                                             if ($attrs.select) {
                                                 console.log('Angular-Google-Chart: The \'select\' attribute is deprecated and will be removed in a future release.  Please use \'onSelect\'.');
-                                                $scope.select({ selectEventRetParams: selectEventRetParams });
+                                                $scope.select(selectEventRetParams);
                                             }
                                             else {
-                                                $scope.onSelect({ selectEventRetParams: selectEventRetParams });
+                                                $scope.onSelect(selectEventRetParams);
                                             }
                                         });
                                     });
