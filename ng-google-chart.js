@@ -242,6 +242,9 @@
                                     draw.triggered = false;
                                 });
                             }, 0, true);
+                        } else if ($scope.chart !== undefined) {
+                            $timeout.cancel(draw.recallTimeout);
+                            draw.recallTimeout = $timeout(draw, 10);
                         }
                     }
 
