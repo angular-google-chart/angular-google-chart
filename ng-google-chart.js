@@ -86,7 +86,7 @@
                     onSelect: '&',
                     select: '&'
                 },
-                link: function ($scope, $elm, $attrs) {
+                controller: function ($scope, $element, $attrs) {
                     /* Watches, to refresh the chart when its data, formatters, options, view,
                         or type change. All other values intentionally disregarded to avoid double
                         calls to the draw function. Please avoid making changes to these objects
@@ -182,7 +182,7 @@
                                         dataTable: $scope.chart.data,
                                         view: $scope.chart.view,
                                         options: $scope.chart.options,
-                                        containerId: $elm[0]
+                                        containerId: $element[0]
                                     };
 
                                     $scope.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
