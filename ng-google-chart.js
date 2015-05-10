@@ -194,15 +194,7 @@
                     or type change. All other values intentionally disregarded to avoid double
                     calls to the draw function. Please avoid making changes to these objects
                     directly from this directive.*/
-                    $scope.$watch('{ customFormatters: '+ $attrs.chart +'.customFormatters, ' +
-                    'data: ' + $attrs.chart + '.data, ' +
-                    'formatters: ' + $attrs.chart +'.formatters, ' +
-                    'options: ' + $attrs.chart +'.options, ' +
-                    'type: ' + $attrs.chart +'.type, ' +
-                    'view: ' + $attrs.chart +'.view }', function () {
-                        self.chart = $scope.$eval($attrs.chart);
-                        drawAsync();
-                    }, true); // true is for deep object equality checking
+                    $scope.$watch(watchValue, watchHandler, true); // true is for deep object equality checking
 
                     // Redraw the chart if the window is resized
                     resizeHandler = $rootScope.$on('resizeMsg', function () {
@@ -258,6 +250,25 @@
                         }
 
                         $timeout(drawChartWrapper);
+                    }
+
+                    function watchHandler(){
+                        self.chart = $scope.$eval($attrs.chart);
+                        drawAsync();
+                    }
+
+                    function watchValue(){
+                        var chartObject = $scope.$eval($attrs.chart);
+                        if (angular.isDefined(chartObject) && angular.isObject(chartObject)){
+                            return {
+                                customFormatters: chartObject.customFormatters,
+                                data: chartObject.data,
+                                formatters: chartObject.formatters,
+                                options: chartObject.options,
+                                type: chartObject.type,
+                                view: chartObject.view
+                            };
+                        }
                     }
             }
 
