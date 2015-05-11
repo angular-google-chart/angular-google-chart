@@ -345,7 +345,7 @@
 
         .directive('onSelect', function(){
             return {
-                retrist: 'A',
+                restrict: 'A',
                 scope: false,
                 require: 'googleChart',
                 link: function(scope, element, attrs, googleChartController){
