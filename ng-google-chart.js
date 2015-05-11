@@ -86,7 +86,7 @@
                 var self = this;
                 var oldChartFormatters = {}, resizeHandler, wrapperListeners = {};
                 self.registerWrapperListener = registerWrapperListener;
-                window.myDebug = wrapperListeners;
+                
                 init();
 
                 function applyFormat(formatType, formatClass, dataTable) {
