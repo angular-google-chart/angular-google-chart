@@ -80,11 +80,13 @@
 
         .directive('googleChart', ['$timeout', '$window', '$rootScope', 'googleChartApiPromise', function ($timeout, $window, $rootScope, googleChartApiPromise) {
 
-            GoogleChartController.$inject = ['$scope', '$element', '$attrs'];
-            
-            function GoogleChartController($scope, $element, $attrs){
+            GoogleChartController.$inject = ['$scope', '$element', '$attrs', '$injector'];
+
+            function GoogleChartController($scope, $element, $attrs, $injector){
                 var self = this;
-                var oldChartFormatters = {}, resizeHandler;
+                var oldChartFormatters = {}, resizeHandler, wrapperListeners = {};
+                self.registerWrapperListener = registerWrapperListener;
+                window.myDebug = wrapperListeners;
                 init();
 
                 function applyFormat(formatType, formatClass, dataTable) {
@@ -162,31 +164,15 @@
                     draw.triggered = false;
                 }
 
-                function handleError(err) {
-                    console.log("Chart not displayed due to error: " + err.message + ". Full error object follows.");
-                    console.log(err);
+                handleError.$inject = ['args'];
+                function handleError(args) {
+                    var error = args[0];
+                    console.log("Chart not displayed due to error: '" + error.message + "' Full error object follows.");
+                    console.log(error);
                 }
 
                 function handleReady() {
                     self.chart.displayed = true;
-                    $scope.$apply(function () {
-                        $scope.$eval($attrs.onReady, { chartWrapper: self.chartWrapper });
-                    });
-                }
-
-                function handleSelect() {
-                    var selectEventRetParams = { selectedItems: self.chartWrapper.getChart().getSelection() };
-                    // This is for backwards compatibility for people using 'selectedItem' that only wanted the first selection.
-                    selectEventRetParams.selectedItem = selectEventRetParams.selectedItems[0];
-                    $scope.$apply(function () {
-                        if ($attrs.select) {
-                            console.log('Angular-Google-Chart: The \'select\' attribute is deprecated and will be removed in a future release.  Please use \'onSelect\'.');
-                            $scope.$eval($attrs.select, selectEventRetParams);
-                        }
-                        else {
-                            $scope.$eval($attrs.onSelect, selectEventRetParams);
-                        }
-                    });
                 }
 
                 function init(){
@@ -208,6 +194,9 @@
 
                     //Cleanup resize handler.
                     $scope.$on('$destroy', cleanup());
+
+                    registerWrapperListener('error', handleError, self);
+                    registerWrapperListener('ready', handleReady, self);
                 }
 
                 function setupAndDraw(){
@@ -221,9 +210,16 @@
                         };
 
                         self.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
-                        google.visualization.events.addListener(self.chartWrapper, 'ready', handleReady);
-                        google.visualization.events.addListener(self.chartWrapper, 'error', handleError);
-                        google.visualization.events.addListener(self.chartWrapper, 'select', handleSelect);
+                        for (var eventName in wrapperListeners){
+                            if (wrapperListeners.hasOwnProperty(eventName) && angular.isArray(wrapperListeners[eventName])){
+                                for (var fnIterator = 0; fnIterator < wrapperListeners[eventName].length; fnIterator++){
+                                    if (angular.isFunction(wrapperListeners[eventName][fnIterator])){
+                                        wrapperListeners[eventName][fnIterator].googleListenerHandle =
+                                            google.visualization.events.addListener(self.chartWrapper, eventName, wrapperListeners[eventName][fnIterator]);
+                                    }
+                                }
+                            }
+                        }
                     } else {
                         self.chartWrapper.setChartType(self.chart.type);
                         self.chartWrapper.setDataTable(self.chart.data);
@@ -270,6 +266,45 @@
                             };
                         }
                     }
+
+                    // This function was written to genericize listener registration
+                    // because I plan to implement different collections of listeners
+                    // for events on the underlying chart object, and for
+                    // directive-level events (ie. beforeDraw).
+                    function registerListener(listenerCollection, eventName, listenerFn, listenerObject){
+                        // This is the function that will be invoked by the charts API.
+                        // Passing the wrapper function allows the use of DI for
+                        // for the called function.
+                        var listenerWrapper = function (){
+                            var locals = {
+                                chartWrapper: self.chartWrapper,
+                                chart: self.chartWrapper.getChart(),
+                                args: arguments
+                            };
+                            $injector.invoke(listenerFn, listenerObject || this, locals);
+                        };
+
+                        if (angular.isDefined(listenerCollection) && angular.isObject(listenerCollection)){
+                            if (!angular.isArray(listenerCollection[eventName])){
+                                listenerCollection[eventName] = [];
+                            }
+                            listenerCollection[eventName].push(listenerWrapper);
+                            return function (){
+                                if (angular.isDefined(listenerWrapper.googleListenerHandle)){
+                                    google.visualization.events.removeListener(listenerWrapper.googleListenerHandle);
+                                }
+                                var fnIndex = listenerCollection[eventName].indexOf(listenerWrapper);
+                                listenerCollection[eventName].splice(fnIndex,1);
+                                if (listenerCollection[eventName].length === 0){
+                                    listenerCollection[eventName] = undefined;
+                                }
+                            };
+                        }
+                    }
+
+                    function registerWrapperListener(eventName, listenerFn, listenerObject){
+                        return registerListener(wrapperListeners, eventName, listenerFn, listenerObject);
+                    }
             }
 
             return {
@@ -278,6 +313,69 @@
                 controller: GoogleChartController
             };
         }])
+
+        .directive('onReady', function(){
+            return {
+                restrict: 'A',
+                scope: false,
+                require: 'googleChart',
+                link: function(scope, element, attrs, googleChartController){
+                    callback.$inject=['chartWrapper'];
+                    function callback(chartWrapper){
+                        scope.$eval(attrs.onReady, {chartWrapper: chartWrapper});
+                    }
+                    googleChartController.registerWrapperListener('ready', callback, this);
+                }
+            };
+        })
+
+        .directive('onSelect', function(){
+            return {
+                retrist: 'A',
+                scope: false,
+                require: 'googleChart',
+                link: function(scope, element, attrs, googleChartController){
+                    callback.$inject = ['chartWrapper', 'chart'];
+                    function callback(chartWrapper, chart){
+                        var selectEventRetParams = { selectedItems: chart.getSelection() };
+                        // This is for backwards compatibility for people using 'selectedItem' that only wanted the first selection.
+                        selectEventRetParams.selectedItem = selectEventRetParams.selectedItems[0];
+                        selectEventRetParams.chartWrapper = chartWrapper;
+                        selectEventRetParams.chart = chart;
+                        scope.$apply(function () {
+                            scope.$eval(attrs.onSelect, selectEventRetParams);
+                        });
+                    }
+                    googleChartController.registerWrapperListener('select', callback, this);
+                }
+            };
+        })
+
+        .directive('onError', function(){
+            return{
+                restrict: 'A',
+                scope: false,
+                require: 'googleChart',
+                link: function(scope, element, attrs, googleChartController){
+                    callback.$inject = ['chartWrapper', 'chart', 'args'];
+                    function callback(chartWrapper, chart, args){
+                        var returnValues = {
+                            chartWrapper: chartWrapper,
+                            chart: chart,
+                            args: args,
+                            error: args[0],
+                            err: args[0],
+                            id: args[0].id,
+                            message: args[0].message
+                        };
+                        scope.$apply(function(){
+                            scope.$eval(attrs.onError, returnValues);
+                        });
+                    }
+                    googleChartController.registerWrapperListener('error', callback, this);
+                }
+            };
+        })
 
         .run(['$rootScope', '$window', function ($rootScope, $window) {
             angular.element($window).bind('resize', function () {
