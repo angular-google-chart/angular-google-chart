@@ -336,7 +336,9 @@
                 link: function(scope, element, attrs, googleChartController){
                     callback.$inject=['chartWrapper'];
                     function callback(chartWrapper){
-                        scope.$eval(attrs.onReady, {chartWrapper: chartWrapper});
+                        scope.$apply(function (){
+                            scope.$eval(attrs.onReady, {chartWrapper: chartWrapper});
+                        });
                     }
                     googleChartController.registerWrapperListener('ready', callback, this);
                 }
