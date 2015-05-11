@@ -84,9 +84,11 @@
 
             function GoogleChartController($scope, $element, $attrs, $injector){
                 var self = this;
-                var oldChartFormatters = {}, resizeHandler, wrapperListeners = {};
+                var oldChartFormatters = {}, resizeHandler, wrapperListeners = {},
+                    chartListeners = {}, innerVisualization = null;
+                self.registerChartListener = registerChartListener;
                 self.registerWrapperListener = registerWrapperListener;
-                
+
                 init();
 
                 function applyFormat(formatType, formatClass, dataTable) {
@@ -173,6 +175,10 @@
 
                 function handleReady() {
                     self.chart.displayed = true;
+                    if (innerVisualization !== self.chartWrapper.getChart()){
+                        innerVisualization = self.chartWrapper.getChart();
+                        registerListenersWithGoogle(innerVisualization, chartListeners);
+                    }
                 }
 
                 function init(){
@@ -210,16 +216,7 @@
                         };
 
                         self.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
-                        for (var eventName in wrapperListeners){
-                            if (wrapperListeners.hasOwnProperty(eventName) && angular.isArray(wrapperListeners[eventName])){
-                                for (var fnIterator = 0; fnIterator < wrapperListeners[eventName].length; fnIterator++){
-                                    if (angular.isFunction(wrapperListeners[eventName][fnIterator])){
-                                        wrapperListeners[eventName][fnIterator].googleListenerHandle =
-                                            google.visualization.events.addListener(self.chartWrapper, eventName, wrapperListeners[eventName][fnIterator]);
-                                    }
-                                }
-                            }
-                        }
+                        registerListenersWithGoogle(self.chartWrapper, wrapperListeners);
                     } else {
                         self.chartWrapper.setChartType(self.chart.type);
                         self.chartWrapper.setDataTable(self.chart.data);
@@ -300,6 +297,23 @@
                                 }
                             };
                         }
+                    }
+
+                    function registerListenersWithGoogle(eventSource, listenerCollection){
+                        for (var eventName in listenerCollection){
+                            if (listenerCollection.hasOwnProperty(eventName) && angular.isArray(listenerCollection[eventName])){
+                                for (var fnIterator = 0; fnIterator < listenerCollection[eventName].length; fnIterator++){
+                                    if (angular.isFunction(listenerCollection[eventName][fnIterator])){
+                                        listenerCollection[eventName][fnIterator].googleListenerHandle =
+                                        google.visualization.events.addListener(eventSource, eventName, listenerCollection[eventName][fnIterator]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    function registerChartListener(eventName, listenerFn, listenerObject){
+                        return registerListener(chartListeners, eventName, listenerFn, listenerObject);
                     }
 
                     function registerWrapperListener(eventName, listenerFn, listenerObject){
