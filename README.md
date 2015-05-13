@@ -34,6 +34,27 @@ See [ChartWrapper](https://google-developers.appspot.com/chart/interactive/docs/
 
 ### Release notes
 
+#### Unreleased Changes
+
+*Added:*
+
+* gauge chart sample
+* basic API for hooking into chart events from other directives
+* API-level support for listeners/event-handlers on inner chart object
+* on-error directive to register listener for google charts error event
+
+*Changed:*
+
+* Change package meta-data to reflect support for angular 1.2+
+* on-select now returns all selections if `selectedItems` is used instead of `selectedItem`
+* cancels extra draw cycles if many rapid changes are made to chart-object watched parameters
+* changed link function to controller in google-chart directive
+* broke out some functionality into separate directives (on-ready, on-select)
+
+*Removed:*
+
+* support for `select` attribute
+
 #### 0.0.11
 
 * Revert to AngularJS 1.2.x as requested by user.
