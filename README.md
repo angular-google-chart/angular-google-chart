@@ -21,7 +21,7 @@ Please send your pull requests to `gh-pages`.
 
 ### Usage and Demo
 
-See sample files index.html and controllers in partials directory. [Live Demo](http://bouil.github.io/angular-google-chart/)
+See sample files index.html and controllers in partials directory. [Live Demo](http://angular-google-chart.github.io/angular-google-chart/)
 
 #### Other samples
 
