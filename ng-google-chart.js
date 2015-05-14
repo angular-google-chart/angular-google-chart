@@ -224,103 +224,104 @@
                         self.chartWrapper.setOptions(self.chart.options);
                     }
 
-                    if (typeof (self.formatters) === 'undefined')
+                    if (typeof (self.formatters) === 'undefined'){
                         self.formatters = {};
+                    }
 
-                        if (typeof (self.chart.formatters) !== 'undefined') {
-                            applyFormat("number", google.visualization.NumberFormat, self.chartWrapper.getDataTable());
-                            applyFormat("arrow", google.visualization.ArrowFormat, self.chartWrapper.getDataTable());
-                            applyFormat("date", google.visualization.DateFormat, self.chartWrapper.getDataTable());
-                            applyFormat("bar", google.visualization.BarFormat, self.chartWrapper.getDataTable());
-                            applyFormat("color", google.visualization.ColorFormat, self.chartWrapper.getDataTable());
-                        }
+                    if (typeof (self.chart.formatters) !== 'undefined') {
+                        applyFormat("number", google.visualization.NumberFormat, self.chartWrapper.getDataTable());
+                        applyFormat("arrow", google.visualization.ArrowFormat, self.chartWrapper.getDataTable());
+                        applyFormat("date", google.visualization.DateFormat, self.chartWrapper.getDataTable());
+                        applyFormat("bar", google.visualization.BarFormat, self.chartWrapper.getDataTable());
+                        applyFormat("color", google.visualization.ColorFormat, self.chartWrapper.getDataTable());
+                    }
 
-                        var customFormatters = self.chart.customFormatters;
-                        if (typeof (customFormatters) !== 'undefined') {
-                            for (var name in customFormatters) {
-                                if (customFormatters.hasOwnProperty(name)){
-                                    applyFormat(name, customFormatters[name], self.chartWrapper.getDataTable());
-                                }
+                    var customFormatters = self.chart.customFormatters;
+                    if (typeof (customFormatters) !== 'undefined') {
+                        for (var name in customFormatters) {
+                            if (customFormatters.hasOwnProperty(name)){
+                                applyFormat(name, customFormatters[name], self.chartWrapper.getDataTable());
                             }
                         }
-
-                        $timeout(drawChartWrapper);
                     }
 
-                    function watchHandler(){
-                        self.chart = $scope.$eval($attrs.chart);
-                        drawAsync();
-                    }
+                    $timeout(drawChartWrapper);
+                }
 
-                    function watchValue(){
-                        var chartObject = $scope.$eval($attrs.chart);
-                        if (angular.isDefined(chartObject) && angular.isObject(chartObject)){
-                            return {
-                                customFormatters: chartObject.customFormatters,
-                                data: chartObject.data,
-                                formatters: chartObject.formatters,
-                                options: chartObject.options,
-                                type: chartObject.type,
-                                view: chartObject.view
-                            };
-                        }
-                    }
+                function watchHandler(){
+                    self.chart = $scope.$eval($attrs.chart);
+                    drawAsync();
+                }
 
-                    // This function was written to genericize listener registration
-                    // because I plan to implement different collections of listeners
-                    // for events on the underlying chart object, and for
-                    // directive-level events (ie. beforeDraw).
-                    function registerListener(listenerCollection, eventName, listenerFn, listenerObject){
-                        // This is the function that will be invoked by the charts API.
-                        // Passing the wrapper function allows the use of DI for
-                        // for the called function.
-                        var listenerWrapper = function (){
-                            var locals = {
-                                chartWrapper: self.chartWrapper,
-                                chart: self.chartWrapper.getChart(),
-                                args: arguments
-                            };
-                            $injector.invoke(listenerFn, listenerObject || this, locals);
+                function watchValue(){
+                    var chartObject = $scope.$eval($attrs.chart);
+                    if (angular.isDefined(chartObject) && angular.isObject(chartObject)){
+                        return {
+                            customFormatters: chartObject.customFormatters,
+                            data: chartObject.data,
+                            formatters: chartObject.formatters,
+                            options: chartObject.options,
+                            type: chartObject.type,
+                            view: chartObject.view
                         };
+                    }
+                }
 
-                        if (angular.isDefined(listenerCollection) && angular.isObject(listenerCollection)){
-                            if (!angular.isArray(listenerCollection[eventName])){
-                                listenerCollection[eventName] = [];
+                // This function was written to genericize listener registration
+                // because I plan to implement different collections of listeners
+                // for events on the underlying chart object, and for
+                // directive-level events (ie. beforeDraw).
+                function registerListener(listenerCollection, eventName, listenerFn, listenerObject){
+                    // This is the function that will be invoked by the charts API.
+                    // Passing the wrapper function allows the use of DI for
+                    // for the called function.
+                    var listenerWrapper = function (){
+                        var locals = {
+                            chartWrapper: self.chartWrapper,
+                            chart: self.chartWrapper.getChart(),
+                            args: arguments
+                        };
+                        $injector.invoke(listenerFn, listenerObject || this, locals);
+                    };
+
+                    if (angular.isDefined(listenerCollection) && angular.isObject(listenerCollection)){
+                        if (!angular.isArray(listenerCollection[eventName])){
+                            listenerCollection[eventName] = [];
+                        }
+                        listenerCollection[eventName].push(listenerWrapper);
+                        return function (){
+                            if (angular.isDefined(listenerWrapper.googleListenerHandle)){
+                                google.visualization.events.removeListener(listenerWrapper.googleListenerHandle);
                             }
-                            listenerCollection[eventName].push(listenerWrapper);
-                            return function (){
-                                if (angular.isDefined(listenerWrapper.googleListenerHandle)){
-                                    google.visualization.events.removeListener(listenerWrapper.googleListenerHandle);
+                            var fnIndex = listenerCollection[eventName].indexOf(listenerWrapper);
+                            listenerCollection[eventName].splice(fnIndex,1);
+                            if (listenerCollection[eventName].length === 0){
+                                listenerCollection[eventName] = undefined;
+                            }
+                        };
+                    }
+                }
+
+                function registerListenersWithGoogle(eventSource, listenerCollection){
+                    for (var eventName in listenerCollection){
+                        if (listenerCollection.hasOwnProperty(eventName) && angular.isArray(listenerCollection[eventName])){
+                            for (var fnIterator = 0; fnIterator < listenerCollection[eventName].length; fnIterator++){
+                                if (angular.isFunction(listenerCollection[eventName][fnIterator])){
+                                    listenerCollection[eventName][fnIterator].googleListenerHandle =
+                                    google.visualization.events.addListener(eventSource, eventName, listenerCollection[eventName][fnIterator]);
                                 }
-                                var fnIndex = listenerCollection[eventName].indexOf(listenerWrapper);
-                                listenerCollection[eventName].splice(fnIndex,1);
-                                if (listenerCollection[eventName].length === 0){
-                                    listenerCollection[eventName] = undefined;
-                                }
-                            };
+                            }
                         }
                     }
+                }
 
-                    function registerListenersWithGoogle(eventSource, listenerCollection){
-                        for (var eventName in listenerCollection){
-                            if (listenerCollection.hasOwnProperty(eventName) && angular.isArray(listenerCollection[eventName])){
-                                for (var fnIterator = 0; fnIterator < listenerCollection[eventName].length; fnIterator++){
-                                    if (angular.isFunction(listenerCollection[eventName][fnIterator])){
-                                        listenerCollection[eventName][fnIterator].googleListenerHandle =
-                                        google.visualization.events.addListener(eventSource, eventName, listenerCollection[eventName][fnIterator]);
-                                    }
-                                }
-                            }
-                        }
-                    }
+                function registerChartListener(eventName, listenerFn, listenerObject){
+                    return registerListener(chartListeners, eventName, listenerFn, listenerObject);
+                }
 
-                    function registerChartListener(eventName, listenerFn, listenerObject){
-                        return registerListener(chartListeners, eventName, listenerFn, listenerObject);
-                    }
-
-                    function registerWrapperListener(eventName, listenerFn, listenerObject){
-                        return registerListener(wrapperListeners, eventName, listenerFn, listenerObject);
-                    }
+                function registerWrapperListener(eventName, listenerFn, listenerObject){
+                    return registerListener(wrapperListeners, eventName, listenerFn, listenerObject);
+                }
             }
 
             return {
