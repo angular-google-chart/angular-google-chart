@@ -1,6 +1,6 @@
 /* global angular */
 
-angular.module("google-chart-sample").controller("AnnotationChartCtrl", function ($scope, googleChartApiPromise) {
+angular.module("google-chart-sample").controller("AnnotationChartCtrl", function ($scope) {
     $scope.chartObject = {};
 
     $scope.secondRow = [
