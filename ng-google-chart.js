@@ -94,20 +94,6 @@
                     }
                 }
                 
-                // helper function that gets a list of all the loaded formatter class names
-                // not used, yet.
-                function listFormatters(){
-                    var formatNames = []
-                    for (var prop in google.visualization){
-                        if(google.visualization.hasOwnProperty(prop)){
-                            if(prop.indexOf("Format", prop.length - ("Format").length) !== -1){
-                                formatNames.push(prop);
-                            }
-                        }
-                    }
-                    return formatNames;
-                }
-                
                 function getFormatClass(formatType){
                     var className = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase() + "Format";
                     if (google.visualization.hasOwnProperty(className)){
