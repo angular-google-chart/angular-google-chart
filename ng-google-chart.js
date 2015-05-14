@@ -37,45 +37,50 @@
                     }
                 }
                 
-                function applyFormats(tFormats, dataTable) {
-                    var i, formatType, FormatClass, requiresHtml = false;
+                function applyFormat(formatType, FormatClass, tFormats){
+                    var i;
+                    if (angular.isArray(tFormats[formatType])) {
+                        // basic change detection; no need to run if no changes
+                        if (!angular.equals(tFormats[formatType], oldFormatTemplates[formatType])) {
+                            oldFormatTemplates[formatType] = tFormats[formatType];
+                            self.iFormats[formatType] = [];
+            
+                            if (formatType === 'color') {
+                                instantiateColorFormatters(tFormats);
+                            } else {
+                                for (i = 0; i < tFormats[formatType].length; i++) {
+                                    self.iFormats[formatType].push(new FormatClass(
+                                        tFormats[formatType][i])
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                function applyFormats(dataTable, tFormats, customFormatters) {
+                    var formatType, FormatClass, requiresHtml = false;
                     if (!angular.isDefined(tFormats) || !angular.isDefined(dataTable)){
                         return;
                     }
                     for (formatType in tFormats){
                         if (tFormats.hasOwnProperty(formatType)){
-                            FormatClass = getFormatClass(formatType);
+                            FormatClass = getFormatClass(formatType, customFormatters);
                             if (!angular.isFunction(FormatClass)){
                                 // if no class constructor was returned,
                                 // there's no point in completing cycle
                                 continue;
                             }
-                            if (angular.isArray(tFormats[formatType])) {
-                                // basic change detection; no need to run if no changes
-                                if (!angular.equals(tFormats[formatType], oldFormatTemplates[formatType])) {
-                                    oldFormatTemplates[formatType] = tFormats[formatType];
-                                    self.iFormats[formatType] = [];
-        
-                                    if (formatType === 'color') {
-                                        instantiateColorFormatters(tFormats);
-                                    } else {
-                                        for (i = 0; i < tFormats[formatType].length; i++) {
-                                            self.iFormats[formatType].push(new FormatClass(
-                                                tFormats[formatType][i])
-                                            );
-                                        }
-                                    }
-                                }
-                                
-                                //Many formatters require HTML tags to display special formatting
-                                if (formatType === 'arrow' || formatType === 'bar' || formatType === 'color') {
-                                    requiresHtml = true;
-                                }
+                            applyFormat(formatType, FormatClass, tFormats);
+                            
+                            //Many formatters require HTML tags to display special formatting
+                            if (formatType === 'arrow' || formatType === 'bar' || formatType === 'color') {
+                                requiresHtml = true;
                             }
                         }
                     }
                     apply(tFormats, dataTable);
-                    return {requiresHtml: requiresHtml};
+                    return { requiresHtml: requiresHtml };
                 }
                 
                 function instantiateColorFormatters(tFormats){
@@ -97,10 +102,12 @@
                     }
                 }
                 
-                function getFormatClass(formatType){
+                function getFormatClass(formatType, customFormatters){
                     var className = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase() + "Format";
                     if (google.visualization.hasOwnProperty(className)){
                         return google.visualization[className];
+                    } else if (angular.isDefined(customFormatters) && customFormatters.hasOwnProperty(formatType)) {
+                        return customFormatters[formatType];
                     }
                     return;
                 }
@@ -277,19 +284,11 @@
                         formatManager = new FormatManager();
                     }
                     
-                    if (formatManager.applyFormats(self.chart.formatters, self.chartWrapper.getDataTable()).requiresHtml){
+                    if (formatManager.applyFormats(self.chartWrapper.getDataTable(),
+                        self.chart.formatters, self.chart.customFormatters).requiresHtml){
                         self.chartWrapper.setOption('allowHtml', true);
                     }
-
-                    //var customFormatters = self.chart.customFormatters;
-                    //if (typeof (customFormatters) !== 'undefined') {
-                    //    for (var name in customFormatters) {
-                    //        if (customFormatters.hasOwnProperty(name)){
-                    //            applyFormat(name, customFormatters[name], self.chartWrapper.getDataTable());
-                    //        }
-                    //    }
-                    //}
-
+                    
                     $timeout(drawChartWrapper);
                 }
 
