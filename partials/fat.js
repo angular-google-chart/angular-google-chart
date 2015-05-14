@@ -129,7 +129,7 @@ angular.module('google-chart-sample').controller("FatChartCtrl", function ($scop
     $scope.chartSelectionChange = function () {
 
         if (($scope.chart.type === 'Table' && $scope.chart.data.cols.length === 6 && $scope.chart.options.tooltip.isHtml === true) ||
-            ($scope.chart.type != 'Table' && $scope.chart.data.cols.length === 6 && $scope.chart.options.tooltip.isHtml === false)) {
+            ($scope.chart.type !== 'Table' && $scope.chart.data.cols.length === 6 && $scope.chart.options.tooltip.isHtml === false)) {
             $scope.chart.data.cols.pop();
             delete $scope.chart.data.rows[0].c[5];
             delete $scope.chart.data.rows[1].c[5];
