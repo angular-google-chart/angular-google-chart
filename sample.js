@@ -1,3 +1,5 @@
+/* global angular */
+
 angular.module("google-chart-sample", ["ngRoute", "googlechart"]).config(['$routeProvider',
     function ($routeProvider) {
         $routeProvider.

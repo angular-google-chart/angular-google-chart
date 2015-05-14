@@ -1,3 +1,5 @@
+/* global angular */
+
 angular.module("google-chart-sample").controller("AnnotationChartCtrl", function ($scope, googleChartApiPromise) {
     $scope.chartObject = {};
 
