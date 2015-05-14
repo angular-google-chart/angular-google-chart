@@ -91,7 +91,7 @@
 
                 init();
 
-                function applyFormat(formatType, formatClass, dataTable) {
+                function applyFormat(formatType, FormatClass, dataTable) {
                     var i;
                     if (typeof (self.chart.formatters[formatType]) !== 'undefined') {
                         if (!angular.equals(self.chart.formatters[formatType], oldChartFormatters[formatType])) {
@@ -100,7 +100,7 @@
 
                             if (formatType === 'color') {
                                 for (var cIdx = 0; cIdx < self.chart.formatters[formatType].length; cIdx++) {
-                                    var colorFormat = new formatClass();
+                                    var colorFormat = new FormatClass();
 
                                     for (i = 0; i < self.chart.formatters[formatType][cIdx].formats.length; i++) {
                                         var data = self.chart.formatters[formatType][cIdx].formats[i];
@@ -117,7 +117,7 @@
                             } else {
 
                                 for (i = 0; i < self.chart.formatters[formatType].length; i++) {
-                                    self.formatters[formatType].push(new formatClass(
+                                    self.formatters[formatType].push(new FormatClass(
                                         self.chart.formatters[formatType][i])
                                     );
                                 }
