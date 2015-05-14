@@ -8,6 +8,7 @@
  */
  
  /* global google */
+ /* jshint -W072 */
  
 (function (document, window, angular) {
     'use strict';
@@ -42,32 +43,34 @@
                         return;
                     }
                     for (formatType in tFormats){
-                        FormatClass = getFormatClass(formatType);
-                        if (!angular.isFunction(FormatClass)){
-                            // if no class constructor was returned,
-                            // there's no point in completing cycle
-                            continue;
-                        }
-                        if (angular.isArray(tFormats[formatType])) {
-                            // basic change detection; no need to run if no changes
-                            if (!angular.equals(tFormats[formatType], oldFormatTemplates[formatType])) {
-                                oldFormatTemplates[formatType] = tFormats[formatType];
-                                self.iFormats[formatType] = [];
-    
-                                if (formatType === 'color') {
-                                    instantiateColorFormatters(tFormats);
-                                } else {
-                                    for (i = 0; i < tFormats[formatType].length; i++) {
-                                        self.iFormats[formatType].push(new FormatClass(
-                                            tFormats[formatType][i])
-                                        );
+                        if (tFormats.hasOwnProperty(formatType)){
+                            FormatClass = getFormatClass(formatType);
+                            if (!angular.isFunction(FormatClass)){
+                                // if no class constructor was returned,
+                                // there's no point in completing cycle
+                                continue;
+                            }
+                            if (angular.isArray(tFormats[formatType])) {
+                                // basic change detection; no need to run if no changes
+                                if (!angular.equals(tFormats[formatType], oldFormatTemplates[formatType])) {
+                                    oldFormatTemplates[formatType] = tFormats[formatType];
+                                    self.iFormats[formatType] = [];
+        
+                                    if (formatType === 'color') {
+                                        instantiateColorFormatters(tFormats);
+                                    } else {
+                                        for (i = 0; i < tFormats[formatType].length; i++) {
+                                            self.iFormats[formatType].push(new FormatClass(
+                                                tFormats[formatType][i])
+                                            );
+                                        }
                                     }
                                 }
-                            }
-                            
-                            //Many formatters require HTML tags to display special formatting
-                            if (formatType === 'arrow' || formatType === 'bar' || formatType === 'color') {
-                                requiresHtml = true;
+                                
+                                //Many formatters require HTML tags to display special formatting
+                                if (formatType === 'arrow' || formatType === 'bar' || formatType === 'color') {
+                                    requiresHtml = true;
+                                }
                             }
                         }
                     }
