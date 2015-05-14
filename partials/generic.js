@@ -34,6 +34,6 @@ angular.module("google-chart-sample").controller("GenericChartCtrl", function ($
     $scope.chartObject.type = $routeParams.chartType;
     $scope.chartObject.options = {
         'title': 'How Much Pizza I Ate Last Night'
-    }
+    };
 });
 

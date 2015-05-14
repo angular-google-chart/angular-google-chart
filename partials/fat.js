@@ -117,7 +117,7 @@ angular.module('google-chart-sample').controller("FatChartCtrl", function ($scop
                 }
             ]
         }
-    ]
+    ];
 
     chart1.formatters = {};
 
@@ -144,8 +144,7 @@ angular.module('google-chart-sample').controller("FatChartCtrl", function ($scop
             $scope.chart.data.rows[1].c[5] = {v: "Date(2013,02,05)"};
             $scope.chart.data.rows[2].c[5] = {v: "Date(2013,03,05)"};
         }
-
-    }
+    };
 
 
     $scope.htmlTooltip = function () {
@@ -161,7 +160,7 @@ angular.module('google-chart-sample').controller("FatChartCtrl", function ($scop
             delete $scope.chart.data.rows[1].c[5];
             delete $scope.chart.data.rows[2].c[5];
         }
-    }
+    };
 
 
     $scope.hideServer = false;
@@ -171,7 +170,7 @@ angular.module('google-chart-sample').controller("FatChartCtrl", function ($scop
         } else {
             $scope.chart.view = {};
         }
-    }
+    };
 
     $scope.formatCollection = formatCollection;
     $scope.toggleFormat = function (format) {
@@ -180,7 +179,7 @@ angular.module('google-chart-sample').controller("FatChartCtrl", function ($scop
 
     $scope.chartReady = function () {
         fixGoogleChartsBarsBootstrap();
-    }
+    };
 
     function fixGoogleChartsBarsBootstrap() {
         // Google charts uses <img height="12px">, which is incompatible with Twitter
@@ -196,7 +195,7 @@ angular.module('google-chart-sample').controller("FatChartCtrl", function ($scop
         $(".google-visualization-table-table img[width]").each(function (index, img) {
             $(img).css("width", $(img).attr("width")).css("height", $(img).attr("height"));
         });
-    };
+    }
 
 });
 
