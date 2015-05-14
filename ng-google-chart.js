@@ -238,7 +238,9 @@
                         var customFormatters = self.chart.customFormatters;
                         if (typeof (customFormatters) !== 'undefined') {
                             for (var name in customFormatters) {
-                                applyFormat(name, customFormatters[name], self.chartWrapper.getDataTable());
+                                if (customFormatters.hasOwnProperty(name)){
+                                    applyFormat(name, customFormatters[name], self.chartWrapper.getDataTable());
+                                }
                             }
                         }
 
