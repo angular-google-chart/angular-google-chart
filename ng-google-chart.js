@@ -6,6 +6,9 @@
  * @license MIT
  * @year 2013
  */
+ 
+ /* global google */
+ 
 (function (document, window, angular) {
     'use strict';
 
