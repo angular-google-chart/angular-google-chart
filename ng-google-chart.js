@@ -14,6 +14,112 @@
 
     angular.module('googlechart', [])
 
+        .factory('FormatManager', function (){
+            // Handles the processing of Google Charts API Formats
+            function FormatManager(){
+                var self = this;
+                var oldFormatTemplates = {};
+                self.iFormats = {}; // Holds instances of formats (ie. self.iFormats.date[0] = new google.visualization.DateFormat(params))
+                self.applyFormats = applyFormats;
+                
+                // apply formats of type to datatable
+                function apply(tFormats, dataTable){
+                    var i, formatType;
+                    for (formatType in tFormats){
+                        if (tFormats.hasOwnProperty(formatType)){
+                            for (i = 0; i < self.iFormats[formatType].length; i++) {
+                                if (tFormats[formatType][i].columnNum < dataTable.getNumberOfColumns()) {
+                                    self.iFormats[formatType][i].format(dataTable, tFormats[formatType][i].columnNum);
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                function applyFormats(tFormats, dataTable) {
+                    var i, formatType, FormatClass, requiresHtml = false;
+                    if (!angular.isDefined(tFormats) || !angular.isDefined(dataTable)){
+                        return;
+                    }
+                    for (formatType in tFormats){
+                        FormatClass = getFormatClass(formatType);
+                        if (!angular.isFunction(FormatClass)){
+                            // if no class constructor was returned,
+                            // there's no point in completing cycle
+                            continue;
+                        }
+                        if (angular.isArray(tFormats[formatType])) {
+                            // basic change detection; no need to run if no changes
+                            if (!angular.equals(tFormats[formatType], oldFormatTemplates[formatType])) {
+                                oldFormatTemplates[formatType] = tFormats[formatType];
+                                self.iFormats[formatType] = [];
+    
+                                if (formatType === 'color') {
+                                    instantiateColorFormatters(tFormats);
+                                } else {
+                                    for (i = 0; i < tFormats[formatType].length; i++) {
+                                        self.iFormats[formatType].push(new FormatClass(
+                                            tFormats[formatType][i])
+                                        );
+                                    }
+                                }
+                            }
+                            
+                            //Many formatters require HTML tags to display special formatting
+                            if (formatType === 'arrow' || formatType === 'bar' || formatType === 'color') {
+                                requiresHtml = true;
+                            }
+                        }
+                    }
+                    apply(tFormats, dataTable);
+                    return {requiresHtml: requiresHtml};
+                }
+                
+                function instantiateColorFormatters(tFormats){
+                    var t, colorFormat, i, data, formatType = 'color';
+                    for (t = 0; t < tFormats[formatType].length; t++) {
+                        colorFormat = new google.visualization.ColorFormat();
+
+                        for (i = 0; i < tFormats[formatType][t].formats.length; i++) {
+                            data = tFormats[formatType][t].formats[i];
+
+                            if (typeof (data.fromBgColor) !== 'undefined' && typeof (data.toBgColor) !== 'undefined') {
+                                colorFormat.addGradientRange(data.from, data.to, data.color, data.fromBgColor, data.toBgColor);
+                            } else {
+                                colorFormat.addRange(data.from, data.to, data.color, data.bgcolor);
+                            }
+                        }
+
+                        self.iFormats[formatType].push(colorFormat);
+                    }
+                }
+                
+                // helper function that gets a list of all the loaded formatter class names
+                // not used, yet.
+                function listFormatters(){
+                    var formatNames = []
+                    for (var prop in google.visualization){
+                        if(google.visualization.hasOwnProperty(prop)){
+                            if(prop.indexOf("Format", prop.length - ("Format").length) !== -1){
+                                formatNames.push(prop);
+                            }
+                        }
+                    }
+                    return formatNames;
+                }
+                
+                function getFormatClass(formatType){
+                    var className = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase() + "Format";
+                    if (google.visualization.hasOwnProperty(className)){
+                        return google.visualization[className];
+                    }
+                    return;
+                }
+            }
+            
+            return FormatManager;
+        })
+
         .value('googleChartApiConfig', {
             version: '1',
             optionalSettings: {
@@ -83,65 +189,16 @@
 
         .directive('googleChart', ['$timeout', '$window', '$rootScope', 'googleChartApiPromise', function ($timeout, $window, $rootScope, googleChartApiPromise) {
 
-            GoogleChartController.$inject = ['$scope', '$element', '$attrs', '$injector'];
+            GoogleChartController.$inject = ['$scope', '$element', '$attrs', '$injector', 'FormatManager'];
 
-            function GoogleChartController($scope, $element, $attrs, $injector){
+            function GoogleChartController($scope, $element, $attrs, $injector, FormatManager){
                 var self = this;
-                var oldChartFormatters = {}, resizeHandler, wrapperListeners = {},
+                var resizeHandler, wrapperListeners = {}, formatManager,
                     chartListeners = {}, innerVisualization = null;
                 self.registerChartListener = registerChartListener;
                 self.registerWrapperListener = registerWrapperListener;
 
                 init();
-
-                function applyFormat(formatType, FormatClass, dataTable) {
-                    var i;
-                    if (typeof (self.chart.formatters[formatType]) !== 'undefined') {
-                        if (!angular.equals(self.chart.formatters[formatType], oldChartFormatters[formatType])) {
-                            oldChartFormatters[formatType] = self.chart.formatters[formatType];
-                            self.formatters[formatType] = [];
-
-                            if (formatType === 'color') {
-                                for (var cIdx = 0; cIdx < self.chart.formatters[formatType].length; cIdx++) {
-                                    var colorFormat = new FormatClass();
-
-                                    for (i = 0; i < self.chart.formatters[formatType][cIdx].formats.length; i++) {
-                                        var data = self.chart.formatters[formatType][cIdx].formats[i];
-
-                                        if (typeof (data.fromBgColor) !== 'undefined' && typeof (data.toBgColor) !== 'undefined') {
-                                            colorFormat.addGradientRange(data.from, data.to, data.color, data.fromBgColor, data.toBgColor);
-                                        } else {
-                                            colorFormat.addRange(data.from, data.to, data.color, data.bgcolor);
-                                        }
-                                    }
-
-                                    self.formatters[formatType].push(colorFormat);
-                                }
-                            } else {
-
-                                for (i = 0; i < self.chart.formatters[formatType].length; i++) {
-                                    self.formatters[formatType].push(new FormatClass(
-                                        self.chart.formatters[formatType][i])
-                                    );
-                                }
-                            }
-                        }
-
-
-                        //apply formats to dataTable
-                        for (i = 0; i < self.formatters[formatType].length; i++) {
-                            if (self.chart.formatters[formatType][i].columnNum < dataTable.getNumberOfColumns()) {
-                                self.formatters[formatType][i].format(dataTable, self.chart.formatters[formatType][i].columnNum);
-                            }
-                        }
-
-
-                        //Many formatters require HTML tags to display special formatting
-                        if (formatType === 'arrow' || formatType === 'bar' || formatType === 'color') {
-                            self.chart.options.allowHtml = true;
-                        }
-                    }
-                }
 
                 function cleanup(){
                     resizeHandler();
@@ -227,26 +284,22 @@
                         self.chartWrapper.setOptions(self.chart.options);
                     }
 
-                    if (typeof (self.formatters) === 'undefined'){
-                        self.formatters = {};
+                    if (!formatManager){
+                        formatManager = new FormatManager();
+                    }
+                    
+                    if (formatManager.applyFormats(self.chart.formatters, self.chartWrapper.getDataTable()).requiresHtml){
+                        self.chartWrapper.setOption('allowHtml', true);
                     }
 
-                    if (typeof (self.chart.formatters) !== 'undefined') {
-                        applyFormat("number", google.visualization.NumberFormat, self.chartWrapper.getDataTable());
-                        applyFormat("arrow", google.visualization.ArrowFormat, self.chartWrapper.getDataTable());
-                        applyFormat("date", google.visualization.DateFormat, self.chartWrapper.getDataTable());
-                        applyFormat("bar", google.visualization.BarFormat, self.chartWrapper.getDataTable());
-                        applyFormat("color", google.visualization.ColorFormat, self.chartWrapper.getDataTable());
-                    }
-
-                    var customFormatters = self.chart.customFormatters;
-                    if (typeof (customFormatters) !== 'undefined') {
-                        for (var name in customFormatters) {
-                            if (customFormatters.hasOwnProperty(name)){
-                                applyFormat(name, customFormatters[name], self.chartWrapper.getDataTable());
-                            }
-                        }
-                    }
+                    //var customFormatters = self.chart.customFormatters;
+                    //if (typeof (customFormatters) !== 'undefined') {
+                    //    for (var name in customFormatters) {
+                    //        if (customFormatters.hasOwnProperty(name)){
+                    //            applyFormat(name, customFormatters[name], self.chartWrapper.getDataTable());
+                    //        }
+                    //    }
+                    //}
 
                     $timeout(drawChartWrapper);
                 }
