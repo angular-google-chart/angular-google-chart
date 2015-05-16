@@ -1,6 +1,6 @@
 /* globals angular */
 (function(){
-    angular.module('googleChart')
+    angular.module('googlechart')
         .value('googleChartApiConfig', {
             version: '1',
             optionalSettings: {

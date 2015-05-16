@@ -1,6 +1,6 @@
 /* globals angular */
 (function(){
-    angular.module('googleChart', [])
+    angular.module('googlechart', [])
         .run(registerResizeEvent);
         
     registerResizeEvent.$inject = ['$rootScope', '$window'];

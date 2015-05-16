@@ -1,7 +1,7 @@
 /* globals angular, google */
 /* jsHint -W072 */
 (function(){
-    angular.module('googleChart')
+    angular.module('googlechart')
         .directive('googleChart', googleChartDirective);
         
     googleChartDirective.$inject = ['$timeout', '$window', '$rootScope', 'googleChartApiPromise'];
