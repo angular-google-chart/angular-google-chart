@@ -2,11 +2,21 @@
     "name": "angular-google-chart",
     "version": "0.0.11",
     "main": "./ng-google-chart.js",
-    "homepage": "http://bouil.github.io/angular-google-chart/",
+    "description": "Google Chart Tools AngularJS Directive Module",
+    "homepage": "http://angular-google-chart.github.io/angular-google-chart/",
+    "repository": {
+        type: "git",
+        url: "https://github.com/angular-google-chart/angular-google-chart.git"
+    }
     "author": {
       "name": "Nicolas Bouillon",
       "email": "nicolas@bouil.org"
     },
+    "contributors": [{
+           "name": "Nicholas Bering",
+           "email": "nulllifeexception@gmail.com",
+           "url": "http://nicholasbering.ca"
+        }],
     "keywords": [
         "angular",
         "angularjs",

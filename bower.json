@@ -1,8 +1,12 @@
 {
     "name": "angular-google-chart",
-    "version": "0.0.11",
     "main": "./ng-google-chart.js",
-    "homepage": "http://bouil.github.io/angular-google-chart/",
+    "homepage": "http://angular-google-chart.github.io/angular-google-chart/",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/angular-google-chart/angular-google-chart.git"
+    },
+    "description": "Google Chart Tools AngularJS Directive Module",
     "authors": [
         "Nicolas Bouillon <nicolas@bouil.org>",
         "GitHub Contributors"
