@@ -1,4 +1,4 @@
-/* globals angular */
+/* global angular, google */
 (function(){
     angular.module('googlechart')
         .factory('FormatManager', formatManagerFactory);

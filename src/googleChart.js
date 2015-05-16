@@ -1,5 +1,5 @@
-/* globals angular, google */
-/* jsHint -W072 */
+/* global angular, google */
+/* jshint -W072 */
 (function(){
     angular.module('googlechart')
         .directive('googleChart', googleChartDirective);

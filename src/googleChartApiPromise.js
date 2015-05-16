@@ -1,4 +1,4 @@
-/* globals angular */
+/* global angular */
 (function(){
     angular.module('googlechart')
         .factory('googleChartApiPromise', googleChartApiPromiseFactory);
