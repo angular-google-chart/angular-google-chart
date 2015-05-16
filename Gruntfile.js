@@ -19,13 +19,20 @@ module.exports = function(grunt) {
         src: ['src/googlechart.module.js', 'src/*.js'],
         dest: 'ng-google-chart.js'
       }
+    },
+    jshint: {
+      options:{
+        jshintrc: true
+      },
+      all: ['Gruntfile.js', 'sample.js', 'partials/**/*.js', 'src/**/*.js']
     }
   });
 
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // Default task(s).
-  grunt.registerTask('default', ['concat']);
+  grunt.registerTask('default', ['jshint:all', 'concat']);
 
 };
