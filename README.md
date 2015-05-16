@@ -20,6 +20,12 @@ Release branch is `master` (idealy), and was created just because Bower needed i
 
 Please send your pull requests to `gh-pages`.
 
+### Building with Grunt
+
+In order to build the project you will need to have NodeJS and NPM installed.
+In commandline, from the root of the project, run `npm install`. This will install
+grunt and the required plugins.  Run `grunt`, and the default task will build `ng-google-chart.js`
+
 ### Usage and Demo
 
 See sample files index.html and controllers in partials directory. [Live Demo](http://angular-google-chart.github.io/angular-google-chart/)
