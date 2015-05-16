@@ -5,9 +5,9 @@
     "description": "Google Chart Tools AngularJS Directive Module",
     "homepage": "http://angular-google-chart.github.io/angular-google-chart/",
     "repository": {
-        type: "git",
-        url: "https://github.com/angular-google-chart/angular-google-chart.git"
-    }
+        "type": "git",
+        "url": "https://github.com/angular-google-chart/angular-google-chart.git"
+    },
     "author": {
       "name": "Nicolas Bouillon",
       "email": "nicolas@bouil.org"
