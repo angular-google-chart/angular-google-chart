@@ -49,7 +49,7 @@
                 function applyFormats(dataTable, tFormats, customFormatters) {
                     var formatType, FormatClass, requiresHtml = false;
                     if (!angular.isDefined(tFormats) || !angular.isDefined(dataTable)){
-                        return;
+                        return { requiresHtml: false };
                     }
                     for (formatType in tFormats){
                         if (tFormats.hasOwnProperty(formatType)){
