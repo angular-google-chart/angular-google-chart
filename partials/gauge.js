@@ -1,16 +1,18 @@
-'use strict';
-
 /* global angular */
-
-angular.module('google-chart-sample').controller("GaugeChartCtrl", function ($scope) {
+(function() {
+  'use strict';
+  angular.module('google-chart-sample').controller("GaugeChartCtrl", function($scope) {
 
     $scope.chartObject = {};
     $scope.chartObject.type = "Gauge";
 
     $scope.chartObject.options = {
-      width: 400, height: 120,
-      redFrom: 90, redTo: 100,
-      yellowFrom:75, yellowTo: 90,
+      width: 400,
+      height: 120,
+      redFrom: 90,
+      redTo: 100,
+      yellowFrom: 75,
+      yellowTo: 90,
       minorTicks: 5
     };
 
@@ -20,4 +22,5 @@ angular.module('google-chart-sample').controller("GaugeChartCtrl", function ($sc
       ['CPU', 55],
       ['Network', 68]
     ];
-});  
+  });
+})();
