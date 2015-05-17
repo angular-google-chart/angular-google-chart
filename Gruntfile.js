@@ -13,7 +13,8 @@ module.exports = function(grunt) {
         '* @author GitHub contributors\n'+
         '* @license MIT\n'+
         '* @year 2013\n'+
-        '*/\n'
+        '*/\n',
+        sourceMap: true
       },
       build: {
         src: ['src/googlechart.module.js', 'src/*.js'],
@@ -25,14 +26,26 @@ module.exports = function(grunt) {
         jshintrc: true
       },
       all: ['Gruntfile.js', 'sample.js', 'partials/**/*.js', 'src/**/*.js']
+    },
+    uglify: {
+      options:{
+        sourceMapIn: 'ng-google-chart.js.map',
+        sourceMap: true
+      },
+      build:{
+        files: {
+          'ng-google-chart.min.js': ['ng-google-chart.js']
+        }
+      }
     }
   });
 
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   // Default task(s).
-  grunt.registerTask('default', ['jshint:all', 'concat']);
+  grunt.registerTask('default', ['jshint:all', 'concat', 'uglify']);
 
 };
