@@ -3,6 +3,12 @@ Thank you for taking the time to contribute to Angular-Google-Chart.
 
 To help you make the most of your effort to contribute to this project, I've assembled a few guidelines for posting issues and pull-requests.
 
+## Building with Grunt
+
+In order to build the project you will need to have NodeJS and NPM installed.
+In commandline, from the root of the project, run `npm install`. This will install
+grunt and the required plugins.  Run `grunt`, and the default task will build `ng-google-chart.js`
+
 ## Issues
 
 - **How do I...?** A large number of our issues are requests for how-to's.  We're always happy to help, and we know the documentation for this project could use some work.  When posting a request for a how-to, please give a sample of the HTML and JavaScript that you've got so far.  The best way to do this is with a demo on http://plnkr.co/, but some HTML and/or JavaScript in the issue itself works just fine, too.
