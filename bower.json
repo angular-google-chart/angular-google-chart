@@ -23,7 +23,12 @@
         ".jshintrc",
         "**/*.txt",
         "**/.*",
-        "bower_components"
+        "bower_components",
+        "package.json",
+        "partials",
+        "index.html",
+        "sample.js",
+        "style.css"
     ],
     "dependencies": {
         "angular": ">1.2.8"
