@@ -4,6 +4,13 @@ for AngularJS
 -------------
 [![Join the chat at https://gitter.im/angular-google-chart/angular-google-chart](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/angular-google-chart/angular-google-chart?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+### Install
+
+Install with bower
+
+`bower install angular-google-chart --save`
+
+
 ### Goal
 
 Wrapper directive for [Google Chart Tools](https://google-developers.appspot.com/chart/)
