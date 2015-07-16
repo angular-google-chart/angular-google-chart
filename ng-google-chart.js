@@ -1,4 +1,4 @@
-/*! angular-google-chart 2015-06-16 */
+/*! angular-google-chart 2015-07-15 */
 /*
 * @description Google Chart Api Directive Module for AngularJS
 * @version 0.0.11
@@ -206,7 +206,7 @@
                 });
 
                 //Cleanup resize handler.
-                $scope.$on('$destroy', cleanup());
+                $scope.$on('$destroy', cleanup);
 
                 registerWrapperListener('error', handleError, self);
                 registerWrapperListener('ready', handleReady, self);
@@ -326,6 +326,7 @@
         };
     }
 })();
+
 /* global angular */
 (function(){
     angular.module('googlechart')

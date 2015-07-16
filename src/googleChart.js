@@ -78,7 +78,7 @@
                 });
 
                 //Cleanup resize handler.
-                $scope.$on('$destroy', cleanup());
+                $scope.$on('$destroy', cleanup);
 
                 registerWrapperListener('error', handleError, self);
                 registerWrapperListener('ready', handleReady, self);
