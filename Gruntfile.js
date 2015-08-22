@@ -37,6 +37,16 @@ module.exports = function(grunt) {
           'ng-google-chart.min.js': ['ng-google-chart.js']
         }
       }
+    },
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js',
+        singleRun: true
+      }
+    },
+    watch: {
+      files: ['src/**.js'],
+      tasks:['jshint:all', 'karma:unit']
     }
   });
 
@@ -44,6 +54,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-karma');
 
   // Default task(s).
   grunt.registerTask('default', ['jshint:all', 'concat', 'uglify']);
