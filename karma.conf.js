@@ -7,7 +7,7 @@ module.exports = function (config) {
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['jasmine', 'sinon'],
+        frameworks: ['jasmine', 'jasmine-matchers', 'sinon'],
 
 
         // list of files / patterns to load in the browser
@@ -17,7 +17,7 @@ module.exports = function (config) {
           'node_modules/bardjs/dist/bard.js',
           'src/googlechart.module.js',
           'src/*.js',
-          'src/*.spec.js'
+          'test/*.spec.js'
         ],
 
         // list of files to exclude
