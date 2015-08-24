@@ -13,7 +13,7 @@
                 callback: function () {
                     var oldCb = apiConfig.optionalSettings.callback;
                     $rootScope.$apply(function () {
-                        apiReady.resolve();
+                        apiReady.resolve(google);
                     });
 
                     if (angular.isFunction(oldCb)) {
