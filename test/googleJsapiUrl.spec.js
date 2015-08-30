@@ -1,3 +1,5 @@
+/* global angular */
+/* eslint-env jasmine */
 describe('googleJsapiUrl provider', function() {
     var providerInstance;
 
@@ -20,7 +22,7 @@ describe('googleJsapiUrl provider', function() {
     });
     
     it ('should return http url if protocol changed', function(){
-       providerInstance.setProtocol('http:')
+       providerInstance.setProtocol('http:');
        var result = providerInstance.$get();
        expect(result).toMatch(/^http:/);
        expect(result).not.toMatch(/^https:/);
