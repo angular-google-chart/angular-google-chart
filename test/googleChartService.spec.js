@@ -1,0 +1,223 @@
+/* global angular */
+/* eslint-env jasmine */
+fdescribe('GoogleChartService', function() {
+
+    var mockApiPromiseBackend, GoogleChartService, $rootScope, mockApi;
+
+    beforeEach(function() {
+        module('googlechart');
+        module('googlechart.mocks', function($provide) {
+
+            // A mock googleChartApiPromise with back-end on global mockApiPromiseBackend
+            $provide.factory('googleChartApiPromise', mockApiPromiseFactory);
+
+            function mockApiPromiseFactory($q, mockGoogleApi) {
+                var deferred = $q.defer();
+                mockApiPromiseBackend = {
+                    succeed: function() {
+                        deferred.resolve(mockGoogleApi);
+                    },
+                    fail: function(reason) {
+                        deferred.reject(reason);
+                    }
+                };
+                return deferred.promise;
+            }
+        });
+
+        inject(function($injector, _$rootScope_) {
+            $rootScope = _$rootScope_;
+            GoogleChartService = $injector.get('GoogleChartService');
+            mockApi = $injector.get('mockGoogleApi');
+        });
+    });
+
+    it('should have public interface methods', function() {
+        expect(GoogleChartService).toHaveMethod('isApiReady');
+        expect(GoogleChartService).toHaveMethod('getChartWrapper');
+        expect(GoogleChartService).toHaveMethod('getData');
+        expect(GoogleChartService).toHaveMethod('getElement');
+        expect(GoogleChartService).toHaveMethod('getOption');
+        expect(GoogleChartService).toHaveMethod('getOptions');
+        expect(GoogleChartService).toHaveMethod('registerServiceListener');
+        expect(GoogleChartService).toHaveMethod('setData');
+        expect(GoogleChartService).toHaveMethod('setup');
+        expect(GoogleChartService).toHaveMethod('setElement');
+        expect(GoogleChartService).toHaveMethod('setOption');
+        expect(GoogleChartService).toHaveMethod('setOptions');
+    });
+
+    it('should set and get individual options', function() {
+        var result, value = 'Some Chart Title';
+        GoogleChartService.setOption('title', value);
+        result = GoogleChartService.getOption('title');
+        expect(result).toBe(value);
+    });
+
+    it('should set and get complex options', function() {
+        var value = {
+                maxValue: 10,
+                minValue: -10
+            },
+            result;
+        GoogleChartService.setOption('vAxis', value);
+        result = GoogleChartService.getOption('vAxis');
+
+        //Should be equal, but not same object
+        expect(angular.equals(value, result)).toBeTrue();
+        expect(result).not.toBe(value);
+
+        result = GoogleChartService.getOption('vAxis.maxValue');
+        expect(result).toBe(10);
+    });
+
+    it('should set complex options with dots in key names', function() {
+        var key = 'vAxis.maxValue';
+        var value = 10;
+        var expectedResult = {
+            maxValue: 10
+        };
+        var result;
+
+        GoogleChartService.setOption(key, value);
+        result = GoogleChartService.getOption('vAxis');
+        expect(angular.equals(result, expectedResult)).toBeTrue();
+
+    });
+
+    it('should get complex options with dots in key names', function() {
+        var value = {
+            maxValue: 10
+        };
+        var expectedResult = 10;
+        var result;
+
+        GoogleChartService.setOption('vAxis', value);
+        result = GoogleChartService.getOption('vAxis.maxValue');
+        expect(result).toBe(expectedResult);
+    });
+    
+    it('should set and get view object', function(){
+       var view = {columns:[0,1,2]};
+       GoogleChartService.setView(view);
+       var result = GoogleChartService.getView(view);
+       expect(angular.equals(result,view)).toBeTrue();
+       expect(result).not.toBe(view);
+    });
+    
+    it('should replace element with setElement', function(){
+       var newElement = angular.element('<div></div>');
+       GoogleChartService.setElement(newElement);
+       expect(GoogleChartService.getElement()).toBe(newElement);
+    });
+    
+    it('should not replace element with non-element', function(){
+       var newElement = angular.element('<div></div>');
+       var notElement = {};
+       GoogleChartService.setElement(newElement);
+       expect(GoogleChartService.getElement()).toBe(newElement);
+       GoogleChartService.setElement(notElement);
+       expect(GoogleChartService.getElement()).not.toBe(notElement);
+       expect(GoogleChartService.getElement()).toBe(newElement);
+    });
+
+    describe('before api is ready', function() {
+        it('should return false from isApiReady', function() {
+            expect(GoogleChartService.isApiReady()).toBe(false);
+        });
+        it('should not create chartWrapper when setup is called', function() {
+            var chartType = "NoChart",
+                data = {},
+                options = {},
+                formatters = {},
+                view = {};
+            //doesn't need directive, just an element to give to chartWrapper
+            var element = angular.element("<div></div>");
+            GoogleChartService.setup(element, chartType, data, view, options, formatters);
+            $rootScope.$apply();
+            expect(GoogleChartService.getChartWrapper()).not.toBeDefined();
+        });
+    });
+
+    describe('after api is ready', function() {
+
+        beforeEach(function() {
+            mockApiPromiseBackend.succeed();
+            $rootScope.$apply();
+        });
+
+        it('should return true from isApiReady', function() {
+            expect(GoogleChartService.isApiReady()).toBe(true);
+        });
+
+        it('should create chartWrapper when setup is called', function() {
+            var chartType = "NoChart",
+                data = {},
+                options = {},
+                formatters = {},
+                view = {};
+            //doesn't need directive, just an element to give to chartWrapper
+            var element = angular.element("<div></div>");
+            GoogleChartService.setup(element, chartType, data, view, options, formatters);
+            $rootScope.$apply();
+            expect(GoogleChartService.getChartWrapper()).toBeDefined();
+        });
+
+        describe('before setup', function() {
+            it('should return undefined from getChartWrapper()', function() {
+                expect(GoogleChartService.getChartWrapper()).not.toBeDefined();
+            });
+        });
+        
+        describe('setup phase', function(){
+            var element, type, data, options, formatters;
+           beforeEach(function(){
+               
+              element = angular.element('<div></div>');
+              type = "MadeUpChart";
+              data = [];
+              options = {title:'A Chart'};
+              formatters = {};
+           });
+           
+           it('should try to call draw on chartwrapper', function(){
+               var drawSpy = spyOn(mockApi.visualization.ChartWrapper.prototype, 'draw').and.callThrough();
+              GoogleChartService.setup(element, type, data, null, options, formatters);
+              $rootScope.$apply();
+              expect(drawSpy).toHaveBeenCalled();
+           });
+        });
+        
+        describe('setup complete', function(){
+            var element, type, data, options, formatters;
+           beforeEach(function(){
+              element = angular.element('<div></div>');
+              type = "MadeUpChart";
+              data = [];
+              options = {title:'A Chart'};
+              formatters = {};
+              GoogleChartService.setup(element, type, data, null, options, formatters);
+              $rootScope.$apply();
+           });
+           
+           it('should call beforeDraw handler when chart draws', function(){
+               var spy = jasmine.createSpy('listener');
+               GoogleChartService.registerServiceListener('beforeDraw', spy, this);
+               GoogleChartService.draw();
+               $rootScope.$apply();
+               expect(spy).toHaveBeenCalled();
+           });
+        });
+    });
+
+    describe('after api fails to load', function() {
+        beforeEach(function() {
+            mockApiPromiseBackend.fail();
+            $rootScope.$apply();
+        });
+
+        it('should return false from isApiReady', function() {
+            expect(GoogleChartService.isApiReady()).toBe(false);
+        });
+    });
+});
