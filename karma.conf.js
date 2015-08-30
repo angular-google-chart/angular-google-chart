@@ -17,6 +17,7 @@ module.exports = function (config) {
           'node_modules/bardjs/dist/bard.js',
           'src/googlechart.module.js',
           'src/*.js',
+          'test/google.mock.js', //looking for a better way to handle mocks
           'test/*.spec.js'
         ],
 
