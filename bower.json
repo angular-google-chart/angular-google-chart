@@ -28,7 +28,8 @@
         "partials",
         "index.html",
         "sample.js",
-        "style.css"
+        "style.css",
+        "images"
     ],
     "dependencies": {
         "angular": ">1.2.8"
