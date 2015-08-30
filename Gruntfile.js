@@ -23,7 +23,8 @@ module.exports = function(grunt) {
     },
     jshint: {
       options:{
-        jshintrc: true
+        jshintrc: true,
+        jasmine: true
       },
       all: ['Gruntfile.js', 'sample.js', 'partials/**/*.js', 'src/**/*.js']
     },
