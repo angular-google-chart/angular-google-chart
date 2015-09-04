@@ -1,7 +1,7 @@
 /* global angular */
 (function(){
     angular.module('googlechart')
-        .directive('onError', onErrorDirective);
+        .directive('agcOnError', onErrorDirective);
     function onErrorDirective(){
         return{
             restrict: 'A',
@@ -20,7 +20,7 @@
                         message: args[0].message
                     };
                     scope.$apply(function(){
-                        scope.$eval(attrs.onError, returnValues);
+                        scope.$eval(attrs.agcOnError, returnValues);
                     });
                 }
                 googleChartController.registerWrapperListener('error', callback, this);

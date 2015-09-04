@@ -1,7 +1,7 @@
 /* global angular */
 (function(){
     angular.module('googlechart')
-        .directive('onSelect', onSelectDirective);
+        .directive('agcOnSelect', onSelectDirective);
         
     function onSelectDirective(){
         return {
@@ -17,7 +17,7 @@
                     selectEventRetParams.chartWrapper = chartWrapper;
                     selectEventRetParams.chart = chart;
                     scope.$apply(function () {
-                        scope.$eval(attrs.onSelect, selectEventRetParams);
+                        scope.$eval(attrs.agcOnSelect, selectEventRetParams);
                     });
                 }
                 googleChartController.registerWrapperListener('select', callback, this);
