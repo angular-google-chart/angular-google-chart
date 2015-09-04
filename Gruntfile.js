@@ -79,8 +79,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
 
   // Default task(s).
-  grunt.registerTask('release', ['jshint:all', 'concat:release', 'uglify:release']);
-  grunt.registerTask('build', ['jshint:all', 'concat:build', 'uglify:build']);
+  grunt.registerTask('release', ['jshint:all', 'karma', 'concat:release', 'uglify:release']);
+  grunt.registerTask('build', ['jshint:all', 'karma', 'concat:build', 'uglify:build']);
   grunt.registerTask('default', ['build']);
 
 };
