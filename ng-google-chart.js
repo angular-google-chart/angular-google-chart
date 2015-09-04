@@ -1,4 +1,4 @@
-/*! angular-google-chart 2015-07-15 */
+/*! angular-google-chart 2015-09-04 */
 /*
 * @description Google Chart Api Directive Module for AngularJS
 * @version 0.0.11
@@ -125,6 +125,145 @@
             
             return FormatManager;
         }
+})();
+/* global angular */
+(function(){
+    angular.module('googlechart')
+        .directive('agcOnError', onErrorDirective);
+    function onErrorDirective(){
+        return{
+            restrict: 'A',
+            scope: false,
+            require: 'googleChart',
+            link: function(scope, element, attrs, googleChartController){
+                callback.$inject = ['chartWrapper', 'chart', 'args'];
+                function callback(chartWrapper, chart, args){
+                    var returnValues = {
+                        chartWrapper: chartWrapper,
+                        chart: chart,
+                        args: args,
+                        error: args[0],
+                        err: args[0],
+                        id: args[0].id,
+                        message: args[0].message
+                    };
+                    scope.$apply(function(){
+                        scope.$eval(attrs.agcOnError, returnValues);
+                    });
+                }
+                googleChartController.registerWrapperListener('error', callback, this);
+            }
+        };
+    }
+})();
+/* global angular */
+
+(function(){
+    angular.module('googlechart')
+        .directive('agcOnMouseout', agcOnMouseoutDirective);
+    
+    function agcOnMouseoutDirective(){
+        return {
+            restrict: 'A',
+            scope: false,
+            require: 'googleChart',
+            link: function(scope, element, attrs, googleChartController){
+                callback.$inject = ['args', 'chart', 'chartWrapper'];
+                function callback(args, chart, chartWrapper){
+                    var returnParams = {
+                        chartWrapper: chartWrapper,
+                        chart: chart,
+                        args: args,
+                        column: args[0].column,
+                        row: args[0].row
+                    };
+                    scope.$apply(function () {
+                        scope.$eval(attrs.agcOnMouseout, returnParams);
+                    });
+                }
+                googleChartController.registerChartListener('onmouseout', callback, this);
+            }
+        };
+    }
+})();
+/* global angular */
+
+(function(){
+    angular.module('googlechart')
+        .directive('agcOnMouseover', agcOnMouseoverDirective);
+    
+    function agcOnMouseoverDirective(){
+        return {
+            restrict: 'A',
+            scope: false,
+            require: 'googleChart',
+            link: function(scope, element, attrs, googleChartController){
+                callback.$inject = ['args', 'chart', 'chartWrapper'];
+                function callback(args, chart, chartWrapper){
+                    var returnParams = {
+                        chartWrapper: chartWrapper,
+                        chart: chart,
+                        args: args,
+                        column: args[0].column,
+                        row: args[0].row
+                    };
+                    scope.$apply(function () {
+                        scope.$eval(attrs.agcOnMouseover, returnParams);
+                    });
+                }
+                googleChartController.registerChartListener('onmouseover', callback, this);
+            }
+        };
+    }
+})();
+/* global angular */
+(function(){
+    angular.module('googlechart')
+        .directive('agcOnReady', onReadyDirective);
+        
+    function onReadyDirective(){
+        return {
+            restrict: 'A',
+            scope: false,
+            require: 'googleChart',
+            link: function(scope, element, attrs, googleChartController){
+                callback.$inject=['chartWrapper'];
+                function callback(chartWrapper){
+                    scope.$apply(function (){
+                        scope.$eval(attrs.agcOnReady, {chartWrapper: chartWrapper});
+                    });
+                }
+                googleChartController.registerWrapperListener('ready', callback, this);
+            }
+        };
+    }
+})();
+/* global angular */
+(function(){
+    angular.module('googlechart')
+        .directive('agcOnSelect', onSelectDirective);
+        
+    function onSelectDirective(){
+        return {
+            restrict: 'A',
+            scope: false,
+            require: 'googleChart',
+            link: function(scope, element, attrs, googleChartController){
+                callback.$inject = ['chartWrapper', 'chart'];
+                function callback(chartWrapper, chart){
+                    var selectEventRetParams = { selectedItems: chart.getSelection() };
+                    // This is for backwards compatibility for people using 'selectedItem' that only wanted the first selection.
+                    selectEventRetParams.selectedItem = selectEventRetParams.selectedItems[0];
+                    selectEventRetParams.chartWrapper = chartWrapper;
+                    selectEventRetParams.chart = chart;
+                    scope.$apply(function () {
+                        scope.$eval(attrs.agcOnSelect, selectEventRetParams);
+                    });
+                }
+                googleChartController.registerWrapperListener('select', callback, this);
+            }
+        };
+    }
 })();
 /* global angular, google */
 /* jshint -W072 */
@@ -405,85 +544,6 @@
 
         this.$get = function () {
             return (protocol ? protocol : '') + url;
-        };
-    }
-})();
-/* global angular */
-(function(){
-    angular.module('googlechart')
-        .directive('onError', onErrorDirective);
-    function onErrorDirective(){
-        return{
-            restrict: 'A',
-            scope: false,
-            require: 'googleChart',
-            link: function(scope, element, attrs, googleChartController){
-                callback.$inject = ['chartWrapper', 'chart', 'args'];
-                function callback(chartWrapper, chart, args){
-                    var returnValues = {
-                        chartWrapper: chartWrapper,
-                        chart: chart,
-                        args: args,
-                        error: args[0],
-                        err: args[0],
-                        id: args[0].id,
-                        message: args[0].message
-                    };
-                    scope.$apply(function(){
-                        scope.$eval(attrs.onError, returnValues);
-                    });
-                }
-                googleChartController.registerWrapperListener('error', callback, this);
-            }
-        };
-    }
-})();
-/* global angular */
-(function(){
-    angular.module('googlechart')
-        .directive('onReady', onReadyDirective);
-        
-    function onReadyDirective(){
-        return {
-            restrict: 'A',
-            scope: false,
-            require: 'googleChart',
-            link: function(scope, element, attrs, googleChartController){
-                callback.$inject=['chartWrapper'];
-                function callback(chartWrapper){
-                    scope.$apply(function (){
-                        scope.$eval(attrs.onReady, {chartWrapper: chartWrapper});
-                    });
-                }
-                googleChartController.registerWrapperListener('ready', callback, this);
-            }
-        };
-    }
-})();
-/* global angular */
-(function(){
-    angular.module('googlechart')
-        .directive('onSelect', onSelectDirective);
-        
-    function onSelectDirective(){
-        return {
-            restrict: 'A',
-            scope: false,
-            require: 'googleChart',
-            link: function(scope, element, attrs, googleChartController){
-                callback.$inject = ['chartWrapper', 'chart'];
-                function callback(chartWrapper, chart){
-                    var selectEventRetParams = { selectedItems: chart.getSelection() };
-                    // This is for backwards compatibility for people using 'selectedItem' that only wanted the first selection.
-                    selectEventRetParams.selectedItem = selectEventRetParams.selectedItems[0];
-                    selectEventRetParams.chartWrapper = chartWrapper;
-                    selectEventRetParams.chart = chart;
-                    scope.$apply(function () {
-                        scope.$eval(attrs.onSelect, selectEventRetParams);
-                    });
-                }
-                googleChartController.registerWrapperListener('select', callback, this);
-            }
         };
     }
 })();
