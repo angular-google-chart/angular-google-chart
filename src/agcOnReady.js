@@ -1,7 +1,7 @@
 /* global angular */
 (function(){
     angular.module('googlechart')
-        .directive('onReady', onReadyDirective);
+        .directive('agcOnReady', onReadyDirective);
         
     function onReadyDirective(){
         return {
@@ -12,7 +12,7 @@
                 callback.$inject=['chartWrapper'];
                 function callback(chartWrapper){
                     scope.$apply(function (){
-                        scope.$eval(attrs.onReady, {chartWrapper: chartWrapper});
+                        scope.$eval(attrs.agcOnReady, {chartWrapper: chartWrapper});
                     });
                 }
                 googleChartController.registerWrapperListener('ready', callback, this);

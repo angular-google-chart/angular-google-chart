@@ -4,19 +4,34 @@ module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     concat: {
-      options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'+
-        '/*\n' +
-        '* @description Google Chart Api Directive Module for AngularJS\n'+
-        '* @version 0.0.11\n'+
-        '* @author Nicolas Bouillon <nicolas@bouil.org>\n'+
-        '* @author GitHub contributors\n'+
-        '* @license MIT\n'+
-        '* @year 2013\n'+
-        '*/\n',
-        sourceMap: true
-      },
       build: {
+        options: {
+          banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n' +
+            '/*\n' +
+            '* @description Google Chart Api Directive Module for AngularJS\n' +
+            '* @version <%= pkg.version %>\n' +
+            '* @author Nicolas Bouillon <nicolas@bouil.org>\n' +
+            '* @author GitHub contributors\n' +
+            '* @license MIT\n' +
+            '* @year 2013\n' +
+            '*/\n',
+          sourceMap: true
+        },
+        src: ['src/googlechart.module.js', 'src/*.js'],
+        dest: 'ng-google-chart.js'
+      },
+      release: {
+        options: {
+          banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n' +
+            '/*\n' +
+            '* @description Google Chart Api Directive Module for AngularJS\n' +
+            '* @version <%= pkg.version %>\n' +
+            '* @author Nicolas Bouillon <nicolas@bouil.org>\n' +
+            '* @author GitHub contributors\n' +
+            '* @license MIT\n' +
+            '* @year 2013\n' +
+            '*/\n'
+        },
         src: ['src/googlechart.module.js', 'src/*.js'],
         dest: 'ng-google-chart.js'
       }
@@ -29,11 +44,16 @@ module.exports = function(grunt) {
       all: ['Gruntfile.js', 'sample.js', 'partials/**/*.js', 'src/**/*.js']
     },
     uglify: {
-      options:{
-        sourceMapIn: 'ng-google-chart.js.map',
-        sourceMap: true
+      build: {
+        options: {
+          sourceMapIn: 'ng-google-chart.js.map',
+          sourceMap: true
+        },
+        files: {
+          'ng-google-chart.min.js': ['ng-google-chart.js']
+        }
       },
-      build:{
+      release: {
         files: {
           'ng-google-chart.min.js': ['ng-google-chart.js']
         }
@@ -59,6 +79,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-karma');
 
   // Default task(s).
-  grunt.registerTask('default', ['jshint:all', 'concat', 'uglify']);
+  grunt.registerTask('release', ['jshint:all', 'concat:release', 'uglify:release']);
+  grunt.registerTask('build', ['jshint:all', 'concat:build', 'uglify:build']);
+  grunt.registerTask('default', ['build']);
 
 };
