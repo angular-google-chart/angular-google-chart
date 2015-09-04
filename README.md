@@ -48,7 +48,7 @@ See [ChartWrapper](https://google-developers.appspot.com/chart/interactive/docs/
 
 ### Release notes
 
-#### Unreleased Changes
+#### 0.1.0-beta.1
 
 *Added:*
 

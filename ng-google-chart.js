@@ -1,7 +1,7 @@
 /*! angular-google-chart 2015-09-04 */
 /*
 * @description Google Chart Api Directive Module for AngularJS
-* @version 0.0.11
+* @version 0.1.0-beta.1
 * @author Nicolas Bouillon <nicolas@bouil.org>
 * @author GitHub contributors
 * @license MIT
@@ -547,4 +547,3 @@
         };
     }
 })();
-//# sourceMappingURL=ng-google-chart.js.map
