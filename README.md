@@ -55,7 +55,8 @@ See [ChartWrapper](https://google-developers.appspot.com/chart/interactive/docs/
 * gauge chart sample
 * basic API for hooking into chart events from other directives
 * API-level support for listeners/event-handlers on inner chart object
-* on-error directive to register listener for google charts error event
+* agc-on-error directive to register listener for google charts error event
+* agc-on-mouseover and agc-on-mouseout directives
 
 *Changed:*
 
@@ -64,6 +65,7 @@ See [ChartWrapper](https://google-developers.appspot.com/chart/interactive/docs/
 * cancels extra draw cycles if many rapid changes are made to chart-object watched parameters
 * changed link function to controller in google-chart directive
 * broke out some functionality into separate directives (on-ready, on-select)
+* namespaced event directives (agc-on-ready, agc-on-error, agc-on-select, agc-on-mouseover, agc-on-mouseout)
 
 *Removed:*
 
