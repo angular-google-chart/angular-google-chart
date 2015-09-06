@@ -8,15 +8,10 @@
     "type": "git",
     "url": "https://github.com/angular-google-chart/angular-google-chart.git"
   },
-  "author": {
-    "name": "Nicolas Bouillon",
-    "email": "nicolas@bouil.org"
-  },
   "contributors": [
     {
-      "name": "Nicholas Bering",
-      "email": "nulllifeexception@gmail.com",
-      "url": "http://nicholasbering.ca"
+      "name": "Github Contributors",
+      "url": "https://github.com/angular-google-chart/angular-google-chart/graphs/contributors"
     }
   ],
   "keywords": [
