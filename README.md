@@ -31,7 +31,14 @@ Please send your pull requests to `gh-pages`.
 
 In order to build the project you will need to have NodeJS and NPM installed.
 In commandline, from the root of the project, run `npm install`. This will install
-grunt and the required plugins.  Run `grunt`, and the default task will build `ng-google-chart.js`
+grunt and the required plugins.  Run `grunt` or `grunt build` to build `ng-google-chart.js` and
+`ng-google-chart.min.js` with included source maps. `grunt release` builds without
+source maps.
+
+### Running Tests
+
+Tests are run during build. Use `grunt watch` to run jshint and tests whenever
+source files are changed.
 
 ### Usage and Demo
 
@@ -47,6 +54,23 @@ See sample files index.html and controllers in partials directory. [Live Demo](h
 See [ChartWrapper](https://google-developers.appspot.com/chart/interactive/docs/reference#chartwrapperobject) and [DataTable](https://google-developers.appspot.com/chart/interactive/docs/reference#DataTable) documentation.
 
 ### Release notes
+
+#### Unreleased Changes
+
+*Added:*
+
+* GoogleChartService (handles the actual wrapping of the google charts API)
+* agcBeforeDraw directive (replaces before-draw on google-chart directive)
+* registerServiceListener method on GoogleChartController API
+* tests
+
+*Changed:*
+
+* much of the internal logic of the GoogleChartController was moved to a service, improving testability and resusability
+
+*Removed:*
+
+* before-draw attribute on google-chart directive (replaced by agcBeforeDraw directive)
 
 #### 0.1.0-beta.1
 
