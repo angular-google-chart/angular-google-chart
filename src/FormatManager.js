@@ -5,10 +5,10 @@
         
         function formatManagerFactory(){
             // Handles the processing of Google Charts API Formats
-            function FormatManager(){
+            function FormatManager($google){
                 var self = this;
                 var oldFormatTemplates = {};
-                self.iFormats = {}; // Holds instances of formats (ie. self.iFormats.date[0] = new google.visualization.DateFormat(params))
+                self.iFormats = {}; // Holds instances of formats (ie. self.iFormats.date[0] = new $google.visualization.DateFormat(params))
                 self.applyFormats = applyFormats;
                 
                 // apply formats of type to datatable
@@ -74,7 +74,7 @@
                 function instantiateColorFormatters(tFormats){
                     var t, colorFormat, i, data, formatType = 'color';
                     for (t = 0; t < tFormats[formatType].length; t++) {
-                        colorFormat = new google.visualization.ColorFormat();
+                        colorFormat = new $google.visualization.ColorFormat();
 
                         for (i = 0; i < tFormats[formatType][t].formats.length; i++) {
                             data = tFormats[formatType][t].formats[i];
@@ -92,7 +92,7 @@
                 
                 function getFormatClass(formatType, customFormatters){
                     var className = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase() + "Format";
-                    if (google.visualization.hasOwnProperty(className)){
+                    if ($google.visualization.hasOwnProperty(className)){
                         return google.visualization[className];
                     } else if (angular.isDefined(customFormatters) && customFormatters.hasOwnProperty(formatType)) {
                         return customFormatters[formatType];

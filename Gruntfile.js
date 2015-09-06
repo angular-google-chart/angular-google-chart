@@ -37,8 +37,9 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
-      options: {
-        jshintrc: true
+      options:{
+        jshintrc: true,
+        jasmine: true
       },
       all: ['Gruntfile.js', 'sample.js', 'partials/**/*.js', 'src/**/*.js']
     },
@@ -57,6 +58,16 @@ module.exports = function(grunt) {
           'ng-google-chart.min.js': ['ng-google-chart.js']
         }
       }
+    },
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js',
+        singleRun: true
+      }
+    },
+    watch: {
+      files: ['src/**.js','test/**/*.spec.js'],
+      tasks:['jshint:all', 'karma:unit']
     }
   });
 
@@ -64,10 +75,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-karma');
 
   // Default task(s).
-  grunt.registerTask('release', ['jshint:all', 'concat:release', 'uglify:release']);
-  grunt.registerTask('build', ['jshint:all', 'concat:build', 'uglify:build']);
+  grunt.registerTask('release', ['jshint:all', 'karma', 'concat:release', 'uglify:release']);
+  grunt.registerTask('build', ['jshint:all', 'karma', 'concat:build', 'uglify:build']);
   grunt.registerTask('default', ['build']);
 
 };
