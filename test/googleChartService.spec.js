@@ -2,7 +2,7 @@
 /* eslint-env jasmine */
 describe('GoogleChartService', function() {
 
-    var mockApiPromiseBackend, GoogleChartService, $rootScope, mockApi;
+    var mockApiPromiseBackend, GoogleChartService, googleChartService, $rootScope, mockApi;
 
     beforeEach(function() {
         module('googlechart');
@@ -28,31 +28,32 @@ describe('GoogleChartService', function() {
         inject(function($injector, _$rootScope_) {
             $rootScope = _$rootScope_;
             GoogleChartService = $injector.get('GoogleChartService');
+            googleChartService = new GoogleChartService();
             mockApi = $injector.get('mockGoogleApi');
         });
     });
 
     it('should have public interface methods', function() {
-        expect(GoogleChartService).toHaveMethod('isApiReady');
-        expect(GoogleChartService).toHaveMethod('getChartWrapper');
-        expect(GoogleChartService).toHaveMethod('getData');
-        expect(GoogleChartService).toHaveMethod('getElement');
-        expect(GoogleChartService).toHaveMethod('getOption');
-        expect(GoogleChartService).toHaveMethod('getOptions');
-        expect(GoogleChartService).toHaveMethod('registerChartListener');
-        expect(GoogleChartService).toHaveMethod('registerServiceListener');
-        expect(GoogleChartService).toHaveMethod('registerWrapperListener');
-        expect(GoogleChartService).toHaveMethod('setData');
-        expect(GoogleChartService).toHaveMethod('setup');
-        expect(GoogleChartService).toHaveMethod('setElement');
-        expect(GoogleChartService).toHaveMethod('setOption');
-        expect(GoogleChartService).toHaveMethod('setOptions');
+        expect(googleChartService).toHaveMethod('isApiReady');
+        expect(googleChartService).toHaveMethod('getChartWrapper');
+        expect(googleChartService).toHaveMethod('getData');
+        expect(googleChartService).toHaveMethod('getElement');
+        expect(googleChartService).toHaveMethod('getOption');
+        expect(googleChartService).toHaveMethod('getOptions');
+        expect(googleChartService).toHaveMethod('registerChartListener');
+        expect(googleChartService).toHaveMethod('registerServiceListener');
+        expect(googleChartService).toHaveMethod('registerWrapperListener');
+        expect(googleChartService).toHaveMethod('setData');
+        expect(googleChartService).toHaveMethod('setup');
+        expect(googleChartService).toHaveMethod('setElement');
+        expect(googleChartService).toHaveMethod('setOption');
+        expect(googleChartService).toHaveMethod('setOptions');
     });
 
     it('should set and get individual options', function() {
         var result, value = 'Some Chart Title';
-        GoogleChartService.setOption('title', value);
-        result = GoogleChartService.getOption('title');
+        googleChartService.setOption('title', value);
+        result = googleChartService.getOption('title');
         expect(result).toBe(value);
     });
 
@@ -62,14 +63,14 @@ describe('GoogleChartService', function() {
                 minValue: -10
             },
             result;
-        GoogleChartService.setOption('vAxis', value);
-        result = GoogleChartService.getOption('vAxis');
+        googleChartService.setOption('vAxis', value);
+        result = googleChartService.getOption('vAxis');
 
         //Should be equal, but not same object
         expect(angular.equals(value, result)).toBeTrue();
         expect(result).not.toBe(value);
 
-        result = GoogleChartService.getOption('vAxis.maxValue');
+        result = googleChartService.getOption('vAxis.maxValue');
         expect(result).toBe(10);
     });
 
@@ -81,8 +82,8 @@ describe('GoogleChartService', function() {
         };
         var result;
 
-        GoogleChartService.setOption(key, value);
-        result = GoogleChartService.getOption('vAxis');
+        googleChartService.setOption(key, value);
+        result = googleChartService.getOption('vAxis');
         expect(angular.equals(result, expectedResult)).toBeTrue();
 
     });
@@ -94,38 +95,38 @@ describe('GoogleChartService', function() {
         var expectedResult = 10;
         var result;
 
-        GoogleChartService.setOption('vAxis', value);
-        result = GoogleChartService.getOption('vAxis.maxValue');
+        googleChartService.setOption('vAxis', value);
+        result = googleChartService.getOption('vAxis.maxValue');
         expect(result).toBe(expectedResult);
     });
     
     it('should set and get view object', function(){
        var view = {columns:[0,1,2]};
-       GoogleChartService.setView(view);
-       var result = GoogleChartService.getView(view);
+       googleChartService.setView(view);
+       var result = googleChartService.getView(view);
        expect(angular.equals(result,view)).toBeTrue();
        expect(result).not.toBe(view);
     });
     
     it('should replace element with setElement', function(){
        var newElement = angular.element('<div></div>');
-       GoogleChartService.setElement(newElement);
-       expect(GoogleChartService.getElement()).toBe(newElement);
+       googleChartService.setElement(newElement);
+       expect(googleChartService.getElement()).toBe(newElement);
     });
     
     it('should not replace element with non-element', function(){
        var newElement = angular.element('<div></div>');
        var notElement = {};
-       GoogleChartService.setElement(newElement);
-       expect(GoogleChartService.getElement()).toBe(newElement);
-       GoogleChartService.setElement(notElement);
-       expect(GoogleChartService.getElement()).not.toBe(notElement);
-       expect(GoogleChartService.getElement()).toBe(newElement);
+       googleChartService.setElement(newElement);
+       expect(googleChartService.getElement()).toBe(newElement);
+       googleChartService.setElement(notElement);
+       expect(googleChartService.getElement()).not.toBe(notElement);
+       expect(googleChartService.getElement()).toBe(newElement);
     });
 
     describe('before api is ready', function() {
         it('should return false from isApiReady', function() {
-            expect(GoogleChartService.isApiReady()).toBe(false);
+            expect(googleChartService.isApiReady()).toBe(false);
         });
         it('should not create chartWrapper when setup is called', function() {
             var chartType = "NoChart",
@@ -135,9 +136,9 @@ describe('GoogleChartService', function() {
                 view = {};
             //doesn't need directive, just an element to give to chartWrapper
             var element = angular.element("<div></div>");
-            GoogleChartService.setup(element, chartType, data, view, options, formatters);
+            googleChartService.setup(element, chartType, data, view, options, formatters);
             $rootScope.$apply();
-            expect(GoogleChartService.getChartWrapper()).not.toBeDefined();
+            expect(googleChartService.getChartWrapper()).not.toBeDefined();
         });
     });
 
@@ -149,7 +150,7 @@ describe('GoogleChartService', function() {
         });
 
         it('should return true from isApiReady', function() {
-            expect(GoogleChartService.isApiReady()).toBe(true);
+            expect(googleChartService.isApiReady()).toBe(true);
         });
 
         it('should create chartWrapper when setup is called', function() {
@@ -160,14 +161,14 @@ describe('GoogleChartService', function() {
                 view = {};
             //doesn't need directive, just an element to give to chartWrapper
             var element = angular.element("<div></div>");
-            GoogleChartService.setup(element, chartType, data, view, options, formatters);
+            googleChartService.setup(element, chartType, data, view, options, formatters);
             $rootScope.$apply();
-            expect(GoogleChartService.getChartWrapper()).toBeDefined();
+            expect(googleChartService.getChartWrapper()).toBeDefined();
         });
 
         describe('before setup', function() {
             it('should return undefined from getChartWrapper()', function() {
-                expect(GoogleChartService.getChartWrapper()).not.toBeDefined();
+                expect(googleChartService.getChartWrapper()).not.toBeDefined();
             });
         });
         
@@ -186,7 +187,7 @@ describe('GoogleChartService', function() {
               Leaving this block as example for later specs.
            it('should try to call draw on chartwrapper', function(){
                var drawSpy = spyOn(mockApi.visualization.ChartWrapper.prototype, 'draw').and.callThrough();
-              GoogleChartService.setup(element, type, data, null, options, formatters);
+              googleChartService.setup(element, type, data, null, options, formatters);
               $rootScope.$apply();
               expect(drawSpy).toHaveBeenCalled();
            });
@@ -201,15 +202,15 @@ describe('GoogleChartService', function() {
               data = [];
               options = {title:'A Chart'};
               formatters = {};
-              GoogleChartService.setup(element, type, data, null, options, formatters);
+              googleChartService.setup(element, type, data, null, options, formatters);
               $rootScope.$apply();
            });
            
            /*
            it('should call beforeDraw handler when chart draws', function(){
                var spy = jasmine.createSpy('listener');
-               GoogleChartService.registerServiceListener('beforeDraw', spy, this);
-               GoogleChartService.draw();
+               googleChartService.registerServiceListener('beforeDraw', spy, this);
+               googleChartService.draw();
                $rootScope.$apply();
                expect(spy).toHaveBeenCalled();
            });
@@ -224,7 +225,7 @@ describe('GoogleChartService', function() {
         });
 
         it('should return false from isApiReady', function() {
-            expect(GoogleChartService.isApiReady()).toBe(false);
+            expect(googleChartService.isApiReady()).toBe(false);
         });
     });
 });

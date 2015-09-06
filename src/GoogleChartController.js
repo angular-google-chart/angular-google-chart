@@ -10,9 +10,7 @@
     function GoogleChartController($scope, $element, $attrs, $injector, $timeout, $window, $rootScope, GoogleChartService) {
         var self = this;
         var resizeHandler;
-        self.registerChartListener = GoogleChartService.registerChartListener;
-        self.registerWrapperListener = GoogleChartService.registerWrapperListener;
-        self.registerServiceListener = GoogleChartService.registerServiceListener;
+        var googleChartService;
 
         init();
 
@@ -33,17 +31,24 @@
 
         // Watch function calls this.
         function drawAsync() {
-            GoogleChartService.getReadyPromise()
+            googleChartService.getReadyPromise()
                 .then(draw);
         }
 
         //setupAndDraw() calls this.
         function drawChartWrapper() {
-            GoogleChartService.draw();
+            googleChartService.draw();
             draw.triggered = false;
         }
 
         function init() {
+            // Instantiate service
+            googleChartService = new GoogleChartService();
+            
+            self.registerChartListener = googleChartService.registerChartListener;
+            self.registerWrapperListener = googleChartService.registerWrapperListener;
+            self.registerServiceListener = googleChartService.registerServiceListener;
+            
             /* Watches, to refresh the chart when its data, formatters, options, view,
             or type change. All other values intentionally disregarded to avoid double
             calls to the draw function. Please avoid making changes to these objects
@@ -58,7 +63,7 @@
         }
 
         function setupAndDraw() {
-            GoogleChartService.setup($element,
+            googleChartService.setup($element,
             self.chart.type,
             self.chart.data,
             self.chart.view,
