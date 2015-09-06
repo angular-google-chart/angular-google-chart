@@ -1,4 +1,4 @@
-/*! angular-google-chart 2015-09-04 */
+/*! angular-google-chart 2015-09-06 */
 /*
 * @description Google Chart Api Directive Module for AngularJS
 * @version 0.1.0-beta.1
@@ -27,10 +27,10 @@
         
         function formatManagerFactory(){
             // Handles the processing of Google Charts API Formats
-            function FormatManager(){
+            function FormatManager($google){
                 var self = this;
                 var oldFormatTemplates = {};
-                self.iFormats = {}; // Holds instances of formats (ie. self.iFormats.date[0] = new google.visualization.DateFormat(params))
+                self.iFormats = {}; // Holds instances of formats (ie. self.iFormats.date[0] = new $google.visualization.DateFormat(params))
                 self.applyFormats = applyFormats;
                 
                 // apply formats of type to datatable
@@ -96,7 +96,7 @@
                 function instantiateColorFormatters(tFormats){
                     var t, colorFormat, i, data, formatType = 'color';
                     for (t = 0; t < tFormats[formatType].length; t++) {
-                        colorFormat = new google.visualization.ColorFormat();
+                        colorFormat = new $google.visualization.ColorFormat();
 
                         for (i = 0; i < tFormats[formatType][t].formats.length; i++) {
                             data = tFormats[formatType][t].formats[i];
@@ -114,7 +114,7 @@
                 
                 function getFormatClass(formatType, customFormatters){
                     var className = formatType.charAt(0).toUpperCase() + formatType.slice(1).toLowerCase() + "Format";
-                    if (google.visualization.hasOwnProperty(className)){
+                    if ($google.visualization.hasOwnProperty(className)){
                         return google.visualization[className];
                     } else if (angular.isDefined(customFormatters) && customFormatters.hasOwnProperty(formatType)) {
                         return customFormatters[formatType];
@@ -125,6 +125,119 @@
             
             return FormatManager;
         }
+})();
+/* global angular, google */
+
+(function() {
+
+    angular.module('googlechart')
+        .controller('GoogleChartController', GoogleChartController);
+
+    GoogleChartController.$inject = ['$scope', '$element', '$attrs', '$injector', '$timeout', '$window', '$rootScope', 'GoogleChartService'];
+
+    function GoogleChartController($scope, $element, $attrs, $injector, $timeout, $window, $rootScope, GoogleChartService) {
+        var self = this;
+        var resizeHandler;
+        self.registerChartListener = GoogleChartService.registerChartListener;
+        self.registerWrapperListener = GoogleChartService.registerWrapperListener;
+        self.registerServiceListener = GoogleChartService.registerServiceListener;
+
+        init();
+
+        function cleanup() {
+            resizeHandler();
+        }
+
+        function draw() {
+            if (!draw.triggered && (self.chart !== undefined)) {
+                draw.triggered = true;
+                $timeout(setupAndDraw, 0, true);
+            }
+            else if (self.chart !== undefined) {
+                $timeout.cancel(draw.recallTimeout);
+                draw.recallTimeout = $timeout(draw, 10);
+            }
+        }
+
+        // Watch function calls this.
+        function drawAsync() {
+            GoogleChartService.getReadyPromise()
+                .then(draw);
+        }
+
+        //setupAndDraw() calls this.
+        function drawChartWrapper() {
+            GoogleChartService.draw();
+            draw.triggered = false;
+        }
+
+        function init() {
+            /* Watches, to refresh the chart when its data, formatters, options, view,
+            or type change. All other values intentionally disregarded to avoid double
+            calls to the draw function. Please avoid making changes to these objects
+            directly from this directive.*/
+            $scope.$watch(watchValue, watchHandler, true); // true is for deep object equality checking
+
+            // Redraw the chart if the window is resized
+            resizeHandler = $rootScope.$on('resizeMsg', drawAsync);
+
+            //Cleanup resize handler.
+            $scope.$on('$destroy', cleanup);
+        }
+
+        function setupAndDraw() {
+            GoogleChartService.setup($element,
+            self.chart.type,
+            self.chart.data,
+            self.chart.view,
+            self.chart.options,
+            self.chart.formatters,
+            self.chart.customFormatters);
+
+            $timeout(drawChartWrapper);
+        }
+
+        function watchHandler() {
+            self.chart = $scope.$eval($attrs.chart);
+            drawAsync();
+        }
+
+        function watchValue() {
+            var chartObject = $scope.$eval($attrs.chart);
+            if (angular.isDefined(chartObject) && angular.isObject(chartObject)) {
+                return {
+                    customFormatters: chartObject.customFormatters,
+                    data: chartObject.data,
+                    formatters: chartObject.formatters,
+                    options: chartObject.options,
+                    type: chartObject.type,
+                    view: chartObject.view
+                };
+            }
+        }
+    }
+})();
+/* global angular */
+(function(){
+    angular.module('googlechart')
+        .directive('agcBeforeDraw', onReadyDirective);
+        
+    function onReadyDirective(){
+        return {
+            restrict: 'A',
+            scope: false,
+            require: 'googleChart',
+            link: function(scope, element, attrs, googleChartController){
+                callback.$inject=['chartWrapper'];
+                function callback(chartWrapper){
+                    scope.$apply(function (){
+                        scope.$eval(attrs.agcBeforeDraw, {chartWrapper: chartWrapper});
+                    });
+                }
+                googleChartController.registerServiceListener('beforeDraw', callback, this);
+            }
+        };
+    }
 })();
 /* global angular */
 (function(){
@@ -271,197 +384,14 @@
     angular.module('googlechart')
         .directive('googleChart', googleChartDirective);
         
-    googleChartDirective.$inject = ['$timeout', '$window', '$rootScope', 'googleChartApiPromise'];
+    googleChartDirective.$inject = [];
         
-    function googleChartDirective($timeout, $window, $rootScope, googleChartApiPromise) {
-
-        GoogleChartController.$inject = ['$scope', '$element', '$attrs', '$injector', 'FormatManager'];
-
-        function GoogleChartController($scope, $element, $attrs, $injector, FormatManager){
-            var self = this;
-            var resizeHandler, wrapperListeners = {}, formatManager,
-                chartListeners = {}, innerVisualization = null;
-            self.registerChartListener = registerChartListener;
-            self.registerWrapperListener = registerWrapperListener;
-
-            init();
-
-            function cleanup(){
-                resizeHandler();
-            }
-
-            function draw() {
-                if (!draw.triggered && (self.chart !== undefined)) {
-                    draw.triggered = true;
-                    $timeout(setupAndDraw, 0, true);
-                } else if (self.chart !== undefined) {
-                    $timeout.cancel(draw.recallTimeout);
-                    draw.recallTimeout = $timeout(draw, 10);
-                }
-            }
-
-            function drawAsync() {
-                googleChartApiPromise.then(function () {
-                    draw();
-                });
-            }
-
-            function drawChartWrapper(){
-                $scope.$eval($attrs.beforeDraw, { chartWrapper: $scope.chartWrapper });
-                self.chartWrapper.draw();
-                draw.triggered = false;
-            }
-
-            handleError.$inject = ['args'];
-            function handleError(args) {
-                var error = args[0];
-                console.log("Chart not displayed due to error: '" + error.message + "' Full error object follows.");
-                console.log(error);
-            }
-
-            function handleReady() {
-                self.chart.displayed = true;
-                if (innerVisualization !== self.chartWrapper.getChart()){
-                    innerVisualization = self.chartWrapper.getChart();
-                    registerListenersWithGoogle(innerVisualization, chartListeners);
-                }
-            }
-
-            function init(){
-                /* Watches, to refresh the chart when its data, formatters, options, view,
-                or type change. All other values intentionally disregarded to avoid double
-                calls to the draw function. Please avoid making changes to these objects
-                directly from this directive.*/
-                $scope.$watch(watchValue, watchHandler, true); // true is for deep object equality checking
-
-                // Redraw the chart if the window is resized
-                resizeHandler = $rootScope.$on('resizeMsg', function () {
-                    $timeout(function () {
-                        // Not always defined yet in IE so check
-                        if (self.chartWrapper) {
-                            drawAsync();
-                        }
-                    });
-                });
-
-                //Cleanup resize handler.
-                $scope.$on('$destroy', cleanup);
-
-                registerWrapperListener('error', handleError, self);
-                registerWrapperListener('ready', handleReady, self);
-            }
-
-            function setupAndDraw(){
-                if (typeof (self.chartWrapper) === 'undefined') {
-                    var chartWrapperArgs = {
-                        chartType: self.chart.type,
-                        dataTable: self.chart.data,
-                        view: self.chart.view,
-                        options: self.chart.options,
-                        containerId: $element[0]
-                    };
-
-                    self.chartWrapper = new google.visualization.ChartWrapper(chartWrapperArgs);
-                    registerListenersWithGoogle(self.chartWrapper, wrapperListeners);
-                } else {
-                    self.chartWrapper.setChartType(self.chart.type);
-                    self.chartWrapper.setDataTable(self.chart.data);
-                    self.chartWrapper.setView(self.chart.view);
-                    self.chartWrapper.setOptions(self.chart.options);
-                }
-
-                if (!formatManager){
-                    formatManager = new FormatManager();
-                }
-                    
-                if (formatManager.applyFormats(self.chartWrapper.getDataTable(),
-                    self.chart.formatters, self.chart.customFormatters).requiresHtml){
-                    self.chartWrapper.setOption('allowHtml', true);
-                }
-                    
-                $timeout(drawChartWrapper);
-            }
-
-            function watchHandler(){
-                self.chart = $scope.$eval($attrs.chart);
-                drawAsync();
-            }
-
-            function watchValue(){
-                var chartObject = $scope.$eval($attrs.chart);
-                if (angular.isDefined(chartObject) && angular.isObject(chartObject)){
-                    return {
-                        customFormatters: chartObject.customFormatters,
-                        data: chartObject.data,
-                        formatters: chartObject.formatters,
-                        options: chartObject.options,
-                        type: chartObject.type,
-                        view: chartObject.view
-                    };
-                }
-            }
-
-            // This function was written to genericize listener registration
-            // because I plan to implement different collections of listeners
-            // for events on the underlying chart object, and for
-            // directive-level events (ie. beforeDraw).
-            function registerListener(listenerCollection, eventName, listenerFn, listenerObject){
-                // This is the function that will be invoked by the charts API.
-                // Passing the wrapper function allows the use of DI for
-                // for the called function.
-                var listenerWrapper = function (){
-                    var locals = {
-                        chartWrapper: self.chartWrapper,
-                        chart: self.chartWrapper.getChart(),
-                        args: arguments
-                    };
-                    $injector.invoke(listenerFn, listenerObject || this, locals);
-                };
-
-                if (angular.isDefined(listenerCollection) && angular.isObject(listenerCollection)){
-                    if (!angular.isArray(listenerCollection[eventName])){
-                        listenerCollection[eventName] = [];
-                    }
-                    listenerCollection[eventName].push(listenerWrapper);
-                    return function (){
-                        if (angular.isDefined(listenerWrapper.googleListenerHandle)){
-                            google.visualization.events.removeListener(listenerWrapper.googleListenerHandle);
-                        }
-                        var fnIndex = listenerCollection[eventName].indexOf(listenerWrapper);
-                        listenerCollection[eventName].splice(fnIndex,1);
-                        if (listenerCollection[eventName].length === 0){
-                            listenerCollection[eventName] = undefined;
-                        }
-                    };
-                }
-            }
-
-            function registerListenersWithGoogle(eventSource, listenerCollection){
-                for (var eventName in listenerCollection){
-                    if (listenerCollection.hasOwnProperty(eventName) && angular.isArray(listenerCollection[eventName])){
-                        for (var fnIterator = 0; fnIterator < listenerCollection[eventName].length; fnIterator++){
-                            if (angular.isFunction(listenerCollection[eventName][fnIterator])){
-                                listenerCollection[eventName][fnIterator].googleListenerHandle =
-                                google.visualization.events.addListener(eventSource, eventName, listenerCollection[eventName][fnIterator]);
-                            }
-                        }
-                    }
-                }
-            }
-
-            function registerChartListener(eventName, listenerFn, listenerObject){
-                return registerListener(chartListeners, eventName, listenerFn, listenerObject);
-            }
-
-            function registerWrapperListener(eventName, listenerFn, listenerObject){
-                return registerListener(wrapperListeners, eventName, listenerFn, listenerObject);
-            }
-        }
+    function googleChartDirective() {
 
         return {
             restrict: 'A',
             scope: false,
-            controller: GoogleChartController
+            controller: 'GoogleChartController'
         };
     }
 })();
@@ -491,7 +421,7 @@
                 callback: function () {
                     var oldCb = apiConfig.optionalSettings.callback;
                     $rootScope.$apply(function () {
-                        apiReady.resolve();
+                        apiReady.resolve(google);
                     });
 
                     if (angular.isFunction(oldCb)) {
@@ -523,6 +453,331 @@
         head.appendChild(script);
 
         return apiReady.promise;
+    }
+})();
+/* global angular */
+(function() {
+    angular.module('googlechart')
+        .service('GoogleChartService', GoogleChartService);
+
+    GoogleChartService.$inject = ['googleChartApiPromise', '$injector', '$q', 'FormatManager'];
+
+    function GoogleChartService(googleChartApiPromise, $injector, $q, FormatManager) {
+        var self = this;
+        self.draw = draw;
+        self.getChartWrapper = getChartWrapper;
+        self.getData = getData;
+        self.getElement = getElement;
+        self.getOption = getOption;
+        self.getOptions = getOptions;
+        self.getView = getView;
+        self.getReadyPromise = getReadyPromise;
+        self.isApiReady = isApiReady;
+        self.registerChartListener = registerChartListener;
+        self.registerServiceListener = registerServiceListener;
+        self.registerWrapperListener = registerWrapperListener;
+        self.setData = setData;
+        self.setElement = setElement;
+        self.setOption = setOption;
+        self.setOptions = setOptions;
+        self.setup = setup;
+        self.setView = setView;
+
+        var $google,
+        _apiPromise,
+        _apiReady,
+        _chartWrapper,
+        _element,
+        _chartType,
+        _data,
+        _view,
+        _options,
+        _formatters,
+        _innerVisualization,
+        _formatManager,
+        _needsUpdate = true,
+        _customFormatters,
+        _serviceDeferred,
+        serviceListeners = {},
+        wrapperListeners = {},
+        chartListeners = {};
+
+        _init();
+
+        function _activateServiceEvent(eventName){
+            var i;
+            if (angular.isArray(serviceListeners[eventName])){
+                for(i=0;i<serviceListeners[eventName].length;i++)
+                {
+                    serviceListeners[eventName][i]();
+                }
+            }
+        }
+        
+        function _apiLoadFail(reason) {
+            // Not sure what to do if this does happen.
+            // Post your suggestions in the issues tracker at
+            // https://github.com/angular-google-chart/angular-google-chart/
+            return reason;
+        }
+
+        function _apiLoadSuccess(g) {
+            $google = g;
+            _apiReady = true;
+            _serviceDeferred.resolve();
+            return g;
+        }
+        
+        
+        function _continueSetup() {
+            if (!angular.isDefined(_chartWrapper)) {
+                _chartWrapper = new $google.visualization.ChartWrapper({
+                    chartType: _chartType,
+                    dataTable: _data,
+                    view: _view,
+                    options: _options,
+                    containerId: _element[0]
+                });
+                _registerListenersWithGoogle(_chartWrapper,wrapperListeners);
+            }
+            else {
+                _chartWrapper.setChartType(_chartType);
+                _chartWrapper.setDataTable(_data);
+                _chartWrapper.setView(_view);
+                _chartWrapper.setOptions(_options);
+            }
+            
+            if(!_formatManager){
+                _formatManager = new FormatManager($google);
+            }
+            
+            if(_formatManager.applyFormats(_chartWrapper.getDataTable(),
+                _formatters, _customFormatters).requiresHtml){
+                _chartWrapper.setOption('allowHtml', true);    
+            }
+            
+            _needsUpdate = false;
+        }
+        
+        // Credit for this solution:
+        // http://stackoverflow.com/a/20125572/3771976
+        function _getSetDescendantProp(obj, desc, value) {
+            var arr = desc ? desc.split(".") : [];
+
+            while (arr.length && obj) {
+                var comp = arr.shift();
+                var match = new RegExp("(.+)\\[([0-9]*)\\]").exec(comp);
+
+                // handle arrays
+                if ((match !== null) && (match.length == 3)) {
+                    var arrayData = {
+                        arrName: match[1],
+                        arrIndex: match[2]
+                    };
+                    if (obj[arrayData.arrName] !== undefined) {
+                        if (value && arr.length === 0) {
+                            obj[arrayData.arrName][arrayData.arrIndex] = value;
+                        }
+                        obj = obj[arrayData.arrName][arrayData.arrIndex];
+                    }
+                    else {
+                        obj = undefined;
+                    }
+
+                    continue;
+                }
+
+                // handle regular things
+                if (value) {
+                    if (obj[comp] === undefined) {
+                        obj[comp] = {};
+                    }
+
+                    if (arr.length === 0) {
+                        obj[comp] = value;
+                    }
+                }
+
+                obj = obj[comp];
+            }
+
+            return obj;
+        }
+        
+        function _handleReady(){
+            // When the chartWrapper is ready, check to see if the inner chart
+            // has changed. If it has, re-register listeners onto that chart.
+            if (_innerVisualization !== _chartWrapper.getChart()){
+                _innerVisualization = _chartWrapper.getChart();
+                _registerListenersWithGoogle(_innerVisualization,chartListeners);
+            }
+        }
+        
+        function _init() {
+            _apiReady = false;
+            _serviceDeferred = $q.defer();
+            //keeps the resulting promise to chain on other actions
+            _apiPromise = googleChartApiPromise
+                .then(_apiLoadSuccess)
+                .catch(_apiLoadFail);
+            
+            registerWrapperListener('ready', _handleReady, self);
+        }
+
+        function _registerListener(listenerCollection, eventName, listenerFn, listenerObject) {
+            // This is the function that will be invoked by the charts API.
+            // Passing the wrapper function allows the use of DI for
+            // for the called function.
+            var listenerWrapper = function() {
+                var locals = {
+                    chartWrapper: _chartWrapper,
+                    chart: _chartWrapper.getChart(),
+                    args: arguments
+                };
+                $injector.invoke(listenerFn, listenerObject || this, locals);
+            };
+
+            if (angular.isDefined(listenerCollection) && angular.isObject(listenerCollection)) {
+                if (!angular.isArray(listenerCollection[eventName])) {
+                    listenerCollection[eventName] = [];
+                }
+                listenerCollection[eventName].push(listenerWrapper);
+                return function() {
+                    if (angular.isDefined(listenerWrapper.googleListenerHandle)) {
+                        $google.visualization.events.removeListener(listenerWrapper.googleListenerHandle);
+                    }
+                    var fnIndex = listenerCollection[eventName].indexOf(listenerWrapper);
+                    listenerCollection[eventName].splice(fnIndex, 1);
+                    if (listenerCollection[eventName].length === 0) {
+                        listenerCollection[eventName] = undefined;
+                    }
+                };
+            }
+        }
+        
+        function _registerListenersWithGoogle(eventSource, listenerCollection) {
+            for (var eventName in listenerCollection) {
+                if (listenerCollection.hasOwnProperty(eventName) && angular.isArray(listenerCollection[eventName])) {
+                    for (var fnIterator = 0; fnIterator < listenerCollection[eventName].length; fnIterator++) {
+                        if (angular.isFunction(listenerCollection[eventName][fnIterator])) {
+                            listenerCollection[eventName][fnIterator].googleListenerHandle =
+                                $google.visualization.events.addListener(eventSource, eventName, listenerCollection[eventName][fnIterator]);
+                        }
+                    }
+                }
+            }
+        }
+        
+        function _runDrawCycle(){
+            _activateServiceEvent('beforeDraw');
+            _chartWrapper.draw();
+        }
+
+        /*
+        This function does this:
+            - waits for API to load, if not already loaded
+            - sets up ChartWrapper object (create or update)
+            - schedules timeout event to draw chart
+        */
+        function draw(){
+            if (_needsUpdate){
+                _apiPromise = _apiPromise.then(_continueSetup);
+            }
+            _apiPromise = _apiPromise.then(_runDrawCycle());
+        }
+
+        function getChartWrapper() {
+            // Most get functions on this interface return copies,
+            // this one should return reference so as to expose the 
+            //chart api to users
+            return _chartWrapper;
+        }
+
+        function getData() {
+            var data = _data || {};
+            return angular.copy(data);
+        }
+        
+        function getElement(){
+            return _element;
+        }
+
+        function getOption(name) {
+            var options = _options || {};
+            return _getSetDescendantProp(options, name);
+        }
+
+        function getOptions() {
+            var options = _options || {};
+            return angular.copy(options);
+        }
+        
+        function getReadyPromise(){
+            return _serviceDeferred.promise;
+        }
+        
+        function getView(){
+            var view = _view || {};
+            return angular.copy(view);
+        }
+
+        function isApiReady() {
+            return _apiReady;
+        }
+        
+         function registerChartListener(eventName, listenerFn, listenerObject){
+            return _registerListener(chartListeners, eventName, listenerFn, listenerObject);
+        }
+        
+        function registerServiceListener(eventName, listenerFn, listenerObject){
+            return _registerListener(serviceListeners, eventName, listenerFn, listenerObject);
+        }
+        
+        function registerWrapperListener(eventName, listenerFn, listenerObject){
+            return _registerListener(wrapperListeners, eventName, listenerFn, listenerObject);
+        }
+
+        function setData(data) {
+            if (angular.isDefined(data)) {
+                _data = angular.copy(data);
+            }
+        }
+        
+        function setElement(element){
+            if (angular.isElement(element)){
+                _element = element;
+            }
+        }
+
+        function setOption(name, value) {
+            _options = _options || {};
+            _getSetDescendantProp(_options, name, angular.copy(value));
+        }
+
+        function setOptions(options) {
+            if (angular.isDefined(options)) {
+                _options = angular.copy(options);
+            }
+        }
+
+        function setup(element, chartType, data, view, options, formatters, customFormatters) {
+            // Keep values if already set,
+            // can call setup() with nulls to keep
+            // existing values
+            _element = element || _element;
+            _chartType = chartType || _chartType;
+            _data = data || _data;
+            _view = view || _view;
+            _options = options || _options;
+            _formatters = formatters || _formatters;
+            _customFormatters = customFormatters || _customFormatters;
+
+            _apiPromise = _apiPromise.then(_continueSetup);
+        }
+        
+        function setView(view){
+            _view = angular.copy(view);
+        }
     }
 })();
 /* global angular */
