@@ -2,8 +2,7 @@
 /*
 * @description Google Chart Api Directive Module for AngularJS
 * @version 0.1.0-beta.1
-* @author Nicolas Bouillon <nicolas@bouil.org>
-* @author GitHub contributors
+* @author GitHub Contributors <https://github.com/angular-google-chart/angular-google-chart/graphs/contributors>
 * @license MIT
 * @year 2013
 */
@@ -809,3 +808,4 @@
         };
     }
 })();
+

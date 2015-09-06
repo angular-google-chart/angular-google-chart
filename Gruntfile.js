@@ -10,8 +10,7 @@ module.exports = function(grunt) {
             '/*\n' +
             '* @description Google Chart Api Directive Module for AngularJS\n' +
             '* @version <%= pkg.version %>\n' +
-            '* @author Nicolas Bouillon <nicolas@bouil.org>\n' +
-            '* @author GitHub contributors\n' +
+            '* @author GitHub Contributors <https://github.com/angular-google-chart/angular-google-chart/graphs/contributors> \n' +
             '* @license MIT\n' +
             '* @year 2013\n' +
             '*/\n',
@@ -26,8 +25,7 @@ module.exports = function(grunt) {
             '/*\n' +
             '* @description Google Chart Api Directive Module for AngularJS\n' +
             '* @version <%= pkg.version %>\n' +
-            '* @author Nicolas Bouillon <nicolas@bouil.org>\n' +
-            '* @author GitHub contributors\n' +
+            '* @author GitHub Contributors <https://github.com/angular-google-chart/angular-google-chart/graphs/contributors> \n' +
             '* @license MIT\n' +
             '* @year 2013\n' +
             '*/\n'

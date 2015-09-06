@@ -8,8 +8,7 @@
     },
     "description": "Google Chart Tools AngularJS Directive Module",
     "authors": [
-        "Nicolas Bouillon <nicolas@bouil.org>",
-        "GitHub Contributors"
+        "GitHub Contributors <https://github.com/angular-google-chart/angular-google-chart/graphs/contributors>"
     ],
     "keywords": [
         "angular",
