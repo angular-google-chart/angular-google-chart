@@ -1,6 +1,6 @@
 /* global angular */
 /* eslint-env jasmine */
-fdescribe('GoogleChartService', function() {
+describe('GoogleChartService', function() {
 
     var mockApiPromiseBackend, GoogleChartService, $rootScope, mockApi;
 
@@ -39,7 +39,9 @@ fdescribe('GoogleChartService', function() {
         expect(GoogleChartService).toHaveMethod('getElement');
         expect(GoogleChartService).toHaveMethod('getOption');
         expect(GoogleChartService).toHaveMethod('getOptions');
+        expect(GoogleChartService).toHaveMethod('registerChartListener');
         expect(GoogleChartService).toHaveMethod('registerServiceListener');
+        expect(GoogleChartService).toHaveMethod('registerWrapperListener');
         expect(GoogleChartService).toHaveMethod('setData');
         expect(GoogleChartService).toHaveMethod('setup');
         expect(GoogleChartService).toHaveMethod('setElement');
@@ -180,12 +182,15 @@ fdescribe('GoogleChartService', function() {
               formatters = {};
            });
            
+           /* Design Changed: Controller to handle setup->draw flow.
+              Leaving this block as example for later specs.
            it('should try to call draw on chartwrapper', function(){
                var drawSpy = spyOn(mockApi.visualization.ChartWrapper.prototype, 'draw').and.callThrough();
               GoogleChartService.setup(element, type, data, null, options, formatters);
               $rootScope.$apply();
               expect(drawSpy).toHaveBeenCalled();
            });
+           */
         });
         
         describe('setup complete', function(){
@@ -200,6 +205,7 @@ fdescribe('GoogleChartService', function() {
               $rootScope.$apply();
            });
            
+           /*
            it('should call beforeDraw handler when chart draws', function(){
                var spy = jasmine.createSpy('listener');
                GoogleChartService.registerServiceListener('beforeDraw', spy, this);
@@ -207,6 +213,7 @@ fdescribe('GoogleChartService', function() {
                $rootScope.$apply();
                expect(spy).toHaveBeenCalled();
            });
+           */
         });
     });
 
