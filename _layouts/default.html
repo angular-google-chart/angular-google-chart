@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="{% if page.ng-app %}{{page.ng-app}}{% else %}googlechart-docs{% endif %}">
+
+  {% include head.html %}
+
+  <body>
+
+    {% include header.html %}
+
+    <div class="page-content">
+      <div class="container">
+        {{ content }}
+      </div>
+    </div>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/{% if page.angular_version %}{{ page.angular_version}}{% else %}1.3.18{% endif %}/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-chart/{% if page.version %}{{ page.version }}{% else %}{{ site.latest_version }}{% endif %}/ng-google-chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.13.4/ui-bootstrap-tpls.min.js"></script>
+    <script src="{{site.baseurl}}/scripts/googlechart-docs.js"></script>
+    {% if page.scripts %}
+      {% for script in page.scripts %}
+        <script src="{{ site.baseurl }}{{ script }}"></script>
+      {% endfor %}
+    {% endif %}
+  </body>
+
+</html>

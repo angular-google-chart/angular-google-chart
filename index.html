@@ -1,0 +1,49 @@
+---
+layout: default
+---
+
+<div class="home">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="jumbotron">
+        <div class="row">
+          <div class="col-xs-12 col-sm-8 text-center">
+            <h1>Angular Google Chart</h1>
+          </div>
+          <div class="col-xs-12 col-sm-4">
+            <img src="{{ site.baseurl }}/images/AGC-Logo.svg" class="center-block" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xs-12 col-sm-6 col-md-4 text-center">
+            <a class="btn btn-default btn-lg" href="https://github.com/angular-google-chart/angular-google-chart/">
+              <span class="fa fa-github"></span> Fork me on GitHub
+            </a>
+          </div>
+          <div class="col-xs-12 col-sm-6 col-md-4 text-center">
+            <a class="btn btn-warning btn-lg" href="{{ site.baseurl }}/docs/latest/guides/getting-started/">Getting Started</a>
+          </div>
+          <div class="col-xs-12 col-md-4 text-center">
+            <a class="btn btn-primary btn-lg" href="{{ site.baseurl }}/docs/latest/examples/">Interactive Examples</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h1 class="h1">Announcements</h1>
+
+  <div class="row">
+    {% for post in site.posts %}
+    <div class="col-xs-12">
+      <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+
+      <h2>
+          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        </h2>
+    </div>
+    {% endfor %}
+  </div>
+
+  <p class="rss-subscribe">subscribe <a href="{{ " /feed.xml " | prepend: site.baseurl }}">via RSS</a></p>
+
+</div>

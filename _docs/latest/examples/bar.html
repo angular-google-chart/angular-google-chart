@@ -1,0 +1,26 @@
+---
+layout: docs
+title: Bar Chart
+category: Examples
+version: 0.0.11
+latest: true
+scripts:
+- /docs/latest/examples/bar.js
+ng-app: "google-chart-sample"
+ng-controller: "GenericChartCtrl" 
+---
+<div>
+    Onions: <input type="number" ng-model="onions[1].v" />
+</div>
+
+<div google-chart chart="chartObject" style="height:600px; width:100%;"></div>
+
+<h4>HTML Template</h4>
+{% highlight html %}
+<div google-chart chart="chartObject" style="height:600px; width:100%;"></div>
+{% endhighlight %}
+
+<h4>JavaScript</h4>
+{% highlight javascript %}
+	{% include_relative bar.js %}
+{% endhighlight %}

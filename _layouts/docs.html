@@ -1,0 +1,14 @@
+---
+layout: default
+---
+
+<ol class="breadcrumb">
+    <li><a href="{{site.baseurl}}/docs/{{ page.version }}">{{page.version}}</a></li>
+    <li><a href="{{site.baseurl}}/docs/{{page.version}}/{{page.category | downcase}}/">{{page.category}}</a></li>
+    <li>{{page.title}}</li>
+</ol>
+
+<article{% if page.ng-controller %} ng-controller="{{page.ng-controller}}"{% endif %}>
+    <h1>{{page.title}}</h1>
+    {{content}}
+</article>

@@ -1,0 +1,32 @@
+<nav class="navbar navbar-default" ng-controller="HeaderController as header">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" ng-click="header.collapsed = !header.collapsed">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="{{ site.baseurl }}/" style="padding:5px 15px;">
+        <img src="{{ site.baseurl }}/images/AGC-Logo.svg" style="height:100%;" />
+      </a>
+    </div>
+      <div class="collapse navbar-collapse" collapse="header.collapsed">
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a href="{{site.baseurl}}/docs/latest/guides/getting-started/">Getting Started</a>
+        </li>
+        {% for page in site.pages %} {% if page.title %}
+        <li>
+          <a href="{{ page.url | prepend: site.baseurl }}">{{ page.title }}</a>
+        </li>
+        {% endif %} {% endfor %}
+        <li>
+          <a href="https://github.com/angular-google-chart/angular-google-chart/">
+            <span class="fa fa-github"></span> Fork me on GitHub
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

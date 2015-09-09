@@ -1,0 +1,14 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+@import "bootstrap-compass",
+        "bootstrap-variables",
+        "bootstrap",
+        "syntax-highlighting"
+;
+
+.btn{
+        margin: 5px 0;
+}
