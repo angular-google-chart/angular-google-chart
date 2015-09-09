@@ -2,7 +2,7 @@
 title: Angular Google Chart
 email: your-email@domain.com
 description: Wrapper directive for Google Charts API in AngularJS.
-baseurl: "/docs-experiment" # the subpath of your site, e.g. /blog/
+baseurl: "/angular-google-chart" # the subpath of your site, e.g. /blog/
 url: "http://balrog30.github.io" # the base hostname & protocol for your site
 #twitter_username: jekyllrb
 github_username:  angular-google-chart
