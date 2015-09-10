@@ -13,11 +13,11 @@ Install with bower
 
 ### Goal
 
-Wrapper directive for [Google Chart Tools](https://google-developers.appspot.com/chart/)
+Wrapper directive for [Google Chart Tools](https://developers.google.com/chart/)
 
 ### Contributing
 
-Interested in contributing to **Angular-Google-Chart**? Cool! Check out [CONTRIBUTING.md](./CONTRIBUTING.md) for a brief guide to raising issues and submitting Pull Requests.
+Interested in contributing to **Angular Google Chart**? Cool! Check out [CONTRIBUTING.md](./CONTRIBUTING.md) for a brief guide to raising issues and submitting Pull Requests.
 
 ### A note on branches
 
@@ -44,7 +44,7 @@ source files are changed.
 
 ### Usage and Demo
 
-See sample files index.html and controllers in partials directory. [Live Demo](http://angular-google-chart.github.io/angular-google-chart/)
+See examples in the [Documentation](http://angular-google-chart.github.io/angular-google-chart/docs/latest/examples/)
 
 #### Other samples
 
@@ -53,7 +53,7 @@ See sample files index.html and controllers in partials directory. [Live Demo](h
 
 ### Chart Data doc
 
-See [ChartWrapper](https://google-developers.appspot.com/chart/interactive/docs/reference#chartwrapperobject) and [DataTable](https://google-developers.appspot.com/chart/interactive/docs/reference#DataTable) documentation.
+See [ChartWrapper](https://developers.google.com/chart/interactive/docs/reference#chartwrapperobject) and [DataTable](https://developers.google.com/chart/interactive/docs/reference#datatable-class) documentation.
 
 ### Release notes
 
