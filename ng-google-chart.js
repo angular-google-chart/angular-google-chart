@@ -1,8 +1,8 @@
-/*! angular-google-chart 2015-09-06 */
+/*! angular-google-chart 2015-09-10 */
 /*
 * @description Google Chart Api Directive Module for AngularJS
-* @version 0.1.0-beta.1
-* @author GitHub Contributors <https://github.com/angular-google-chart/angular-google-chart/graphs/contributors>
+* @version 0.1.0-beta.2
+* @author GitHub Contributors <https://github.com/angular-google-chart/angular-google-chart/graphs/contributors> 
 * @license MIT
 * @year 2013
 */
@@ -808,4 +808,3 @@
         };
     }
 })();
-
