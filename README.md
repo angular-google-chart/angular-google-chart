@@ -21,11 +21,13 @@ Interested in contributing to **Angular-Google-Chart**? Cool! Check out [CONTRIB
 
 ### A note on branches
 
-Development branch is `gh-pages`.
+Development branch is `development`.
 
 Release branch is `master` (idealy), and was created just because Bower needed it.
 
-Please send your pull requests to `gh-pages`.
+There is documentation on the `gh-pages` branch which hosts the project's documentation website.
+
+Please send your pull requests to `development`.
 
 ### Building with Grunt
 
