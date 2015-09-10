@@ -87,4 +87,17 @@ but is still in early stages of development.
 
 * The module is now named `googlechart` (instead of `googlechart.directives`)
 
-## [0.0.1] - 2013-08-23
+## 0.0.1 - 2013-08-23
+
+[unreleased]: https://github.com/angular-google-chart/angular-google-chart/compare/0.1.0-beta.1...HEAD
+[0.1.0-beta.1]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.11...0.1.0-beta.1
+[0.0.11]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.10...0.0.11
+[0.0.10]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.9...0.0.10
+[0.0.9]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.8...0.0.9
+[0.0.8]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.7...0.0.8
+[0.0.7]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.6...0.0.7
+[0.0.6]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.5...0.0.6
+[0.0.5]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.4...0.0.5
+[0.0.4]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.3...0.0.4
+[0.0.3]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.2...0.0.3
+[0.0.2]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.1...0.0.2
