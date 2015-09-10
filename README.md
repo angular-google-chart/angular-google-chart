@@ -13,19 +13,21 @@ Install with bower
 
 ### Goal
 
-Wrapper directive for [Google Chart Tools](https://google-developers.appspot.com/chart/)
+Wrapper directive for [Google Chart Tools](https://developers.google.com/chart/)
 
 ### Contributing
 
-Interested in contributing to **Angular-Google-Chart**? Cool! Check out [CONTRIBUTING.md](./CONTRIBUTING.md) for a brief guide to raising issues and submitting Pull Requests.
+Interested in contributing to **Angular Google Chart**? Cool! Check out [CONTRIBUTING.md](./CONTRIBUTING.md) for a brief guide to raising issues and submitting Pull Requests.
 
 ### A note on branches
 
-Development branch is `gh-pages`.
+Development branch is `development`.
 
 Release branch is `master` (idealy), and was created just because Bower needed it.
 
-Please send your pull requests to `gh-pages`.
+There is documentation on the `gh-pages` branch which hosts the project's documentation website.
+
+Please send your pull requests to `development`.
 
 ### Building with Grunt
 
@@ -42,7 +44,7 @@ source files are changed.
 
 ### Usage and Demo
 
-See sample files index.html and controllers in partials directory. [Live Demo](http://angular-google-chart.github.io/angular-google-chart/)
+See examples in the [Documentation](http://angular-google-chart.github.io/angular-google-chart/docs/latest/examples/)
 
 #### Other samples
 
@@ -51,87 +53,11 @@ See sample files index.html and controllers in partials directory. [Live Demo](h
 
 ### Chart Data doc
 
-See [ChartWrapper](https://google-developers.appspot.com/chart/interactive/docs/reference#chartwrapperobject) and [DataTable](https://google-developers.appspot.com/chart/interactive/docs/reference#DataTable) documentation.
+See [ChartWrapper](https://developers.google.com/chart/interactive/docs/reference#chartwrapperobject) and [DataTable](https://developers.google.com/chart/interactive/docs/reference#datatable-class) documentation.
 
 ### Release notes
 
-#### Unreleased Changes
-
-*Added:*
-
-* GoogleChartService (handles the actual wrapping of the google charts API)
-* agcBeforeDraw directive (replaces before-draw on google-chart directive)
-* registerServiceListener method on GoogleChartController API
-* tests
-
-*Changed:*
-
-* much of the internal logic of the GoogleChartController was moved to a service, improving testability and resusability
-
-*Removed:*
-
-* before-draw attribute on google-chart directive (replaced by agcBeforeDraw directive)
-
-#### 0.1.0-beta.1
-
-*Added:*
-
-* gauge chart sample
-* basic API for hooking into chart events from other directives
-* API-level support for listeners/event-handlers on inner chart object
-* agc-on-error directive to register listener for google charts error event
-* agc-on-mouseover and agc-on-mouseout directives
-
-*Changed:*
-
-* Change package meta-data to reflect support for angular 1.2+
-* on-select now returns all selections if `selectedItems` is used instead of `selectedItem`
-* cancels extra draw cycles if many rapid changes are made to chart-object watched parameters
-* changed link function to controller in google-chart directive
-* broke out some functionality into separate directives (on-ready, on-select)
-* namespaced event directives (agc-on-ready, agc-on-error, agc-on-select, agc-on-mouseover, agc-on-mouseout)
-
-*Removed:*
-
-* support for `select` attribute
-
-#### 0.0.11
-
-* Revert to AngularJS 1.2.x as requested by user.
-* Changed Charts API loader config from a constant to a value to accomodate the use of localization localization features.
-* Add before-draw event callback attribute, allowing for last-minute changes from user's javascript (like dynamically resizing chart area for responsive designs).
-* Added French local sample.
-* Fixed issue where changing view properties didn't cause a redraw.
-
-#### 0.0.10
-
-* Fixed bug with Formatter implementation.
-* Fix issue where Select listener function was not called for unselect events.
-* Fixed some issues where drawing the chart triggered another call to draw the chart.
-* `select` attribute is now deprecated, to be removed in a future release.  Replaced with `on-select` to keep naming consistent with `on-ready`.
-
-#### 0.0.9
-
-* Load Google Charts API with https as default protocol.
-* Support for Custom Formatters
-* Added and Reorganized Samples
-* Improved IE Compatability for API Loading
-
-#### 0.0.8
-
-Exposing a factory `googleChartApiPromise` which is a Promise resolved when the `google` global object is correctly initialized.
-
-#### 0.0.7
-
-Removed jQuery dependency.
-
-#### 0.0.3
-
-Advanced chart formatter are available. Therefore, compatibility is broken withe the previous version of NumberFormat. Check the demo for usage.
-
-#### 0.0.2
-
-The module is now named `googlechart` (instead of `googlechart.directives`)
+See [CHANGELOG.md](./CHANGELOG.md) for a summary of changes.
 
 ### Out of luck ?
 
