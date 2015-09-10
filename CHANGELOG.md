@@ -3,6 +3,8 @@ All notable changes to this project will be documented in this file.
 This project loosely follows [Semantic Versioning](http://semver.org/),
 but is still in early stages of development.
 
+## [Unreleased][unreleased]
+
 ## [0.1.0-beta.2] - 2015-09-09
 
 ### Added
