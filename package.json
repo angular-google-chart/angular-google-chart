@@ -36,6 +36,7 @@
     "grunt-karma": "^0.12.0",
     "jasmine-core": "^2.3.4",
     "karma": "^0.13.9",
+    "karma-coverage": "^0.5.2",
     "karma-jasmine": "^0.3.6",
     "karma-jasmine-matchers": "^2.0.0-beta1",
     "karma-phantomjs-launcher": "^0.2.1",
