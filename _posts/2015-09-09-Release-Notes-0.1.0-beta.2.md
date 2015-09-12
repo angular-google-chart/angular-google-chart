@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Release Notes: 0.1.0-beta.1"
+title: "Release Notes: 0.1.0-beta.2"
 author: Nicholas Bering
 ---
 
