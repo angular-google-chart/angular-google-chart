@@ -1,0 +1,72 @@
+---
+layout: docs
+category: Directives
+title: agcOnSelect
+version: 0.1.0-beta.2
+latest: false
+---
+
+<h2>Overview</h2>
+
+<p>
+    The <code>agcOnSelect</code> directive requires the <a href="{{site.baseurl}}/docs/{{page.version}}/directives/googleChart/">googleChart</a> directive to be declared on the same element. It allows you to bind an expression to the <code>ChartWrapper</code> instance's 'select' event. The expression will have some useful local variables available when it is called.
+</p>
+
+<div class="alert alert-info">
+    <span class="fa fa-book fa-lg"></span> 
+    Check out the 
+    <a href="https://developers.google.com/chart/interactive/docs/reference#events">
+        <b>Google Charts API Documentation</b><span class="fa fa-external-link"></span>
+    </a>
+    for more information on the 'select' event.
+</div>
+
+<h2>Code Example</h2>
+{% highlight html %}
+<div google-chart chart="chartObject" agc-on-select="selectHandler(selectedItem)"></div>
+{% endhighlight %}
+
+<h2>Available Locals</h2>
+<div class="panel panel-default">
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>
+                <code>chart</code>
+            </td>
+            <td>
+                The chart instance belonging to the associated <code>googeChart</code> directive. This is the instance of specific chart type (ie. <code>BarChart</code>, <code>LineChart</code>, etc.) This can be used to drop down to the Google Charts API level and program directly against the chart object.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <code>chartWrapper</code>
+            </td>
+            <td>
+                The instance of <code>ChartWrapper</code> belonging to the associated <code>googeChart</code> directive. Can be used to drop down to the Google Charts API level and program directly against the <code>ChartWrapper</code> and chart objects.
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <code>selectedItem</code>
+            </td>
+            <td>
+                A single object with row and column properties representing the selected DataTable entry. If the user has selected multiple data points, only the first will appear in the variable. To capture a multi-select, use <code>selectedItems</code>. A <code>null</code> value for the row means that the legend was selected (on most charts).
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <code>selectedItems</code>
+            </td>
+            <td>
+                An Array of objects with row and column keys representing the selected DataTable entries. A <code>null</code> value for the row means that the legend was selected (on most charts).
+            </td>
+        </tr>
+    </table>
+    <div class="panel-footer">
+        <strong>Note:</strong> Locals are injected by the name used in your HTML Template, so they must match the names shown here. Names used in your controller code do not have to match.
+    </div>
+</div>
