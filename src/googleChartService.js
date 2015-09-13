@@ -111,26 +111,6 @@
                     var comp = arr.shift();
                     var match = new RegExp("(.+)\\[([0-9]*)\\]").exec(comp);
 
-                    // handle arrays
-                    if ((match !== null) && (match.length == 3)) {
-                        var arrayData = {
-                            arrName: match[1],
-                            arrIndex: match[2]
-                        };
-                        if (obj[arrayData.arrName] !== undefined) {
-                            if (value && arr.length === 0) {
-                                obj[arrayData.arrName][arrayData.arrIndex] = value;
-                            }
-                            obj = obj[arrayData.arrName][arrayData.arrIndex];
-                        }
-                        else {
-                            obj = undefined;
-                        }
-
-                        continue;
-                    }
-
-                    // handle regular things
                     if (value) {
                         if (obj[comp] === undefined) {
                             obj[comp] = {};
@@ -283,23 +263,29 @@
             function setData(data) {
                 if (angular.isDefined(data)) {
                     _data = angular.copy(data);
+                    _needsUpdate = true;
                 }
             }
 
             function setElement(element) {
-                if (angular.isElement(element)) {
+                if (angular.isElement(element) && _element !== element) {
                     _element = element;
+                    // clear out the chartWrapper because we're going to need a new one
+                    _chartWrapper = null;
+                    _needsUpdate = true;
                 }
             }
 
             function setOption(name, value) {
                 _options = _options || {};
                 _getSetDescendantProp(_options, name, angular.copy(value));
+                _needsUpdate = true;
             }
 
             function setOptions(options) {
                 if (angular.isDefined(options)) {
                     _options = angular.copy(options);
+                    _needsUpdate = true;
                 }
             }
 
