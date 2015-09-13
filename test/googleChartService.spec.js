@@ -1,4 +1,4 @@
-/* global angular */
+/* global angular, inject */
 /* eslint-env jasmine */
 describe('GoogleChartService', function() {
 
@@ -182,16 +182,6 @@ describe('GoogleChartService', function() {
               options = {title:'A Chart'};
               formatters = {};
            });
-           
-           /* Design Changed: Controller to handle setup->draw flow.
-              Leaving this block as example for later specs.
-           it('should try to call draw on chartwrapper', function(){
-               var drawSpy = spyOn(mockApi.visualization.ChartWrapper.prototype, 'draw').and.callThrough();
-              googleChartService.setup(element, type, data, null, options, formatters);
-              $rootScope.$apply();
-              expect(drawSpy).toHaveBeenCalled();
-           });
-           */
         });
         
         describe('setup complete', function(){
@@ -206,7 +196,13 @@ describe('GoogleChartService', function() {
               $rootScope.$apply();
            });
            
-           /*
+           it('should call draw on chartwrapper whe draw called on service', function(){
+               var drawSpy = spyOn(mockApi.visualization.ChartWrapper.prototype, 'draw').and.callThrough();
+              googleChartService.draw();
+              $rootScope.$apply();
+              expect(drawSpy).toHaveBeenCalled();
+           });
+           
            it('should call beforeDraw handler when chart draws', function(){
                var spy = jasmine.createSpy('listener');
                googleChartService.registerServiceListener('beforeDraw', spy, this);
@@ -214,7 +210,46 @@ describe('GoogleChartService', function() {
                $rootScope.$apply();
                expect(spy).toHaveBeenCalled();
            });
-           */
+           
+           it('should deregister handler when returned function is called', function(){
+               var spy = jasmine.createSpy('listener');
+               var deregister = googleChartService.registerServiceListener('beforeDraw', spy, this);
+               googleChartService.draw();
+               $rootScope.$apply();
+               expect(spy).toHaveBeenCalled();
+               spy.calls.reset();
+               deregister();
+               googleChartService.draw();
+               $rootScope.$apply();
+               expect(spy).not.toHaveBeenCalled();
+           });
+           
+           it('should call set functions on chartWrapper when setup called a second time', function(){
+               spyOn(mockApi.visualization.ChartWrapper.prototype,'setChartType');
+               spyOn(mockApi.visualization.ChartWrapper.prototype,'setDataTable');
+               spyOn(mockApi.visualization.ChartWrapper.prototype,'setView');
+               spyOn(mockApi.visualization.ChartWrapper.prototype,'setOptions');
+               googleChartService.setup(element, type, data, null, options, formatters);
+               $rootScope.$apply();
+               expect(mockApi.visualization.ChartWrapper.prototype.setChartType).toHaveBeenCalled();
+               expect(mockApi.visualization.ChartWrapper.prototype.setDataTable).toHaveBeenCalled();
+               expect(mockApi.visualization.ChartWrapper.prototype.setView).toHaveBeenCalled();
+               expect(mockApi.visualization.ChartWrapper.prototype.setOptions).toHaveBeenCalled();
+           });
+           
+           it('should call set functions on chartWrapper when draw is called a values have been changed', function(){
+               spyOn(mockApi.visualization.ChartWrapper.prototype,'setChartType');
+               spyOn(mockApi.visualization.ChartWrapper.prototype,'setDataTable');
+               spyOn(mockApi.visualization.ChartWrapper.prototype,'setView');
+               spyOn(mockApi.visualization.ChartWrapper.prototype,'setOptions');
+               googleChartService.setOption('title', 'A Brief History of Time');
+               googleChartService.draw();
+               $rootScope.$apply();
+               expect(mockApi.visualization.ChartWrapper.prototype.setChartType).toHaveBeenCalled();
+               expect(mockApi.visualization.ChartWrapper.prototype.setDataTable).toHaveBeenCalled();
+               expect(mockApi.visualization.ChartWrapper.prototype.setView).toHaveBeenCalled();
+               expect(mockApi.visualization.ChartWrapper.prototype.setOptions).toHaveBeenCalled();
+           });
         });
     });
 
