@@ -6,6 +6,7 @@
     googleChartApiPromiseFactory.$inject = ['$rootScope', '$q', 'googleChartApiConfig', 'googleJsapiUrl'];
         
     function googleChartApiPromiseFactory($rootScope, $q, apiConfig, googleJsapiUrl) {
+        apiConfig.optionalSettings = apiConfig.optionalSettings || {};
         var apiReady = $q.defer();
         var onLoad = function () {
             // override callback function
