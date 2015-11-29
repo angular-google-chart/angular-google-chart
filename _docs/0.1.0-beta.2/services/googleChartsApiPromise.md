@@ -1,7 +1,7 @@
 ---
 layout: docs
 category: Services
-title: googleChartsApiService
+title: googleChartsApiPromise
 version: 0.1.0-beta.2
 latest: false
 ---
@@ -15,16 +15,16 @@ objects and functions related to the API will not be available.
 (function(){
     angular.module('google-chart-sample', 'googlechart')
         .controller('ExampleController', ExampleController);
-    
+
     ExampleController.$inject = ['$scope', 'googleChartsApiPromise'];
-    
+
     function ExampleController ($scope, googleChartsApiPromise){
         $scope.chartObject = {
             type: 'PieChart'
         };
-        
+
         googleChartsApiPromise.then(buildDataTable);
-        
+
         function buildDataTable(){
             $scope.chartObject.data = new google.visualization.DataTable();
             // Continue building the data table.
