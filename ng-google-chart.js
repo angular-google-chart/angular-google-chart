@@ -1,7 +1,7 @@
-/*! angular-google-chart 2015-09-10 */
+/*! angular-google-chart 2015-11-29 */
 /*
 * @description Google Chart Api Directive Module for AngularJS
-* @version 0.1.0-beta.2
+* @version 0.1.0
 * @author GitHub Contributors <https://github.com/angular-google-chart/angular-google-chart/graphs/contributors> 
 * @license MIT
 * @year 2013
@@ -243,6 +243,28 @@
         };
     }
 })();
+(function(){
+    angular.module('googlechart')
+        .directive('agcOnClick', onClickDirective);
+
+    function onClickDirective(){
+        return {
+            restrict: 'A',
+            scope: false,
+            require: 'googleChart',
+            link: function(scope, element, attrs, googleChartController){
+                callback.$inject = ['args', 'chart', 'chartWrapper'];
+                function callback(args, chart, chartWrapper){
+                    scope.$apply(function (){
+                        scope.$eval(attrs.agcOnClick, {args: args, chart: chart, chartWrapper: chartWrapper});
+                    });
+                }
+                googleChartController.registerChartListener('click', callback, this);
+            }
+        };
+    }
+})();
+
 /* global angular */
 (function(){
     angular.module('googlechart')
@@ -418,6 +440,7 @@
     googleChartApiPromiseFactory.$inject = ['$rootScope', '$q', 'googleChartApiConfig', 'googleJsapiUrl'];
         
     function googleChartApiPromiseFactory($rootScope, $q, apiConfig, googleJsapiUrl) {
+        apiConfig.optionalSettings = apiConfig.optionalSettings || {};
         var apiReady = $q.defer();
         var onLoad = function () {
             // override callback function
@@ -572,26 +595,6 @@
                     var comp = arr.shift();
                     var match = new RegExp("(.+)\\[([0-9]*)\\]").exec(comp);
 
-                    // handle arrays
-                    if ((match !== null) && (match.length == 3)) {
-                        var arrayData = {
-                            arrName: match[1],
-                            arrIndex: match[2]
-                        };
-                        if (obj[arrayData.arrName] !== undefined) {
-                            if (value && arr.length === 0) {
-                                obj[arrayData.arrName][arrayData.arrIndex] = value;
-                            }
-                            obj = obj[arrayData.arrName][arrayData.arrIndex];
-                        }
-                        else {
-                            obj = undefined;
-                        }
-
-                        continue;
-                    }
-
-                    // handle regular things
                     if (value) {
                         if (obj[comp] === undefined) {
                             obj[comp] = {};
@@ -744,23 +747,29 @@
             function setData(data) {
                 if (angular.isDefined(data)) {
                     _data = angular.copy(data);
+                    _needsUpdate = true;
                 }
             }
 
             function setElement(element) {
-                if (angular.isElement(element)) {
+                if (angular.isElement(element) && _element !== element) {
                     _element = element;
+                    // clear out the chartWrapper because we're going to need a new one
+                    _chartWrapper = null;
+                    _needsUpdate = true;
                 }
             }
 
             function setOption(name, value) {
                 _options = _options || {};
                 _getSetDescendantProp(_options, name, angular.copy(value));
+                _needsUpdate = true;
             }
 
             function setOptions(options) {
                 if (angular.isDefined(options)) {
                     _options = angular.copy(options);
+                    _needsUpdate = true;
                 }
             }
 
