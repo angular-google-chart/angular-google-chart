@@ -1,6 +1,6 @@
 {
   "name": "angular-google-chart",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0",
   "main": "./ng-google-chart.js",
   "description": "Google Chart Tools AngularJS Directive Module",
   "homepage": "http://angular-google-chart.github.io/angular-google-chart/",

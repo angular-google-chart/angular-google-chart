@@ -5,6 +5,8 @@ but is still in early stages of development.
 
 ## [Unreleased][unreleased]
 
+## [0.1.0] - 2015-11-29
+
 ### Added
 
 * agcOnClick directive
@@ -99,7 +101,8 @@ but is still in early stages of development.
 
 ## 0.0.1 - 2013-08-23
 
-[unreleased]: https://github.com/angular-google-chart/angular-google-chart/compare/0.1.0-beta.2...HEAD
+[unreleased]: https://github.com/angular-google-chart/angular-google-chart/compare/0.1.0...HEAD
+[0.1.0]: https://github.com/angular-google-chart/angular-google-chart/compare/0.1.0-beta.2...0.1.0
 [0.1.0-beta.2]: https://github.com/angular-google-chart/angular-google-chart/compare/0.1.0-beta.1...0.1.0-beta.2
 [0.1.0-beta.1]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.11...0.1.0-beta.1
 [0.0.11]: https://github.com/angular-google-chart/angular-google-chart/compare/0.0.10...0.0.11
