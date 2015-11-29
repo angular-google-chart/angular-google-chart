@@ -5,6 +5,14 @@ but is still in early stages of development.
 
 ## [Unreleased][unreleased]
 
+### Added
+
+* agcOnClick directive
+
+### Fixed
+
+* optionalSettings key on api config given default value of empty so that it can actually be optional
+
 ## [0.1.0-beta.2] - 2015-09-09
 
 ### Added
