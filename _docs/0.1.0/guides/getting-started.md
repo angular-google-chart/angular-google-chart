@@ -3,7 +3,7 @@ layout: docs
 title: Getting Started
 category: Guides
 version: 0.1.0
-latest: true
+latest: false
 ---
 
 ### Install with Bower

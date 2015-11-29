@@ -1,16 +1,17 @@
 ---
-layout: post
-title: Pie Chart
+layout: docs
+title: Annotation Chart
 category: Examples
 version: 0.1.0
-latest: true
+latest: false
 scripts:
-- /docs/latest/examples/pie.js
-ng-app: google-chart-sample
-ng-controller: GenericChartCtrl
+- /docs/0.1.0/examples/annotation.js
+ng-controller: "AnnotationChartCtrl"
+ng-app: "google-chart-sample"
 ---
 <div>
-    Onions: <input type="number" ng-model="onions[1].v" />
+    Some value to change:
+    <input type="number" ng-model="secondRow[1].v" />
 </div>
 
 <div google-chart chart="chartObject" style="height:600px; width:100%;"></div>
@@ -21,6 +22,7 @@ ng-controller: GenericChartCtrl
 {% endhighlight %}
 
 <h4>JavaScript</h4>
+
 {% highlight javascript %}
-	{% include_relative pie.js %}
+    {% include_relative annotation.js %}
 {% endhighlight %}

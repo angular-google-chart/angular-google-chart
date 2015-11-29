@@ -3,7 +3,7 @@ layout: docs
 category: Directives
 title: googleChart
 version: 0.1.0
-latest: true
+latest: false
 ---
 
 This is the heart of Angular Google Chart. See the [Examples]({{site.baseurl}}/docs/{{page,version}}/examples/)

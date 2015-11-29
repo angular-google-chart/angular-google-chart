@@ -3,7 +3,7 @@ layout: docs
 title: Directives
 category: Directives
 version: 0.1.0
-latest: true
+latest: false
 ---
 
 {% assign directives = site.docs | where:'version', page.version | where:'category', 'Directives' | where:'latest', page.latest %}
