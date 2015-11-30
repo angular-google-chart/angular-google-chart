@@ -1,13 +1,13 @@
 ---
 layout: post
-title: Pie Chart
+title: Bar Chart
 category: Examples
 version: 0.1.0
-latest: true
+latest: false
 scripts:
-- /docs/latest/examples/pie.js
-ng-app: google-chart-sample
-ng-controller: GenericChartCtrl
+- /docs/0.1.0/examples/bar.js
+ng-app: "google-chart-sample"
+ng-controller: "GenericChartCtrl" 
 ---
 <div>
     Onions: <input type="number" ng-model="onions[1].v" />
@@ -22,5 +22,5 @@ ng-controller: GenericChartCtrl
 
 <h4>JavaScript</h4>
 {% highlight javascript %}
-	{% include_relative pie.js %}
+	{% include_relative bar.js %}
 {% endhighlight %}

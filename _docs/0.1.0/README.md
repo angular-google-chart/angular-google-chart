@@ -2,8 +2,8 @@
 layout: docs
 title: Documentation
 version: 0.1.0
-latest: true
-permalink: /docs/latest/index.html
+latest: false
+permalink: /docs/0.1.0/index.html
 ---
 
 - [Guides]({{site.baseurl}}/docs/{{page.version}}/guides/)

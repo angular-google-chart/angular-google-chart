@@ -3,7 +3,7 @@ layout: docs
 title: Services
 category: Services
 version: 0.1.0
-latest: true
+latest: false
 ---
 
 {% assign services = site.docs | where:'version', page.version | where:'category', 'Services' | where:'latest', page.latest %}

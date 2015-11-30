@@ -3,7 +3,7 @@ layout: docs
 category: Providers
 title: googleJsapiUrl
 version: 0.1.0
-latest: true
+latest: false
 ---
 
 This provider is used to set the url to fetch the Google API from.

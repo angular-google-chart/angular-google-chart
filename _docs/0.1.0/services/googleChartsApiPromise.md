@@ -3,7 +3,7 @@ layout: docs
 category: Services
 title: googleChartsApiPromise
 version: 0.1.0
-latest: true
+latest: false
 ---
 
 This services returns a promise that resolves when the Google Charts API has

@@ -3,7 +3,7 @@ layout: docs
 category: Values
 title: googleChartApiConfig
 version: 0.1.0
-latest: true
+latest: false
 ---
 
 This value can be overriden by setting it on your module. It is used by the

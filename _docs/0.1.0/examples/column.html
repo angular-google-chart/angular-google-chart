@@ -1,19 +1,21 @@
 ---
-layout: post
-title: Pie Chart
+layout: docs
+title: Column Chart
 category: Examples
 version: 0.1.0
-latest: true
+latest: false
 scripts:
-- /docs/latest/examples/pie.js
-ng-app: google-chart-sample
-ng-controller: GenericChartCtrl
+- /docs/0.1.0/examples/column.js
+ng-app: "google-chart-sample"
+ng-controller: "GenericChartCtrl"
 ---
+<div ng-init="chartObject.type='ColumnChart'">
 <div>
     Onions: <input type="number" ng-model="onions[1].v" />
 </div>
 
 <div google-chart chart="chartObject" style="height:600px; width:100%;"></div>
+</div>
 
 <h4>HTML Template</h4>
 {% highlight html %}
@@ -22,5 +24,5 @@ ng-controller: GenericChartCtrl
 
 <h4>JavaScript</h4>
 {% highlight javascript %}
-	{% include_relative pie.js %}
+	{% include_relative column.js %}
 {% endhighlight %}
