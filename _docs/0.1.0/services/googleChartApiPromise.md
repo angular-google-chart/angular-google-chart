@@ -1,7 +1,7 @@
 ---
 layout: docs
 category: Services
-title: googleChartsApiPromise
+title: googleChartApiPromise
 version: 0.1.0
 latest: false
 ---
@@ -18,7 +18,7 @@ objects and functions related to the API will not be available.
 
     ExampleController.$inject = ['$scope', 'googleChartsApiPromise'];
 
-    function ExampleController ($scope, googleChartsApiPromise){
+    function ExampleController ($scope, googleChartApiPromise){
         $scope.chartObject = {
             type: 'PieChart'
         };

@@ -1,8 +1,8 @@
 ---
 layout: docs
 category: Services
-title: googleChartsApiPromise
-version: 0.1.0-beta.2
+title: googleChartApiPromise
+version: 0.1.0-beta.1
 latest: false
 ---
 

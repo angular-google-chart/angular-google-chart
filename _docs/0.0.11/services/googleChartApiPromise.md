@@ -1,9 +1,9 @@
 ---
 layout: docs
 category: Services
-title: googleChartsApiPromise
-version: 0.1.0
-latest: true
+title: googleChartApiPromise
+version: 0.0.11
+latest: false
 ---
 
 This services returns a promise that resolves when the Google Charts API has
@@ -16,7 +16,7 @@ objects and functions related to the API will not be available.
     angular.module('google-chart-sample', 'googlechart')
         .controller('ExampleController', ExampleController);
 
-    ExampleController.$inject = ['$scope', 'googleChartsApiPromise'];
+    ExampleController.$inject = ['$scope', 'googleChartApiPromise'];
 
     function ExampleController ($scope, googleChartsApiPromise){
         $scope.chartObject = {
