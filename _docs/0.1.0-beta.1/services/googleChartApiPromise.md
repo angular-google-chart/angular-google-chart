@@ -16,14 +16,14 @@ objects and functions related to the API will not be available.
     angular.module('google-chart-sample', 'googlechart')
         .controller('ExampleController', ExampleController);
 
-    ExampleController.$inject = ['$scope', 'googleChartsApiPromise'];
+    ExampleController.$inject = ['$scope', 'googleChartApiPromise'];
 
-    function ExampleController ($scope, googleChartsApiPromise){
+    function ExampleController ($scope, googleChartApiPromise){
         $scope.chartObject = {
             type: 'PieChart'
         };
 
-        googleChartsApiPromise.then(buildDataTable);
+        googleChartApiPromise.then(buildDataTable);
 
         function buildDataTable(){
             $scope.chartObject.data = new google.visualization.DataTable();
