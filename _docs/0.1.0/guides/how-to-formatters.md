@@ -81,7 +81,8 @@ As part of the Google Visualization API there are a series of formatter predefin
 The chart object passed to the directive accept a formatters attribute.
 
 This attribute is composed as in the following example:
-```
+
+{% highlight javascript %}
 // Standard chart object
 var chart = {
             data: data,
@@ -97,7 +98,8 @@ var formatters = {
                         }]
                 };
 
-```
+{% endhighlight %}
+
 
 The **formatters** object has an attribute that is the first part of the Formatter name in lowercase without the Format suffix.
 
