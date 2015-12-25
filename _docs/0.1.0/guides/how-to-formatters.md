@@ -8,8 +8,7 @@ latest: false
 
 ### Google Chart Formatters
 
-As part of the Google Visualization API there are a series of formatter predefined by Google
-
+As part of the Google Visualization API there are a series of predefined formatters:
 
 <table class="table">
     <tr>
@@ -18,7 +17,7 @@ As part of the Google Visualization API there are a series of formatter predefin
     </tr>
     <tr>
         <td>
-            <code>ArrowFormat</code>
+            <a href="https://developers.google.com/chart/interactive/docs/reference#arrowformat">ArrowFormat <span class="fa fa-external-link"></span></a>
         </td>
         <td>
             Adds an up or down arrow, indicating whether the cell value is above or below a specified value.
@@ -26,7 +25,7 @@ As part of the Google Visualization API there are a series of formatter predefin
     </tr>
     <tr>
         <td>
-            <code>BarFormat</code>
+            <a href="https://developers.google.com/chart/interactive/docs/reference#barformat">BarFormat <span class="fa fa-external-link"></span></a>
         </td>
         <td>
             Adds a colored bar, the direction and color of which indicates whether the cell value is above or below a specified value.
@@ -34,7 +33,7 @@ As part of the Google Visualization API there are a series of formatter predefin
     </tr>
     <tr>
         <td>
-            <code>ColorFormat</code>
+            <a href="https://developers.google.com/chart/interactive/docs/reference#colorformat">ColorFormat <span class="fa fa-external-link"></span></a>
         </td>
         <td>
             Colors a cell according to whether the values fall within a specified range.
@@ -42,7 +41,7 @@ As part of the Google Visualization API there are a series of formatter predefin
     </tr>
     <tr>
         <td>
-            <code>DateFormat</code>
+            <a href="https://developers.google.com/chart/interactive/docs/reference#dateformat">DateFormat <span class="fa fa-external-link"></span></a>
         </td>
         <td>
             Formats a Date or DateTime value in several different ways, including "January 1, 2009," "1/1/09" and "Jan 1, 2009."
@@ -50,7 +49,7 @@ As part of the Google Visualization API there are a series of formatter predefin
     </tr>
     <tr>
         <td>
-            <code>NumberFormat</code>
+            <a href="https://developers.google.com/chart/interactive/docs/reference#numberformat">NumberFormat <span class="fa fa-external-link"></span></a>
         </td>
         <td>
             Formats various aspects of numeric values.
@@ -58,7 +57,7 @@ As part of the Google Visualization API there are a series of formatter predefin
     </tr>
     <tr>
         <td>
-            <code>PatternFormat</code>
+            <a href="https://developers.google.com/chart/interactive/docs/reference#patternformat">PatternFormat <span class="fa fa-external-link"></span></a>
         </td>
         <td>
             Concatenates cell values on the same row into a specified cell, along with arbitrary text.
@@ -70,7 +69,7 @@ As part of the Google Visualization API there are a series of formatter predefin
     <span class="fa fa-book fa-lg"></span>
     Check out the
     <a href="https://developers.google.com/chart/interactive/docs/reference?hl=en#formatters">
-        <b>Google Visualization API Reference</b><span class="fa fa-external-link"></span>
+        <b>Google Visualization API Reference</b> <span class="fa fa-external-link"></span>
     </a>
     for more information about specific Formatter.
 </div>
@@ -85,31 +84,31 @@ This attribute is composed as in the following example:
 {% highlight javascript %}
 // Standard chart object
 var chart = {
-            data: data,
-            type: 'Table',
-            formatters: formatters
-        };
+    data: data,
+    type: 'Table',
+    formatters: formatters
+};
 
 // Formatters
 var formatters = {
-                  date: [{
-                        columnNum: 1,
-                        pattern: "HH:mm:ss dd:MM:yy"
-                        }]
-                };
-
+    date: [{
+        columnNum: 1,
+        pattern: "HH:mm:ss dd:MM:yy"
+    }]
+};
 {% endhighlight %}
 
 
-The **formatters** object has an attribute that is the first part of the Formatter name in lowercase without the Format suffix.
+Add too the `formatters` object with the descriptive part of the formatter name. This key is case insensitive.
 
 The list of the shortened names:
-- arrow
-- bar
-- color
-- date 
-- number
-- pattern
+
+* arrow
+* bar
+* color
+* date 
+* number
+* pattern
 
 The value of this attribute is an array containing the object representing the column to format and the formatter options.
 
