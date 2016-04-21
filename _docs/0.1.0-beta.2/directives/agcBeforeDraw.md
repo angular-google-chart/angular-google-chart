@@ -8,5 +8,5 @@ latest: false
 
 #### Code Example
 {% highlight html %}
-<div google-chart chart="chartObject" agc-before-draw="drawHandler(chartWrapper)"></div>
+<div google-chart chart="myChartObject" agc-before-draw="drawHandler(chartWrapper)"></div>
 {% endhighlight %}

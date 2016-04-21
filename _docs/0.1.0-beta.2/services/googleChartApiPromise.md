@@ -19,14 +19,14 @@ objects and functions related to the API will not be available.
     ExampleController.$inject = ['$scope', 'googleChartApiPromise'];
 
     function ExampleController ($scope, googleChartApiPromise){
-        $scope.chartObject = {
+        $scope.myChartObject = {
             type: 'PieChart'
         };
 
         googleChartApiPromise.then(buildDataTable);
 
         function buildDataTable(){
-            $scope.chartObject.data = new google.visualization.DataTable();
+            $scope.myChartObject.data = new google.visualization.DataTable();
             // Continue building the data table.
         }
     }

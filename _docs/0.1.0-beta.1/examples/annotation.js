@@ -2,7 +2,7 @@
 (function(){
     angular.module("google-chart-sample", ["googlechart", "googlechart-docs"])
     .controller("AnnotationChartCtrl", function ($scope) {
-        $scope.chartObject = {};
+        $scope.myChartObject = {};
 
         $scope.secondRow = [
             {v: new Date(2314, 2, 16)},
@@ -15,9 +15,9 @@
         ];
 
 
-        $scope.chartObject.type = "AnnotationChart";
+        $scope.myChartObject.type = "AnnotationChart";
 
-        $scope.chartObject.data = {"cols": [
+        $scope.myChartObject.data = {"cols": [
             {id: "month", label: "Month", type: "date"},
             {id: "kepler-data", label: "Kepler-22b mission", type: "number"},
             {id: "kepler-annot", label: "Kepler-22b Annotation Title", type: "string"},
@@ -48,7 +48,7 @@
             ]}
         ]};
 
-        $scope.chartObject.options = {
+        $scope.myChartObject.options = {
             displayAnnotations: true
         };
     });

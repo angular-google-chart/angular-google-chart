@@ -9,17 +9,17 @@ scripts:
 ng-app: "google-chart-sample"
 ng-controller: "GenericChartCtrl"
 ---
-<div ng-init="chartObject.type='ColumnChart'">
+<div ng-init="myChartObject.type='ColumnChart'">
 <div>
     Onions: <input type="number" ng-model="onions[1].v" />
 </div>
 
-<div google-chart chart="chartObject" style="height:600px; width:100%;"></div>
+<div google-chart chart="myChartObject" style="height:600px; width:100%;"></div>
 </div>
 
 <h4>HTML Template</h4>
 {% highlight html %}
-<div google-chart chart="chartObject" style="height:600px; width:100%;"></div>
+<div google-chart chart="myChartObject" style="height:600px; width:100%;"></div>
 {% endhighlight %}
 
 <h4>JavaScript</h4>

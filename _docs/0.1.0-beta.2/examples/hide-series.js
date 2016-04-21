@@ -7,7 +7,7 @@
 
     function HideSeriesController($scope) {
         // Properties
-        $scope.chartObject = {};
+        $scope.myChartObject = {};
 
         //Methods
         $scope.hideSeries = hideSeries;
@@ -17,27 +17,27 @@
         function hideSeries(selectedItem) {
             var col = selectedItem.column;
             if (selectedItem.row === null) {
-                if ($scope.chartObject.view.columns[col] == col) {
-                    $scope.chartObject.view.columns[col] = {
-                        label: $scope.chartObject.data.cols[col].label,
-                        type: $scope.chartObject.data.cols[col].type,
+                if ($scope.myChartObject.view.columns[col] == col) {
+                    $scope.myChartObject.view.columns[col] = {
+                        label: $scope.myChartObject.data.cols[col].label,
+                        type: $scope.myChartObject.data.cols[col].type,
                         calc: function() {
                             return null;
                         }
                     };
-                    $scope.chartObject.options.colors[col - 1] = '#CCCCCC';
+                    $scope.myChartObject.options.colors[col - 1] = '#CCCCCC';
                 }
                 else {
-                    $scope.chartObject.view.columns[col] = col;
-                    $scope.chartObject.options.colors[col - 1] = $scope.chartObject.options.defaultColors[col - 1];
+                    $scope.myChartObject.view.columns[col] = col;
+                    $scope.myChartObject.options.colors[col - 1] = $scope.myChartObject.options.defaultColors[col - 1];
                 }
             }
         }
 
         function init() {
-            $scope.chartObject.type = "LineChart";
-            $scope.chartObject.displayed = false;
-            $scope.chartObject.data = {
+            $scope.myChartObject.type = "LineChart";
+            $scope.myChartObject.displayed = false;
+            $scope.myChartObject.data = {
                 "cols": [{
                     id: "month",
                     label: "Month",
@@ -102,7 +102,7 @@
                     }]
                 }]
             };
-            $scope.chartObject.options = {
+            $scope.myChartObject.options = {
                 "title": "Sales per month",
                 "colors": ['#0000FF', '#009900', '#CC0000', '#DD9900'],
                 "defaultColors": ['#0000FF', '#009900', '#CC0000', '#DD9900'],
@@ -120,7 +120,7 @@
                 }
             };
 
-            $scope.chartObject.view = {
+            $scope.myChartObject.view = {
                 columns: [0, 1, 2, 3, 4]
             };
         }
