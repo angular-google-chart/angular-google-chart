@@ -20,7 +20,7 @@ for practical code examples.
         <td><p><code>chart</code></p>
         <td>expression</td>
         <td>Binding to the chart object with the values needed to build the chart.</td>
-        <td><p><code>chart="chartObject"</code></p></td>
+        <td><p><code>chart="myChartObject"</code></p></td>
     </tr>
     <tr>
         <td><p><code>on-select</code></p></td>

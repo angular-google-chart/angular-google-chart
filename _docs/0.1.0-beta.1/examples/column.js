@@ -1,16 +1,16 @@
 /* global angular */
 angular.module("google-chart-sample", ["googlechart", "googlechart-docs"])
 .controller("GenericChartCtrl", function ($scope) {
-    $scope.chartObject = {};
+    $scope.myChartObject = {};
     
-    $scope.chartObject.type = "ColumnChart";
+    $scope.myChartObject.type = "ColumnChart";
     
     $scope.onions = [
         {v: "Onions"},
         {v: 3},
     ];
 
-    $scope.chartObject.data = {"cols": [
+    $scope.myChartObject.data = {"cols": [
         {id: "t", label: "Topping", type: "string"},
         {id: "s", label: "Slices", type: "number"}
     ], "rows": [
@@ -33,7 +33,7 @@ angular.module("google-chart-sample", ["googlechart", "googlechart-docs"])
         ]}
     ]};
 
-    $scope.chartObject.options = {
+    $scope.myChartObject.options = {
         'title': 'How Much Pizza I Ate Last Night'
     };
 });
