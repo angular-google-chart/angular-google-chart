@@ -10,6 +10,7 @@ but is still in early stages of development.
 ### Added
 
 * agcOnClick directive
+* agcOnRangeChange directive
 
 ### Fixed
 
