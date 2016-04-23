@@ -2,9 +2,9 @@
 
 (function(){
     angular.module('googlechart')
-        .directive('agcRangeChange', agcRangeChangeDirective);
+        .directive('agcOnRangeChange', agcOnRangeChangeDirective);
 
-    function agcRangeChangeDirective(){
+    function agcOnRangeChangeDirective(){
         return {
             restrict: 'A',
             scope: false,
@@ -20,7 +20,7 @@
                         end: args[0].end
                     };
                     scope.$apply(function () {
-                        scope.$eval(attrs.agcRangeChange, returnParams);
+                        scope.$eval(attrs.agcOnRangeChange, returnParams);
                     });
                 }
                 googleChartController.registerChartListener('rangechange', callback, this);
