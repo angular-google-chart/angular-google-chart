@@ -1,9 +1,9 @@
 /* global angular */
 (function(){
     angular.module('googlechart')
-        .directive('agcBeforeDraw', onReadyDirective);
+        .directive('agcBeforeDraw', beforeDrawDirective);
         
-    function onReadyDirective(){
+    function beforeDrawDirective(){
         return {
             restrict: 'A',
             scope: false,
