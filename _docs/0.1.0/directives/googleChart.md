@@ -6,7 +6,7 @@ version: 0.1.0
 latest: false
 ---
 
-This is the heart of Angular Google Chart. See the [Examples]({{site.baseurl}}/docs/{{page,version}}/examples/)
+This is the heart of Angular Google Chart. See the [Examples]({{site.baseurl}}/docs/{{page.version}}/examples/)
 for practical code examples.
 
 <table class="table">
