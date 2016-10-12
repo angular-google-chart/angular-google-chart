@@ -22,10 +22,10 @@ angular.module("google-chart-sample", ["ngRoute", "googlechart"]).config(['$rout
             otherwise({
                 redirectTo: '/fat'
             });
-    }]).value('googleChartApiConfig', {
+    }]);/*.value('googleChartApiConfig', {
             version: '1',
             optionalSettings: {
                 packages: ['corechart', 'gauge'],
                 language: 'fr'
             }
-    });
+    });*/

@@ -1,4 +1,4 @@
-/*! angular-google-chart 2015-11-29 */
+/*! angular-google-chart 2016-09-20 */
 /*
 * @description Google Chart Api Directive Module for AngularJS
 * @version 0.1.0
@@ -224,9 +224,9 @@
 /* global angular */
 (function(){
     angular.module('googlechart')
-        .directive('agcBeforeDraw', onReadyDirective);
+        .directive('agcBeforeDraw', beforeDrawDirective);
         
-    function onReadyDirective(){
+    function beforeDrawDirective(){
         return {
             restrict: 'A',
             scope: false,
@@ -243,6 +243,59 @@
         };
     }
 })();
+
+/* global angular */
+(function() {
+    angular.module('googlechart')
+        .value('agcGstaticLoaderStrategy', agcGstaticLoaderStrategy);
+
+    agcGstaticLoaderStrategy.$inject = ["$rootScope", "agcScriptTagHelper"];
+    function agcGstaticLoaderStrategy($rootScope, agcScriptTagHelper){
+        var tagPromise = agcScriptTagHelper("");
+    }
+})();
+
+/* global angular */
+(function() {
+    angular.module("googlechart")
+        .factory("agcJsapiLoaderStrategy", agcJsapiLoaderStrategyFactory);
+
+    agcJsapiLoaderStrategyFactory.$inject = ["$rootScope", "$q", "agcScriptTagHelper", "googleChartApiConfig"];
+    function agcJsapiLoaderStrategyFactory($rootScope, $q, agcScriptTagHelper, googleChartApiConfig){
+        return function agcJsapiLoaderStrategy(){
+            
+            var apiReady = $q.defer();
+            // Massage configuration as needed.
+            googleChartApiConfig.optionalSettings = googleChartApiConfig.optionalSettings || {};
+
+            var userDefinedCallback = googleChartApiConfig.optionalSettings.callback;
+
+            var settings = {
+                callback: function() {
+                    if (angular.isFunction(userDefinedCallback))
+                        userDefinedCallback.call(this);
+
+                    $rootScope.$apply(function(){
+                        apiReady.resolve(google);
+                    });
+                }
+            };
+
+            settings = angular.extend({}, googleChartApiConfig.optionalSettings, settings);
+            
+            agcScriptTagHelper("//www.google.com/jsapi")
+                .then(function(){
+                    window.google.load('visualization', googleChartApiConfig.version || '1', settings);
+                })
+                .catch(function(){
+                    apiReady.reject();
+                });
+
+            return apiReady.promise;
+        };
+    }   
+})();
+
 (function(){
     angular.module('googlechart')
         .directive('agcOnClick', onClickDirective);
@@ -356,6 +409,37 @@
     }
 })();
 /* global angular */
+
+(function(){
+    angular.module('googlechart')
+        .directive('agcOnRangeChange', agcOnRangeChangeDirective);
+
+    function agcOnRangeChangeDirective(){
+        return {
+            restrict: 'A',
+            scope: false,
+            require: 'googleChart',
+            link: function(scope, element, attrs, googleChartController){
+                callback.$inject = ['args', 'chart', 'chartWrapper'];
+                function callback(args, chart, chartWrapper){
+                    var returnParams = {
+                        chartWrapper: chartWrapper,
+                        chart: chart,
+                        args: args,
+                        start: args[0].start,
+                        end: args[0].end
+                    };
+                    scope.$apply(function () {
+                        scope.$eval(attrs.agcOnRangeChange, returnParams);
+                    });
+                }
+                googleChartController.registerChartListener('rangechange', callback, this);
+            }
+        };
+    }
+})();
+
+/* global angular */
 (function(){
     angular.module('googlechart')
         .directive('agcOnReady', onReadyDirective);
@@ -404,6 +488,54 @@
         };
     }
 })();
+/* global angular */
+(function() {
+    angular.module("googlechart")
+        .factory("agcScriptTagHelper", agcScriptTagHelperFactory);
+
+    agcScriptTagHelperFactory.$inject = ["$q"];
+    function agcScriptTagHelperFactory($q)
+    {
+        /** Add a script tag to the document's head section and return an angular
+          * promise that resolves when the script has loaded.
+          */
+        function agcScriptTagHelper(url)
+        {
+            var deferred = $q.defer();
+            var head = document.getElementsByTagName('head')[0];
+            var script = document.createElement('script');
+
+            script.setAttribute('type', 'text/javascript');
+            script.src = url;
+
+            if (script.addEventListener) { // Standard browsers (including IE9+)
+                script.addEventListener('load', onLoad, false);
+                script.onerror = onError;
+            } else { // IE8 and below
+                script.onreadystatechange = function () {
+                    if (script.readyState === 'loaded' || script.readyState === 'complete') {
+                        script.onreadystatechange = null;
+                        onLoad();
+                    }
+                };
+            }
+            head.appendChild(script);
+
+            function onLoad() {
+                deferred.resolve();
+            }
+
+            function onError() {
+                deferred.reject();
+            }
+
+            return deferred.promise;
+        }
+
+        return agcScriptTagHelper;
+    }
+})();
+
 /* global angular, google */
 /* jshint -W072 */
 (function(){
@@ -437,49 +569,10 @@
     angular.module('googlechart')
         .factory('googleChartApiPromise', googleChartApiPromiseFactory);
         
-    googleChartApiPromiseFactory.$inject = ['$rootScope', '$q', 'googleChartApiConfig', 'googleJsapiUrl'];
+    googleChartApiPromiseFactory.$inject = ['$rootScope', '$q', 'googleChartApiConfig', 'agcJsapiLoaderStrategy'];
         
-    function googleChartApiPromiseFactory($rootScope, $q, apiConfig, googleJsapiUrl) {
-        apiConfig.optionalSettings = apiConfig.optionalSettings || {};
-        var apiReady = $q.defer();
-        var onLoad = function () {
-            // override callback function
-            var settings = {
-                callback: function () {
-                    var oldCb = apiConfig.optionalSettings.callback;
-                    $rootScope.$apply(function () {
-                        apiReady.resolve(google);
-                    });
-
-                    if (angular.isFunction(oldCb)) {
-                        oldCb.call(this);
-                    }
-                }
-            };
-
-            settings = angular.extend({}, apiConfig.optionalSettings, settings);
-
-            window.google.load('visualization', apiConfig.version, settings);
-        };
-        var head = document.getElementsByTagName('head')[0];
-        var script = document.createElement('script');
-
-        script.setAttribute('type', 'text/javascript');
-        script.src = googleJsapiUrl;
-
-        if (script.addEventListener) { // Standard browsers (including IE9+)
-            script.addEventListener('load', onLoad, false);
-        } else { // IE8 and below
-            script.onreadystatechange = function () {
-                if (script.readyState === 'loaded' || script.readyState === 'complete') {
-                    script.onreadystatechange = null;
-                    onLoad();
-                }
-            };
-        }
-        head.appendChild(script);
-
-        return apiReady.promise;
+    function googleChartApiPromiseFactory($rootScope, $q, apiConfig, agcJsapiLoaderStrategy) {
+        return agcJsapiLoaderStrategy();
     }
 })();
 /* global angular */
@@ -795,25 +888,4 @@
         return GoogleChartService;
     }
 })();
-/* global angular */
-(function(){
-    angular.module('googlechart')
-        .provider('googleJsapiUrl', googleJsapiUrlProvider);
-        
-    function googleJsapiUrlProvider() {
-        var protocol = 'https:';
-        var url = '//www.google.com/jsapi';
-        
-        this.setProtocol = function (newProtocol) {
-            protocol = newProtocol;
-        };
-
-        this.setUrl = function (newUrl) {
-            url = newUrl;
-        };
-
-        this.$get = function () {
-            return (protocol ? protocol : '') + url;
-        };
-    }
-})();
+//# sourceMappingURL=ng-google-chart.js.map

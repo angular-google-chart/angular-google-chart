@@ -27,6 +27,23 @@ describe('googleChartApiPromise factory', function() {
         expect(googleChartApiPromise.catch).toBeFunction();
         expect(googleChartApiPromise.finally).toBeFunction();
     });
+});
+
+describe('googleChartApiPromise functionality', function() {
+    var googleChartApiPromise;
+    beforeEach(module('googlechart', function($provide) {
+        $provide.provider('googleJsapiUrl', function() {
+            return {
+                $get: function() {
+                    return 'https://www.google.com/jsapi';
+                }
+            };
+        });
+    }));
+
+    beforeEach(inject(function($injector) {
+        googleChartApiPromise = $injector.get('googleChartApiPromise');
+    }));
 
     it('should load the google api', function(done) {
 
@@ -41,6 +58,6 @@ describe('googleChartApiPromise factory', function() {
             */
             expect(true).toBe(false);
             done();
-        })
+        },10000)
     });
 });
