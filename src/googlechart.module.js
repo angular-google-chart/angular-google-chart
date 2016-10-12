@@ -6,7 +6,7 @@
     registerResizeEvent.$inject = ['$rootScope', '$window'];
     
     function registerResizeEvent($rootScope, $window){
-        angular.element($window).bind('resize', function () {
+        angular.element($window).on('resize', function () {
                 $rootScope.$emit('resizeMsg');
             });
     }
