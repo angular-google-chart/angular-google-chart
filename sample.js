@@ -15,6 +15,10 @@ angular.module("google-chart-sample", ["ngRoute", "googlechart"]).config(['$rout
                 templateUrl: 'partials/gauge.html',
                 controller: 'GaugeChartCtrl'
             }).
+            when('/map', {
+                templateUrl: 'partials/map.html',
+                controller: 'MapChartCtrl'
+            }).
             when('/generic/:chartType', {
                 templateUrl: 'partials/generic.html',
                 controller: 'GenericChartCtrl'
@@ -22,6 +26,13 @@ angular.module("google-chart-sample", ["ngRoute", "googlechart"]).config(['$rout
             otherwise({
                 redirectTo: '/fat'
             });
+    }])
+    .config(["agcLibraryLoaderProvider", function(agcLibraryLoaderProvider){
+        agcLibraryLoaderProvider.setLoader("gstatic");
+    }])
+    .config(["agcGstaticLoaderProvider", function(gstaticProvider){
+        gstaticProvider.addPackage("map");
+        //gstaticProvider.setOption("mapsApiKey", "INSERT YOUR KEY HERE");
     }]);/*.value('googleChartApiConfig', {
             version: '1',
             optionalSettings: {
