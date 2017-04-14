@@ -1,4 +1,4 @@
-/*! angular-google-chart 2016-09-20 */
+/*! angular-google-chart 2017-04-14 */
 /*
 * @description Google Chart Api Directive Module for AngularJS
 * @version 0.1.0
@@ -247,53 +247,217 @@
 /* global angular */
 (function() {
     angular.module('googlechart')
-        .value('agcGstaticLoaderStrategy', agcGstaticLoaderStrategy);
+        .provider('agcGstaticLoader', agcGstaticLoaderProvider);
 
-    agcGstaticLoaderStrategy.$inject = ["$rootScope", "agcScriptTagHelper"];
-    function agcGstaticLoaderStrategy($rootScope, agcScriptTagHelper){
-        var tagPromise = agcScriptTagHelper("");
+    function agcGstaticLoaderProvider(){
+        var useBothLoaders = false;
+        var version = "current";
+        var options = {
+            packages: ["corechart"]
+        }
+
+        this.setVersion = function(value){
+            version = value;
+            if (needsBothLoaders())
+                useBothLoaders = true;
+        }
+
+        this.addPackage = function(packageName){
+            options.packages = options.packages || [];
+            options.packages.push(packageName);
+
+            if (needsBothLoaders())
+                useBothLoaders = true;
+        }
+
+        this.removePackage = function(packageName){
+            options.packages = this._options.packages || [];
+            var index = options.packages.indexOf(packageName);
+            if (index > -1)
+                options.packages.splice(index, 1);
+        }
+
+        this.setOption = function(option, value){
+            options[option] = value;
+        }
+
+        this.setOptions = function(value){
+            options = value;
+        }
+
+        this.clearOption = function(option){
+            delete this._options["option"]
+        }
+        
+        this.useBothLoaders = function(value){
+            useBothLoaders = !!value;
+        }
+
+        function needsBothLoaders(){
+            var versionCheck, packageCheck;
+
+            versionCheck = !isNaN(+version) && +version < 45;
+            packageCheck = options.packages.indexOf("geochart") > -1 ||
+                options.packages.indexOf("map") > -1;
+
+            return versionCheck && packageCheck;
+        }
+
+        this.$get = function($rootScope, $q, agcScriptTagHelper){
+
+            function scriptLoadCallback(){
+                if (!google ||
+                    !google.charts ||
+                    typeof google.charts.setOnLoadCallback !== 'function'){
+                    return $q.reject("Google charts library loader not present.");
+                }
+                
+                var deferred = $q.defer();
+
+                google.charts.load(version, options);
+
+                google.charts.setOnLoadCallback(function(){
+                    $rootScope.$apply(function(){
+                        deferred.resolve(google);
+                    });
+                });
+
+                return deferred.promise;
+            }
+
+            var tagPromise = agcScriptTagHelper("https://www.gstatic.com/charts/loader.js");
+            if (useBothLoaders)
+                tagPromise = tagPromise.then(function(){ return agcScriptTagHelper("https://www.google.com/jsapi")})
+            var libraryPromise = tagPromise.then(scriptLoadCallback);
+
+            return libraryPromise;
+        }
+        this.$get.$inject = ["$rootScope", "$q", "agcScriptTagHelper"];
     }
 })();
 
 /* global angular */
 (function() {
     angular.module("googlechart")
-        .factory("agcJsapiLoaderStrategy", agcJsapiLoaderStrategyFactory);
+        .factory("agcJsapiLoader", agcJsapiLoaderFactory);
 
-    agcJsapiLoaderStrategyFactory.$inject = ["$rootScope", "$q", "agcScriptTagHelper", "googleChartApiConfig"];
-    function agcJsapiLoaderStrategyFactory($rootScope, $q, agcScriptTagHelper, googleChartApiConfig){
-        return function agcJsapiLoaderStrategy(){
-            
-            var apiReady = $q.defer();
-            // Massage configuration as needed.
-            googleChartApiConfig.optionalSettings = googleChartApiConfig.optionalSettings || {};
+    agcJsapiLoaderFactory.$inject = ["$log", "$rootScope", "$q", "agcScriptTagHelper", "googleChartApiConfig"];
+    function agcJsapiLoaderFactory($log, $rootScope, $q, agcScriptTagHelper, googleChartApiConfig){
+        $log.debug("[AGC] jsapi loader invoked.");
+        var apiReady = $q.defer();
+        // Massage configuration as needed.
+        googleChartApiConfig.optionalSettings = googleChartApiConfig.optionalSettings || {};
 
-            var userDefinedCallback = googleChartApiConfig.optionalSettings.callback;
+        var userDefinedCallback = googleChartApiConfig.optionalSettings.callback;
 
-            var settings = {
-                callback: function() {
-                    if (angular.isFunction(userDefinedCallback))
-                        userDefinedCallback.call(this);
+        var settings = {
+            callback: function() {
+                if (angular.isFunction(userDefinedCallback))
+                    userDefinedCallback.call(this);
 
-                    $rootScope.$apply(function(){
-                        apiReady.resolve(google);
-                    });
-                }
-            };
-
-            settings = angular.extend({}, googleChartApiConfig.optionalSettings, settings);
-            
-            agcScriptTagHelper("//www.google.com/jsapi")
-                .then(function(){
-                    window.google.load('visualization', googleChartApiConfig.version || '1', settings);
-                })
-                .catch(function(){
-                    apiReady.reject();
+                $rootScope.$apply(function(){
+                    apiReady.resolve(google);
                 });
-
-            return apiReady.promise;
+            }
         };
+
+        settings = angular.extend({}, googleChartApiConfig.optionalSettings, settings);
+
+        $log.debug("[AGC] Calling tag helper...");
+        agcScriptTagHelper("//www.google.com/jsapi")
+            .then(function(){
+                $log.debug("[AGC] Tag helper returned success.");
+                window.google.load('visualization', googleChartApiConfig.version || '1', settings);
+            })
+            .catch(function(){
+                $log("[AGC] Tag helper returned error.");
+                apiReady.reject();
+            });
+
+        return apiReady.promise;
     }   
+})();
+
+/* global angular */
+(function(){
+    angular.module("googlechart")
+        .provider("agcLibraryLoader", AgcLibraryLoaderProvider);
+
+    AgcLibraryLoaderProvider.$inject = ["$injector"];
+
+    function AgcLibraryLoaderProvider($injector){
+
+        this.$get = function(loader){
+            return loader;
+        }
+
+        this.setLoader = function(loaderName){
+            loaderName = loaderName.charAt(0).toUpperCase() + loaderName.slice(1);
+            if ($injector.has(this.getProviderName(loaderName)))
+                this.$get.$inject = [this.getProviderName(loaderName)];
+            else
+                console.warn("AGC loader type doesn't exist. Defaulting to JSAPI.");
+        }
+
+        this.getProviderName = function(loaderName){
+            return "agc" + loaderName + "Loader";
+        }
+
+        this.setLoader("Jsapi");
+    }
+})();
+
+/* global angular */
+(function(){
+    angular.module("googlechart")
+        .provider("agcNullLoader", AgcNullLoaderProvider);
+    
+    /** Fake loader strategy. Use this if you're loading the google charts library
+     *  in some non-standard way.
+     */
+
+    function AgcNullLoaderProvider(){
+        this._hasTrigger = false;
+        this._libraryOverride = null;
+        this._triggerFunction = (function(){
+            // If the trigger function is called before $get,
+            // just act as if it was never fetched.
+            if (this._deferred)
+                this._deferred.resolve(this._libraryOverride || google);
+            else
+                this._hasTrigger = false;
+        }).bind(this);
+        this._deferred = null;
+    }
+
+    AgcNullLoaderProvider.prototype.$get = function($q){
+        this._deferred = $q.defer();
+        
+        if (!this._hasTrigger)
+            this._deferred.resolve(this._libraryOverride || google);
+        
+        return function agcNullLoader(){
+            return this._deferred.promise;
+        };
+    };
+    AgcNullLoaderProvider.prototype.$get.$inject = ["$q"];
+
+    AgcNullLoaderProvider.prototype.getTriggerFunction = function(){
+        // Records that the trigger function was fetched.
+        // Will wait for it to be called to resolve.
+        // This is useful for manual, but deferred, loading of
+        // the google charts library.
+        this._hasTrigger = true;
+        return this._triggerFunction;
+    };
+
+    /** Forces angular-google-chart to load this object as the google library.
+     *  Makes no checks to ensure that the object passed is compatible. Use
+     *  at own risk.
+     */
+    AgcNullLoaderProvider.prototype.overrideLibrary = function(library){
+        this._libraryOverride = library;
+    };
 })();
 
 (function(){
@@ -569,12 +733,14 @@
     angular.module('googlechart')
         .factory('googleChartApiPromise', googleChartApiPromiseFactory);
         
-    googleChartApiPromiseFactory.$inject = ['$rootScope', '$q', 'googleChartApiConfig', 'agcJsapiLoaderStrategy'];
-        
-    function googleChartApiPromiseFactory($rootScope, $q, apiConfig, agcJsapiLoaderStrategy) {
-        return agcJsapiLoaderStrategy();
+    googleChartApiPromiseFactory.$inject = ['agcLibraryLoader'];
+
+    /** Here for backward-compatibility only. */
+    function googleChartApiPromiseFactory(agcLibraryLoader) {
+        return agcLibraryLoader;
     }
 })();
+
 /* global angular */
 (function() {
     angular.module('googlechart')
