@@ -3,9 +3,10 @@
     angular.module('googlechart')
         .factory('googleChartApiPromise', googleChartApiPromiseFactory);
         
-    googleChartApiPromiseFactory.$inject = ['$rootScope', '$q', 'googleChartApiConfig', 'agcJsapiLoaderStrategy'];
-        
-    function googleChartApiPromiseFactory($rootScope, $q, apiConfig, agcJsapiLoaderStrategy) {
-        return agcJsapiLoaderStrategy();
+    googleChartApiPromiseFactory.$inject = ['agcLibraryLoader'];
+
+    /** Here for backward-compatibility only. */
+    function googleChartApiPromiseFactory(agcLibraryLoader) {
+        return agcLibraryLoader;
     }
 })();
