@@ -3,9 +3,9 @@
     angular.module('googlechart')
         .factory('GoogleChartService', GoogleChartServiceFactory);
 
-    GoogleChartServiceFactory.$inject = ['googleChartApiPromise', '$injector', '$q', 'FormatManager'];
+    GoogleChartServiceFactory.$inject = ['agcLibraryLoader', '$injector', '$q', 'FormatManager'];
 
-    function GoogleChartServiceFactory(googleChartApiPromise, $injector, $q, FormatManager) {
+    function GoogleChartServiceFactory(agcLibraryLoader, $injector, $q, FormatManager) {
         function GoogleChartService() {
             var self = this;
             self.draw = draw;
@@ -28,7 +28,7 @@
             self.setView = setView;
 
             var $google,
-                _apiPromise,
+                _libraryPromise,
                 _apiReady,
                 _chartWrapper,
                 _element,
@@ -140,7 +140,7 @@
                 _apiReady = false;
                 _serviceDeferred = $q.defer();
                 //keeps the resulting promise to chain on other actions
-                _apiPromise = googleChartApiPromise
+                _libraryPromise = agcLibraryLoader
                     .then(_apiLoadSuccess)
                     .catch(_apiLoadFail);
 
@@ -204,9 +204,9 @@
             */
             function draw() {
                 if (_needsUpdate) {
-                    _apiPromise = _apiPromise.then(_continueSetup);
+                    _libraryPromise = _libraryPromise.then(_continueSetup);
                 }
-                _apiPromise = _apiPromise.then(_runDrawCycle());
+                _libraryPromise = _libraryPromise.then(_runDrawCycle());
             }
 
             function getChartWrapper() {
@@ -301,7 +301,7 @@
                 _formatters = formatters || _formatters;
                 _customFormatters = customFormatters || _customFormatters;
 
-                _apiPromise = _apiPromise.then(_continueSetup);
+                _libraryPromise = _libraryPromise.then(_continueSetup);
             }
 
             function setView(view) {
