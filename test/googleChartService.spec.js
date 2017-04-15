@@ -2,18 +2,18 @@
 /* eslint-env jasmine */
 describe('GoogleChartService', function() {
 
-    var mockApiPromiseBackend, GoogleChartService, googleChartService, $rootScope, mockApi;
+    var mockLibraryLoaderBackend, GoogleChartService, googleChartService, $rootScope, mockApi;
 
     beforeEach(function() {
         module('googlechart');
         module('googlechart.mocks', function($provide) {
 
             // A mock googleChartApiPromise with back-end on global mockApiPromiseBackend
-            $provide.factory('googleChartApiPromise', mockApiPromiseFactory);
+            $provide.factory('agcLibraryLoader', mockLibraryLoaderFactory);
 
-            function mockApiPromiseFactory($q, mockGoogleApi) {
+            function mockLibraryLoaderFactory($q, mockGoogleApi) {
                 var deferred = $q.defer();
-                mockApiPromiseBackend = {
+                mockLibraryLoaderBackend = {
                     succeed: function() {
                         deferred.resolve(mockGoogleApi);
                     },
@@ -145,7 +145,7 @@ describe('GoogleChartService', function() {
     describe('after api is ready', function() {
 
         beforeEach(function() {
-            mockApiPromiseBackend.succeed();
+            mockLibraryLoaderBackend.succeed();
             $rootScope.$apply();
         });
 
@@ -255,7 +255,7 @@ describe('GoogleChartService', function() {
 
     describe('after api fails to load', function() {
         beforeEach(function() {
-            mockApiPromiseBackend.fail();
+            mockLibraryLoaderBackend.fail();
             $rootScope.$apply();
         });
 
