@@ -10,13 +10,7 @@
             packages: ["corechart"]
         }
 
-        this.setVersion = function(value){
-            version = value;
-            if (needsBothLoaders())
-                useBothLoaders = true;
-            return this;
-        }
-
+        /** Add Google Visualization API package to loader configuration. */
         this.addPackage = function(packageName){
             options.packages = options.packages || [];
             options.packages.push(packageName);
@@ -26,6 +20,13 @@
             return this;
         }
 
+        /** Delete key from underlying loader configuration. */
+        this.clearOption = function(key){
+            delete this._options[key]
+            return this;
+        }
+
+        /** Remove Google Visualization API package from loader configuration. */
         this.removePackage = function(packageName){
             options.packages = this._options.packages || [];
             var index = options.packages.indexOf(packageName);
@@ -34,26 +35,33 @@
             return this;
         }
 
+        /** Set option to value. See developers.google.com/chart/ for information about loader options. */
         this.setOption = function(key, value){
             options[key] = value;
             return this;
         }
 
+        /** Sets underlying loader options object to value provided. Replaces everything, included packages. */
         this.setOptions = function(value){
             options = value;
             return this;
         }
 
-        this.clearOption = function(key){
-            delete this._options[key]
+        /** Set Google Visualization API frozen version to load. Default: 'current' */
+        this.setVersion = function(value){
+            version = value;
+            if (needsBothLoaders())
+                useBothLoaders = true;
             return this;
         }
-        
+
+        /** Override for internal setting to add both loader scripts. Required under certain conditions. */
         this.useBothLoaders = function(value){
             useBothLoaders = !!value;
             return this;
         }
 
+        /** Check if conditions are correct to need both JSAPI and gstatic loader scripts. */
         function needsBothLoaders(){
             var versionCheck, packageCheck;
 
