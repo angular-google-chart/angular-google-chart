@@ -1,0 +1,28 @@
+---
+layout: docs
+title: Column Chart
+category: Examples
+version: 1.0.0-beta.1
+latest: false
+scripts:
+- /docs/latest/examples/column.js
+ng-app: "google-chart-sample"
+ng-controller: "GenericChartCtrl"
+---
+<div ng-init="myChartObject.type='ColumnChart'">
+<div>
+    Onions: <input type="number" ng-model="onions[1].v" />
+</div>
+
+<div google-chart chart="myChartObject" style="height:600px; width:100%;"></div>
+</div>
+
+<h4>HTML Template</h4>
+{% highlight html %}
+<div google-chart chart="myChartObject" style="height:600px; width:100%;"></div>
+{% endhighlight %}
+
+<h4>JavaScript</h4>
+{% highlight javascript %}
+	{% include_relative column.js %}
+{% endhighlight %}

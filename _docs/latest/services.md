@@ -2,7 +2,7 @@
 layout: docs
 title: Services
 category: Services
-version: 0.1.0
+version: 1.0.0-beta.1
 latest: true
 ---
 
