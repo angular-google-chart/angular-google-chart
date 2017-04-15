@@ -14,6 +14,7 @@
             version = value;
             if (needsBothLoaders())
                 useBothLoaders = true;
+            return this;
         }
 
         this.addPackage = function(packageName){
@@ -22,6 +23,7 @@
 
             if (needsBothLoaders())
                 useBothLoaders = true;
+            return this;
         }
 
         this.removePackage = function(packageName){
@@ -29,22 +31,27 @@
             var index = options.packages.indexOf(packageName);
             if (index > -1)
                 options.packages.splice(index, 1);
+            return this;
         }
 
-        this.setOption = function(option, value){
-            options[option] = value;
+        this.setOption = function(key, value){
+            options[key] = value;
+            return this;
         }
 
         this.setOptions = function(value){
             options = value;
+            return this;
         }
 
-        this.clearOption = function(option){
-            delete this._options["option"]
+        this.clearOption = function(key){
+            delete this._options[key]
+            return this;
         }
         
         this.useBothLoaders = function(value){
             useBothLoaders = !!value;
+            return this;
         }
 
         function needsBothLoaders(){
