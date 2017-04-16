@@ -8,6 +8,21 @@ but is still in early stages of development.
 ### Added
 
 * agcOnRangeChange directive
+* agcLibraryLoaderProvider
+* agcJsapiLoader service
+* agcGstaticLoader service
+* agcNullLoader service
+* agcScriptTagHelper service
+* a bunch of tests
+
+### Changed
+
+* GoogleChartService (now uses agcLibraryLoader service instead of googleChartApiPromise)
+
+### Removed
+
+* googleJsapiUrl provider
+* "unit" tests that were really integration tests
 
 ## [0.1.0] - 2015-11-29
 
