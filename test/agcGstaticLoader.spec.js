@@ -51,6 +51,14 @@ describe ('gstatic loader strategy provider implementation', function(){
             $rootScope.$apply();
         });
 
+        it('had useBothLoaders() called with true', function(){
+            provider.useBothLoaders(true);
+
+            var loaderPromise = $injector.get("agcGstaticLoader");
+
+            $rootScope.$apply();
+        });
+
         describe ('has version less than 45 and', function(){
 
             beforeEach(function(){
