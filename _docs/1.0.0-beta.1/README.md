@@ -3,7 +3,7 @@ layout: docs
 title: Documentation
 version: 1.0.0-beta.1
 latest: false
-permalink: /docs/latest/index.html
+permalink: /docs/1.0.0-beta.1/index.html
 ---
 
 - [Guides]({{site.baseurl}}/docs/{{page.version}}/guides/)
