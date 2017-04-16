@@ -1,5 +1,5 @@
 (function() {
-    angular.module('googlechart.mocks', [])
+    angular.module('googlechart.mocks')
         .factory('mockGoogleApi', mockGoogleApi);
         
 
@@ -22,6 +22,9 @@
          */
 
         var google = {};
+
+        google.load = function(apiName, version, options){};
+        google.setOnLoadCallback = function(callback){};
         google.visualization = {};
 
         /** @constructor */
