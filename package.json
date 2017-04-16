@@ -35,6 +35,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-karma": "latest",
     "jasmine-core": "latest",
+    "jshint-stylish": "^2.2.1",
     "karma": "latest",
     "karma-chrome-launcher": "^2.0.0",
     "karma-coverage": "latest",

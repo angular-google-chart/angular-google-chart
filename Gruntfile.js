@@ -37,7 +37,8 @@ module.exports = function(grunt) {
     jshint: {
       options:{
         jshintrc: true,
-        jasmine: true
+        jasmine: true,
+        reporter: require('jshint-stylish')
       },
       all: ['Gruntfile.js', 'sample.js', 'partials/**/*.js', 'src/**/*.js']
     },
