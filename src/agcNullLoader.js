@@ -27,9 +27,7 @@
         if (!this._hasTrigger)
             this._deferred.resolve(this._libraryOverride || google);
         
-        return function agcNullLoader(){
-            return this._deferred.promise;
-        };
+        return this._deferred.promise;
     };
     AgcNullLoaderProvider.prototype.$get.$inject = ["$q"];
 
