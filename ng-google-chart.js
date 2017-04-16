@@ -1,4 +1,4 @@
-/*! angular-google-chart 2017-04-14 */
+/*! angular-google-chart 2017-04-16 */
 /*
 * @description Google Chart Api Directive Module for AngularJS
 * @version 0.1.0
@@ -254,45 +254,60 @@
         var version = "current";
         var options = {
             packages: ["corechart"]
-        }
+        };
 
-        this.setVersion = function(value){
-            version = value;
-            if (needsBothLoaders())
-                useBothLoaders = true;
-        }
-
+        /** Add Google Visualization API package to loader configuration. */
         this.addPackage = function(packageName){
             options.packages = options.packages || [];
             options.packages.push(packageName);
 
             if (needsBothLoaders())
                 useBothLoaders = true;
-        }
+            return this;
+        };
 
+        /** Delete key from underlying loader configuration. */
+        this.clearOption = function(key){
+            delete this._options[key];
+            return this;
+        };
+
+        /** Remove Google Visualization API package from loader configuration. */
         this.removePackage = function(packageName){
             options.packages = this._options.packages || [];
             var index = options.packages.indexOf(packageName);
             if (index > -1)
                 options.packages.splice(index, 1);
-        }
+            return this;
+        };
 
-        this.setOption = function(option, value){
-            options[option] = value;
-        }
+        /** Set option to value. See developers.google.com/chart/ for information about loader options. */
+        this.setOption = function(key, value){
+            options[key] = value;
+            return this;
+        };
 
+        /** Sets underlying loader options object to value provided. Replaces everything, included packages. */
         this.setOptions = function(value){
             options = value;
-        }
+            return this;
+        };
 
-        this.clearOption = function(option){
-            delete this._options["option"]
-        }
-        
+        /** Set Google Visualization API frozen version to load. Default: 'current' */
+        this.setVersion = function(value){
+            version = value;
+            if (needsBothLoaders())
+                useBothLoaders = true;
+            return this;
+        };
+
+        /** Override for internal setting to add both loader scripts. Required under certain conditions. */
         this.useBothLoaders = function(value){
             useBothLoaders = !!value;
-        }
+            return this;
+        };
 
+        /** Check if conditions are correct to need both JSAPI and gstatic loader scripts. */
         function needsBothLoaders(){
             var versionCheck, packageCheck;
 
@@ -327,11 +342,11 @@
 
             var tagPromise = agcScriptTagHelper("https://www.gstatic.com/charts/loader.js");
             if (useBothLoaders)
-                tagPromise = tagPromise.then(function(){ return agcScriptTagHelper("https://www.google.com/jsapi")})
+                tagPromise = tagPromise.then(function(){ return agcScriptTagHelper("https://www.google.com/jsapi");});
             var libraryPromise = tagPromise.then(scriptLoadCallback);
 
             return libraryPromise;
-        }
+        };
         this.$get.$inject = ["$rootScope", "$q", "agcScriptTagHelper"];
     }
 })();
@@ -370,7 +385,7 @@
                 window.google.load('visualization', googleChartApiConfig.version || '1', settings);
             })
             .catch(function(){
-                $log("[AGC] Tag helper returned error.");
+                $log.error("[AGC] Tag helper returned error. Script may have failed to load.");
                 apiReady.reject();
             });
 
@@ -387,23 +402,27 @@
 
     function AgcLibraryLoaderProvider($injector){
 
+        var DEFAULT_LOADER = "Jsapi";
+
         this.$get = function(loader){
             return loader;
-        }
+        };
 
         this.setLoader = function(loaderName){
-            loaderName = loaderName.charAt(0).toUpperCase() + loaderName.slice(1);
             if ($injector.has(this.getProviderName(loaderName)))
                 this.$get.$inject = [this.getProviderName(loaderName)];
-            else
-                console.warn("AGC loader type doesn't exist. Defaulting to JSAPI.");
-        }
+            else {
+                console.warn("[Angular-GoogleChart] Loader type \"" + loaderName + "\" doesn't exist. Defaulting to JSAPI loader.");
+                this.$get.$inject = [this.getProviderName(DEFAULT_LOADER)];
+            }
+        };
 
         this.getProviderName = function(loaderName){
+            loaderName = loaderName.charAt(0).toUpperCase() + loaderName.slice(1);
             return "agc" + loaderName + "Loader";
-        }
+        };
 
-        this.setLoader("Jsapi");
+        this.setLoader(DEFAULT_LOADER);
     }
 })();
 
@@ -657,8 +676,8 @@
     angular.module("googlechart")
         .factory("agcScriptTagHelper", agcScriptTagHelperFactory);
 
-    agcScriptTagHelperFactory.$inject = ["$q"];
-    function agcScriptTagHelperFactory($q)
+    agcScriptTagHelperFactory.$inject = ["$q", "$document"];
+    function agcScriptTagHelperFactory($q, $document)
     {
         /** Add a script tag to the document's head section and return an angular
           * promise that resolves when the script has loaded.
@@ -666,8 +685,8 @@
         function agcScriptTagHelper(url)
         {
             var deferred = $q.defer();
-            var head = document.getElementsByTagName('head')[0];
-            var script = document.createElement('script');
+            var head = $document.getElementsByTagName('head')[0];
+            var script = $document.createElement('script');
 
             script.setAttribute('type', 'text/javascript');
             script.src = url;
@@ -746,9 +765,9 @@
     angular.module('googlechart')
         .factory('GoogleChartService', GoogleChartServiceFactory);
 
-    GoogleChartServiceFactory.$inject = ['googleChartApiPromise', '$injector', '$q', 'FormatManager'];
+    GoogleChartServiceFactory.$inject = ['agcLibraryLoader', '$injector', '$q', 'FormatManager'];
 
-    function GoogleChartServiceFactory(googleChartApiPromise, $injector, $q, FormatManager) {
+    function GoogleChartServiceFactory(agcLibraryLoader, $injector, $q, FormatManager) {
         function GoogleChartService() {
             var self = this;
             self.draw = draw;
@@ -771,7 +790,7 @@
             self.setView = setView;
 
             var $google,
-                _apiPromise,
+                _libraryPromise,
                 _apiReady,
                 _chartWrapper,
                 _element,
@@ -883,7 +902,7 @@
                 _apiReady = false;
                 _serviceDeferred = $q.defer();
                 //keeps the resulting promise to chain on other actions
-                _apiPromise = googleChartApiPromise
+                _libraryPromise = agcLibraryLoader
                     .then(_apiLoadSuccess)
                     .catch(_apiLoadFail);
 
@@ -947,9 +966,9 @@
             */
             function draw() {
                 if (_needsUpdate) {
-                    _apiPromise = _apiPromise.then(_continueSetup);
+                    _libraryPromise = _libraryPromise.then(_continueSetup);
                 }
-                _apiPromise = _apiPromise.then(_runDrawCycle());
+                _libraryPromise = _libraryPromise.then(_runDrawCycle());
             }
 
             function getChartWrapper() {
@@ -1044,7 +1063,7 @@
                 _formatters = formatters || _formatters;
                 _customFormatters = customFormatters || _customFormatters;
 
-                _apiPromise = _apiPromise.then(_continueSetup);
+                _libraryPromise = _libraryPromise.then(_continueSetup);
             }
 
             function setView(view) {
@@ -1054,4 +1073,5 @@
         return GoogleChartService;
     }
 })();
+
 //# sourceMappingURL=ng-google-chart.js.map
