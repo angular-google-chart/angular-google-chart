@@ -458,9 +458,7 @@
         if (!this._hasTrigger)
             this._deferred.resolve(this._libraryOverride || google);
         
-        return function agcNullLoader(){
-            return this._deferred.promise;
-        };
+        return this._deferred.promise;
     };
     AgcNullLoaderProvider.prototype.$get.$inject = ["$q"];
 
@@ -688,24 +686,20 @@
         function agcScriptTagHelper(url)
         {
             var deferred = $q.defer();
-            var head = $document.find('head')[0];
-            var script = $document[0].createElement('script');
+            var head = $document.find('head');
+            var script = angular.element('<script></script>');
 
-            script.setAttribute('type', 'text/javascript');
-            script.src = url;
+            script.attr('type', 'text/javascript');
 
-            if (script.addEventListener) { // Standard browsers (including IE9+)
-                script.addEventListener('load', onLoad, false);
-                script.onerror = onError;
-            } else { // IE8 and below
-                script.onreadystatechange = function () {
-                    if (script.readyState === 'loaded' || script.readyState === 'complete') {
-                        script.onreadystatechange = null;
-                        onLoad();
-                    }
-                };
-            }
-            head.appendChild(script);
+            script.on('load', onLoad);
+            script.on('error', onError);
+
+            script.attr('src', url);
+
+            // This: head.append(script);
+            // Adds the tag, but event handles don't work.
+            // Workaround is to add element with native appendChild().
+            head[0].appendChild(script[0]);
 
             function onLoad() {
                 deferred.resolve();
