@@ -303,6 +303,9 @@
 
         /** Override for internal setting to add both loader scripts. Required under certain conditions. */
         this.useBothLoaders = function(value){
+            if (typeof value === 'undefined')
+                value = true;
+
             useBothLoaders = !!value;
             return this;
         };
@@ -685,8 +688,8 @@
         function agcScriptTagHelper(url)
         {
             var deferred = $q.defer();
-            var head = $document.getElementsByTagName('head')[0];
-            var script = $document.createElement('script');
+            var head = $document.find('head')[0];
+            var script = $document[0].createElement('script');
 
             script.setAttribute('type', 'text/javascript');
             script.src = url;
