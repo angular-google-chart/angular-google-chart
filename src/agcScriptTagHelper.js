@@ -12,8 +12,8 @@
         function agcScriptTagHelper(url)
         {
             var deferred = $q.defer();
-            var head = $document.getElementsByTagName('head')[0];
-            var script = $document.createElement('script');
+            var head = $document.find('head')[0];
+            var script = angular.element('<script></script>');
 
             script.setAttribute('type', 'text/javascript');
             script.src = url;
