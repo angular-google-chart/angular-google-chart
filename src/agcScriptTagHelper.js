@@ -3,8 +3,8 @@
     angular.module("googlechart")
         .factory("agcScriptTagHelper", agcScriptTagHelperFactory);
 
-    agcScriptTagHelperFactory.$inject = ["$q"];
-    function agcScriptTagHelperFactory($q)
+    agcScriptTagHelperFactory.$inject = ["$q", "$document"];
+    function agcScriptTagHelperFactory($q, $document)
     {
         /** Add a script tag to the document's head section and return an angular
           * promise that resolves when the script has loaded.
@@ -12,8 +12,8 @@
         function agcScriptTagHelper(url)
         {
             var deferred = $q.defer();
-            var head = document.getElementsByTagName('head')[0];
-            var script = document.createElement('script');
+            var head = $document.getElementsByTagName('head')[0];
+            var script = $document.createElement('script');
 
             script.setAttribute('type', 'text/javascript');
             script.src = url;
