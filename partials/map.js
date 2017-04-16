@@ -17,6 +17,6 @@
                 showTooltop: true,
                 showInfoWindow: true
             }
-        }
+        };
     }
 })();
