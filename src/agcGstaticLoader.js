@@ -57,6 +57,9 @@
 
         /** Override for internal setting to add both loader scripts. Required under certain conditions. */
         this.useBothLoaders = function(value){
+            if (typeof value === 'undefined')
+                value = true;
+
             useBothLoaders = !!value;
             return this;
         };
