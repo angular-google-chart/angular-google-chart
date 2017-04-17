@@ -30,7 +30,7 @@ This provider is used to set the url to fetch the Google API from.
 ### Example Code
 {% highlight javascript %}
 (function(){
-    angular.module(configGoogleAPI)
+    angular.module('myApp')
         .config(configGoogleAPI);
     
     configGoogleAPI.$inject = ['googleJsapiUrl'];
