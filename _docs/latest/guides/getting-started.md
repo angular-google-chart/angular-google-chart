@@ -9,13 +9,13 @@ latest: true
 ### Install with Bower
 
 ```
-$ bower install angular-google-chart#0.1.0 --save
+$ bower install angular-google-chart#1.0.0-beta.1 --save
 ```
 
 ### Install with NPM
 
 ```
-$ npm install --save angular-google-chart@0.1.0
+$ npm install --save angular-google-chart@1.0.0-beta.1
 ```
 
 ### Download from GitHub
@@ -30,10 +30,10 @@ Angular Google Chart is hosted with [cdnjs.com](https://cdnjs.com/libraries/angu
 
 {% highlight HTML %}
 <!-- unminified for development -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-chart/0.1.0/ng-google-chart.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-chart/1.0.0-beta.1/ng-google-chart.js" type="text/javascript"></script>
 
 <!-- minified for production -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-chart/0.1.0/ng-google-chart.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-google-chart/1.0.0-beta.1/ng-google-chart.min.js" type="text/javascript"></script>
 {% endhighlight%}
 
 ### Add Module Dependency to your App
