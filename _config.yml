@@ -10,7 +10,7 @@ github_username:  angular-google-chart
 # Build settings
 markdown: kramdown
 
-latest_version: 0.1.0
+latest_version: 1.0.0-beta.1
 available_versions:
     - 1.0.0-beta.1
     - 0.1.0
