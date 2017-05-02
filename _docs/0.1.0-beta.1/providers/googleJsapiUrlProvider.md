@@ -1,7 +1,7 @@
 ---
 layout: docs
 category: Providers
-title: googleJsapiUrl
+title: googleJsapiUrlProvider
 version: 0.1.0-beta.1
 latest: false
 ---
@@ -33,10 +33,10 @@ This provider is used to set the url to fetch the Google API from.
     angular.module('myApp')
         .config(configGoogleAPI);
     
-    configGoogleAPI.$inject = ['googleJsapiUrl'];
+    configGoogleAPI.$inject = ['googleJsapiUrlProvider'];
     
-    function configGoogleAPI(googleJsapiUrl){
-        googleJsapiUrl.setUrl('//www.google.com/jsapi');
+    function configGoogleAPI(googleJsapiUrlProvider){
+        googleJsapiUrlProvider.setUrl('//www.google.com/jsapi');
     }
 }();
 {% endhighlight %}
