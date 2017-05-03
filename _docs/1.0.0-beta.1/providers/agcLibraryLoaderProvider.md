@@ -1,16 +1,16 @@
 ---
 layout: docs
 category: Providers
-title: agcLibraryLoader
+title: agcLibraryLoaderProvider
 version: 1.0.0-beta.1
-latest: true
+latest: false
 ---
 
-This provider effectively replaces the `googleChartApiPromise` service
-used in previous versions. It was replaced to provide a provider interface
+This provider configures a service that effectively replaces the `googleChartApiPromise`
+service used in previous versions. It was replaced to provide an interface
 for configuring the Google Visualization API loader process.
 
-Uses angular injector for find loader implementations by the name pattern:
+It uses the angular injector to find a loader implementation by the name pattern:
 
 <p><code>"agc" + loaderName + "Loader"</code></p>
 

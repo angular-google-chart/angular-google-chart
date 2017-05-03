@@ -1,19 +1,22 @@
 ---
 layout: docs
 category: Providers
-title: agcNullLoader
+title: agcNullLoaderProvider
 version: 1.0.0-beta.1
 latest: true
 ---
 
-This loader is just a shim to activating the library when script tags and
-loader calls for the Google Visualization API are already present. This
-could be for testing purposes, or for edge cases like usage with the
-Google Analytics Embeded API.
+This provider configures a loader that is just a shim for activating the
+library when script tags and loader calls for the Google Visualization API
+are already present. This could be for testing purposes, or for edge cases
+like usage with the Google Analytics Embeded API.
 
 Also allows the passing of an override `google` object which will be used
 by angular-google-chart regardless of whether there is a `google` object
 on the global scope.
+
+See also: [agcLibraryLoaderProvider]({{ site.baseurl }}{% link _docs/latest/providers/agcLibraryLoaderProvider.md %}),
+[agcNullLoader Service]({{ site.baseurl }}{% link _docs/latest/services/agcNullLoader.md %}).
 
 ### Methods
 <table class="table">

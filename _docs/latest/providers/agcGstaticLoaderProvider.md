@@ -1,15 +1,15 @@
 ---
 layout: docs
 category: Providers
-title: agcGstaticLoader
+title: agcGstaticLoaderProvider
 version: 1.0.0-beta.1
 latest: true
 ---
 
-This provider is the loader strategy implementation for the current
+This provider configures the the loader strategy implementation for the current
 google chart "gstatic" loader version.
 
-New loaders have been implemented as providers to provide a helpful
+New loaders have been implemented with providers to provide a helpful
 programmatic implementation for configuration.
 
 ### Methods
