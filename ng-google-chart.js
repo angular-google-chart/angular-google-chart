@@ -1,4 +1,4 @@
-/*! angular-google-chart 2017-04-16 */
+/*! angular-google-chart 2017-05-20 */
 /*
 * @description Google Chart Api Directive Module for AngularJS
 * @version 1.0.0-beta.1
@@ -382,7 +382,7 @@
         settings = angular.extend({}, googleChartApiConfig.optionalSettings, settings);
 
         $log.debug("[AGC] Calling tag helper...");
-        agcScriptTagHelper("//www.google.com/jsapi")
+        agcScriptTagHelper("https://www.google.com/jsapi")
             .then(function(){
                 $log.debug("[AGC] Tag helper returned success.");
                 window.google.load('visualization', googleChartApiConfig.version || '1', settings);
@@ -1070,3 +1070,5 @@
         return GoogleChartService;
     }
 })();
+
+//# sourceMappingURL=ng-google-chart.js.map
