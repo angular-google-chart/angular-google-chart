@@ -98,7 +98,7 @@ describe('JSAPI loader strategy factory', function(){
 
     it ('should pass the failure along if the script helper returns a rejection', function(done){
         agcScriptTagHelperBackend
-            .when("//www.google.com/jsapi")
+            .when("https://www.google.com/jsapi")
             .fail();
 
         var loaderPromise = $injector.get("agcJsapiLoader");
