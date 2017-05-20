@@ -5,6 +5,10 @@ but is still in early stages of development.
 
 ## [Unreleased][unreleased]
 
+### Changed
+
+* Use `https:` instead of protocol-relative URL for hard-coded JSAPI endpoint.
+
 ## [1.0.0-beta.1] - 2017-04-17
 
 ### Added

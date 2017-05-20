@@ -26,7 +26,7 @@
         settings = angular.extend({}, googleChartApiConfig.optionalSettings, settings);
 
         $log.debug("[AGC] Calling tag helper...");
-        agcScriptTagHelper("//www.google.com/jsapi")
+        agcScriptTagHelper("https://www.google.com/jsapi")
             .then(function(){
                 $log.debug("[AGC] Tag helper returned success.");
                 window.google.load('visualization', googleChartApiConfig.version || '1', settings);
