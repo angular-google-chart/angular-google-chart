@@ -3,9 +3,8 @@
     angular.module("googlechart")
         .factory("agcJsapiLoader", agcJsapiLoaderFactory);
 
-    agcJsapiLoaderFactory.$inject = ["$log", "$rootScope", "$q", "agcScriptTagHelper", "googleChartApiConfig"];
-    function agcJsapiLoaderFactory($log, $rootScope, $q, agcScriptTagHelper, googleChartApiConfig){
-        $log.debug("[AGC] jsapi loader invoked.");
+    agcJsapiLoaderFactory.$inject = ["$rootScope", "$q", "agcScriptTagHelper", "googleChartApiConfig"];
+    function agcJsapiLoaderFactory($rootScope, $q, agcScriptTagHelper, googleChartApiConfig){
         var apiReady = $q.defer();
         // Massage configuration as needed.
         googleChartApiConfig.optionalSettings = googleChartApiConfig.optionalSettings || {};
@@ -25,14 +24,11 @@
 
         settings = angular.extend({}, googleChartApiConfig.optionalSettings, settings);
 
-        $log.debug("[AGC] Calling tag helper...");
         agcScriptTagHelper("https://www.google.com/jsapi")
             .then(function(){
-                $log.debug("[AGC] Tag helper returned success.");
                 window.google.load('visualization', googleChartApiConfig.version || '1', settings);
             })
             .catch(function(){
-                $log.error("[AGC] Tag helper returned error. Script may have failed to load.");
                 apiReady.reject();
             });
 
