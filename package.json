@@ -23,7 +23,8 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "angular": ">1.2.9"
+    "angular": ">1.2.9",
+    "grunt-cli": "^1.2.0"
   },
   "devDependencies": {
     "angular-mocks": "^1.2.28",
@@ -42,8 +43,8 @@
     "karma-jasmine": "latest",
     "karma-jasmine-matchers": "latest",
     "karma-phantomjs-launcher": "latest",
-    "karma-sinon": "latest",
-    "phantomjs": "latest",
+    "karma-sinon": "^1.0.5",
+    "phantomjs-prebuilt": "latest",
     "sinon": "latest"
   }
 }
